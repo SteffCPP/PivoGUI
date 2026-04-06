@@ -1,0 +1,14 @@
+#pragma once
+
+#include "EGUI_Button.hpp"
+#include "EGUI_Color.hpp"
+#include "EGUI_Font.hpp"
+#include "EGUI_Grid.hpp"
+#include "EGUI_Math.hpp"
+#include "EGUI_Panel.hpp"
+#include "EGUI_Rectangle.hpp"
+#include "EGUI_Shape.hpp"
+#include "EGUI_Slider.hpp"
+#include "EGUI_TextInput.hpp"
+#include "EGUI_Vector2D.hpp"
+#include "EGUI_Window.hpp"
