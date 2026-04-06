@@ -11,37 +11,19 @@ namespace egui{
 		Vector2D operator+(const Vector2D& __vec) const {
 			return {__vec._x + _x, __vec._y+_y};
 		}
-		Vector2D operator+(const Vector2D& __vec){
-			return {__vec._x + _x, __vec._y+_y};
-		}
 		Vector2D operator-(const Vector2D& __vec) const {
-			return {__vec._x-_x, __vec._y-_y};
-		}
-		Vector2D operator-(const Vector2D& __vec){
 			return {__vec._x-_x, __vec._y-_y};
 		}
 		Vector2D operator*(const Vector2D& __vec) const {
 			return {__vec._x*_x, __vec._y*_y};
 		}
-		Vector2D operator*(const Vector2D& __vec){
-			return {__vec._x*_x, __vec._y*_y};
-		}
 		Vector2D operator*(const double __x) const {
-			return {_x*__x, _y*__x};
-		}
-		Vector2D operator*(const double __x){
 			return {_x*__x, _y*__x};
 		}
 		Vector2D operator/(const Vector2D& __vec) const {
 			return {__vec._x/_x, __vec._y/_y};
 		}
-		Vector2D operator/(const Vector2D& __vec){
-			return {__vec._x/_x, __vec._y/_y};
-		}
 		Vector2D operator/(const double __x) const {
-			return {_x/__x, _y/__x};
-		}
-		Vector2D operator/(const double __x){
 			return {_x/__x, _y/__x};
 		}
 
