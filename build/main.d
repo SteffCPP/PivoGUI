@@ -18,9 +18,12 @@ build/main.o: src/main.cpp inc/SDL3/SDL.h inc/SDL3/SDL_stdinc.h \
  inc/SDL3/SDL_misc.h inc/SDL3/SDL_platform.h inc/SDL3/SDL_process.h \
  inc/SDL3/SDL_render.h inc/SDL3/SDL_storage.h inc/SDL3/SDL_system.h \
  inc/SDL3/SDL_time.h inc/SDL3/SDL_timer.h inc/SDL3/SDL_tray.h \
- inc/SDL3/SDL_version.h inc/SDL3/SDL_oldnames.h inc/EGUI_Window.hpp \
- inc/EGUI_Shapes/EGUI_Rectangle.hpp inc/EGUI_Shapes/EGUI_Shape.hpp \
- inc/EGUI_Color.hpp inc/EGUI_Vector2D.hpp inc/EGUI_Math.hpp
+ inc/SDL3/SDL_version.h inc/SDL3/SDL_oldnames.h inc/EGUI/EGUI.hpp \
+ inc/EGUI/EGUI_Button.hpp inc/EGUI/EGUI_Color.hpp inc/EGUI/EGUI_Font.hpp \
+ inc/EGUI/EGUI_Grid.hpp inc/EGUI/EGUI_Math.hpp inc/EGUI/EGUI_Panel.hpp \
+ inc/EGUI/EGUI_Rectangle.hpp inc/EGUI/EGUI_Shape.hpp \
+ inc/EGUI/EGUI_Vector2D.hpp inc/EGUI/EGUI_Slider.hpp \
+ inc/EGUI/EGUI_TextInput.hpp inc/EGUI/EGUI_Window.hpp
 inc/SDL3/SDL.h:
 inc/SDL3/SDL_stdinc.h:
 inc/SDL3/SDL_platform_defines.h:
@@ -81,9 +84,16 @@ inc/SDL3/SDL_timer.h:
 inc/SDL3/SDL_tray.h:
 inc/SDL3/SDL_version.h:
 inc/SDL3/SDL_oldnames.h:
-inc/EGUI_Window.hpp:
-inc/EGUI_Shapes/EGUI_Rectangle.hpp:
-inc/EGUI_Shapes/EGUI_Shape.hpp:
-inc/EGUI_Color.hpp:
-inc/EGUI_Vector2D.hpp:
-inc/EGUI_Math.hpp:
+inc/EGUI/EGUI.hpp:
+inc/EGUI/EGUI_Button.hpp:
+inc/EGUI/EGUI_Color.hpp:
+inc/EGUI/EGUI_Font.hpp:
+inc/EGUI/EGUI_Grid.hpp:
+inc/EGUI/EGUI_Math.hpp:
+inc/EGUI/EGUI_Panel.hpp:
+inc/EGUI/EGUI_Rectangle.hpp:
+inc/EGUI/EGUI_Shape.hpp:
+inc/EGUI/EGUI_Vector2D.hpp:
+inc/EGUI/EGUI_Slider.hpp:
+inc/EGUI/EGUI_TextInput.hpp:
+inc/EGUI/EGUI_Window.hpp:

@@ -3,10 +3,8 @@
 namespace egui{
 	class Vector2D{
 	public:
-		constexpr inline void setX(const double X){ _x = X; };
-		constexpr inline void setY(const double Y){ _y = Y; };
-		constexpr inline double getX(){ return _x; }
-		constexpr inline double getY(){ return _y; }
+		constexpr inline double& X(){ return _x; }
+		constexpr inline double& Y(){ return _y; }
 
 		Vector2D operator+(const Vector2D& __vec) const {
 			return {__vec._x + _x, __vec._y+_y};
