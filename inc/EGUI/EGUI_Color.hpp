@@ -6,16 +6,21 @@ namespace egui{
 	public:
 		constexpr void setColors(const uint8_t R, const uint8_t G, const uint8_t B, uint8_t A){ _r = R; _g = G; _b = B; _a = A; }
 
-		constexpr uint8_t& R(){ return _r; }
-		constexpr uint8_t& G(){ return _g; }
-		constexpr uint8_t& B(){ return _b; }
-		constexpr uint8_t& A(){ return _a; }
+		constexpr uint8_t R() const { return _r; }
+		constexpr uint8_t G() const { return _g; }
+		constexpr uint8_t B() const { return _b; }
+		constexpr uint8_t A() const { return _a; }
+
+		void setR(const uint8_t R){ _r = R; }
+		void setG(const uint8_t G){ _g = G; }
+		void setB(const uint8_t B){ _b = B; }
+		void setA(const uint8_t A){ _a = A; }
 
 		Color_RGBA(){}
 		Color_RGBA(const uint8_t R, const uint8_t G, const uint8_t B, uint8_t A=255) : _r(R), _g(G), _b(B), _a(A){}
 		~Color_RGBA(){};
 	private:
-		uint8_t _r{0}, _g{0}, _b{0}, _a{1};
+		uint8_t _r{0}, _g{0}, _b{0}, _a{255};
 	};
 
 	namespace colors{

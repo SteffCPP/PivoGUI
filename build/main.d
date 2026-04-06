@@ -14,17 +14,18 @@ build/main.o: src/main.cpp inc/EGUI/EGUI.hpp inc/EGUI/EGUI_Button.hpp \
  inc/SDL3/SDL_power.h inc/SDL3/SDL_sensor.h inc/SDL3/SDL_keyboard.h \
  inc/SDL3/SDL_keycode.h inc/SDL3/SDL_scancode.h inc/SDL3/SDL_video.h \
  inc/SDL3/SDL_mouse.h inc/SDL3/SDL_pen.h inc/SDL3/SDL_touch.h \
- inc/SDL3/SDL_gpu.h inc/EGUI/EGUI_Slider.hpp inc/EGUI/EGUI_TextInput.hpp \
- inc/EGUI/EGUI_Window.hpp inc/SDL3/SDL.h inc/SDL3/SDL_assert.h \
- inc/SDL3/SDL_asyncio.h inc/SDL3/SDL_bits.h inc/SDL3/SDL_clipboard.h \
- inc/SDL3/SDL_cpuinfo.h inc/SDL3/SDL_dialog.h inc/SDL3/SDL_dlopennote.h \
- inc/SDL3/SDL_filesystem.h inc/SDL3/SDL_haptic.h inc/SDL3/SDL_hidapi.h \
- inc/SDL3/SDL_hints.h inc/SDL3/SDL_init.h inc/SDL3/SDL_loadso.h \
- inc/SDL3/SDL_locale.h inc/SDL3/SDL_log.h inc/SDL3/SDL_messagebox.h \
- inc/SDL3/SDL_metal.h inc/SDL3/SDL_misc.h inc/SDL3/SDL_platform.h \
- inc/SDL3/SDL_process.h inc/SDL3/SDL_storage.h inc/SDL3/SDL_system.h \
- inc/SDL3/SDL_time.h inc/SDL3/SDL_timer.h inc/SDL3/SDL_tray.h \
- inc/SDL3/SDL_version.h inc/SDL3/SDL_oldnames.h
+ inc/SDL3/SDL_gpu.h inc/EGUI/EGUI_Circle.hpp inc/EGUI/EGUI_Slider.hpp \
+ inc/EGUI/EGUI_TextInput.hpp inc/EGUI/EGUI_Window.hpp inc/SDL3/SDL.h \
+ inc/SDL3/SDL_assert.h inc/SDL3/SDL_asyncio.h inc/SDL3/SDL_bits.h \
+ inc/SDL3/SDL_clipboard.h inc/SDL3/SDL_cpuinfo.h inc/SDL3/SDL_dialog.h \
+ inc/SDL3/SDL_dlopennote.h inc/SDL3/SDL_filesystem.h \
+ inc/SDL3/SDL_haptic.h inc/SDL3/SDL_hidapi.h inc/SDL3/SDL_hints.h \
+ inc/SDL3/SDL_init.h inc/SDL3/SDL_loadso.h inc/SDL3/SDL_locale.h \
+ inc/SDL3/SDL_log.h inc/SDL3/SDL_messagebox.h inc/SDL3/SDL_metal.h \
+ inc/SDL3/SDL_misc.h inc/SDL3/SDL_platform.h inc/SDL3/SDL_process.h \
+ inc/SDL3/SDL_storage.h inc/SDL3/SDL_system.h inc/SDL3/SDL_time.h \
+ inc/SDL3/SDL_timer.h inc/SDL3/SDL_tray.h inc/SDL3/SDL_version.h \
+ inc/SDL3/SDL_oldnames.h
 inc/EGUI/EGUI.hpp:
 inc/EGUI/EGUI_Button.hpp:
 inc/EGUI/EGUI_Color.hpp:
@@ -68,6 +69,7 @@ inc/SDL3/SDL_mouse.h:
 inc/SDL3/SDL_pen.h:
 inc/SDL3/SDL_touch.h:
 inc/SDL3/SDL_gpu.h:
+inc/EGUI/EGUI_Circle.hpp:
 inc/EGUI/EGUI_Slider.hpp:
 inc/EGUI/EGUI_TextInput.hpp:
 inc/EGUI/EGUI_Window.hpp:

@@ -7,6 +7,7 @@
 #include "EGUI_Math.hpp"
 #include "EGUI_Panel.hpp"
 #include "EGUI_Rectangle.hpp"
+#include "EGUI_Circle.hpp"
 #include "EGUI_Shape.hpp"
 #include "EGUI_Slider.hpp"
 #include "EGUI_TextInput.hpp"
