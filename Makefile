@@ -9,7 +9,7 @@ BUILD_DIR = build
 TARGET = EasyGUI
 EXE = $(BIN_DIR)/main.exe
 
-CXXFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -O2 -Wall -MMD -MP
+CXXFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -O2 -Wall -MMD -MP -std=c++23
 LDFLAGS_DLL = -L$(LIB_DIR) -lSDL3 -shared -Wl,--out-implib,$(BIN_DIR)/$(TARGET).lib
 LDFLAGS_EXE = -L$(BIN_DIR) -lSDL3 -l$(TARGET)
 
