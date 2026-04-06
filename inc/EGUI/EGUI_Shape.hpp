@@ -7,13 +7,13 @@
 namespace egui{
 	class Shape : public Widget{
 	public:
-		constexpr virtual Vector2D& position(){ return _pos; }
-		constexpr virtual Color_RGBA& backgroundColor(){ return _backgroundColor; }
-		constexpr virtual Color_RGBA& borderColor(){ return _borderColor; }
-		constexpr virtual double& borderWidth(){ return _borderWidth; }
+		constexpr virtual Vector2D getPosition(){ return _pos; }
+		constexpr virtual Color_RGBA getBackgroundColor(){ return _backgroundColor; }
+		constexpr virtual Color_RGBA getBorderColor(){ return _borderColor; }
+		constexpr virtual double getBorderWidth(){ return _borderWidth; }
 
-		constexpr virtual double& rotationDegrees(){ return _rotationDegrees; }
-		constexpr virtual double& rotationRadians(){ return _rotationRadians; }
+		constexpr virtual double getRotationDegrees(){ return _rotationDegrees; }
+		constexpr virtual double getRotationRadians(){ return _rotationRadians; }
 		
 		virtual ~Shape() = default;
 	protected:

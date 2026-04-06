@@ -9,7 +9,9 @@
 namespace egui{
 	class Window{
 	public:
-		void create(std::string title, Vector2D size){
+		void create(std::string title, Vector2D size, Color_RGBA bgColor=egui::colors::White){
+			if(_isOpen) return;
+
 			if(SDL_WasInit(0) == 0){ // If not initialized
 				if(!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS)){
 					std::cerr << "Couldn't initialize SDL3: "<< SDL_GetError() << "\n";
@@ -22,6 +24,7 @@ namespace egui{
 				return;
 			}
 
+			_backgroundColor = bgColor;
 			_isOpen = true;
 		}
 
@@ -57,10 +60,12 @@ namespace egui{
 			_widgets.push_back(&widget);
 		}
 
-		constexpr Color_RGBA& backgroundColor(){ return _backgroundColor; }
+		inline void setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
 		bool isOpen() const { return _isOpen; }
 
-		Window(){}
+		Window(std::string title, Vector2D size, Color_RGBA bgColor=egui::colors::White){
+			create(title, size, bgColor);
+		}
 		~Window(){
 			if(_renderer) SDL_DestroyRenderer(_renderer);
 			if(_win) SDL_DestroyWindow(_win);
