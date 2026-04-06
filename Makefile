@@ -6,7 +6,7 @@ LIB_DIR = lib
 BIN_DIR = bin
 BUILD_DIR = build
 
-TARGET = EasyGUI
+TARGET = EGUI
 EXE = $(BIN_DIR)/main.exe
 
 CXXFLAGS = -I$(INC_DIR) -I$(LIB_DIR) -O2 -Wall -MMD -MP -std=c++23
