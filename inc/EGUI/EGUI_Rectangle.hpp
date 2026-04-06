@@ -16,8 +16,12 @@ namespace egui{
 			drawRect.w = _size.X();
 			drawRect.h = _size.Y();
 			SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
-			SDL_RenderRect(__renderer, &drawRect);
+			SDL_RenderFillRect(__renderer, &drawRect);
 
+			drawRect.x+=_borderWidth;
+			drawRect.y+=_borderWidth;
+			drawRect.w-=_borderWidth*2;
+			drawRect.h-=_borderWidth*2;
 			SDL_SetRenderDrawColor(__renderer, _backgroundColor.R(), _backgroundColor.G(), _backgroundColor.B(), _backgroundColor.A());
 			SDL_RenderFillRect(__renderer, &drawRect);
 		}

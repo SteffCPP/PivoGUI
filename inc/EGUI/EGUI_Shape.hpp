@@ -10,6 +10,7 @@ namespace egui{
 		constexpr virtual Vector2D& position(){ return _pos; }
 		constexpr virtual Color_RGBA& backgroundColor(){ return _backgroundColor; }
 		constexpr virtual Color_RGBA& borderColor(){ return _borderColor; }
+		constexpr virtual double& borderWidth(){ return _borderWidth; }
 
 		constexpr virtual double& rotationDegrees(){ return _rotationDegrees; }
 		constexpr virtual double& rotationRadians(){ return _rotationRadians; }

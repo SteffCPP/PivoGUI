@@ -4,7 +4,7 @@
 namespace egui{
 	class Widget{
 	public:
-	virtual ~Widget() = default;
+		virtual ~Widget() = default;
 	private:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
 		
