@@ -9,8 +9,11 @@
 namespace egui{
 	class Window{
 	public:
-		void create(std::string title, Vector2D size, Color_RGBA bgColor=egui::colors::White){
-			if(_isOpen) return;
+		void create(const std::string& title, 
+					const Vector2D& size, 
+					const Color_RGBA& bgColor=egui::colors::White)
+		{
+			if(_isOpen || _win) return;
 
 			if(SDL_WasInit(0) == 0){ // If not initialized
 				if(!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS)){
@@ -54,7 +57,19 @@ namespace egui{
 			SDL_RenderPresent(_renderer);
 		}
 
-		void destroy(){}
+		void destroy(){
+			if(_renderer){
+				SDL_DestroyRenderer(_renderer);
+				_renderer = nullptr;
+			}
+
+			if(_win){
+				SDL_DestroyWindow(_win);
+				_win = nullptr;
+			}
+
+    		_isOpen = false;
+		}
 
 		void assign(Widget& widget){
 			_widgets.push_back(&widget);
@@ -63,12 +78,14 @@ namespace egui{
 		inline void setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
 		bool isOpen() const { return _isOpen; }
 
-		Window(std::string title, Vector2D size, Color_RGBA bgColor=egui::colors::White){
+		Window(	const std::string title,
+				const Vector2D size,
+				const Color_RGBA bgColor=egui::colors::White)
+		{
 			create(title, size, bgColor);
 		}
 		~Window(){
-			if(_renderer) SDL_DestroyRenderer(_renderer);
-			if(_win) SDL_DestroyWindow(_win);
+			destroy();
 			SDL_Quit();
 		}
 	private:

@@ -3,8 +3,8 @@
 namespace egui{
 	class Vector2D{
 	public:
-		constexpr inline double X(){ return _x; }
-		constexpr inline double Y(){ return _y; }
+		constexpr inline double X() const { return _x; }
+		constexpr inline double Y() const { return _y; }
 
 		Vector2D operator+(const Vector2D& __vec) const {
 			return {__vec._x + _x, __vec._y+_y};
@@ -24,7 +24,7 @@ namespace egui{
 		Vector2D operator/(const double __x) const {
 			return {_x/__x, _y/__x};
 		}
-		
+
 		Vector2D(const double X, const double Y) : _x(X), _y(Y) {}
 		~Vector2D(){}
 	private:

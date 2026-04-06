@@ -7,13 +7,26 @@
 namespace egui{
 	class Shape : public Widget{
 	public:
-		constexpr virtual Vector2D getPosition(){ return _pos; }
-		constexpr virtual Color_RGBA getBackgroundColor(){ return _backgroundColor; }
-		constexpr virtual Color_RGBA getBorderColor(){ return _borderColor; }
-		constexpr virtual double getBorderWidth(){ return _borderWidth; }
+		constexpr Vector2D getPosition() const { return _pos; }
+		constexpr Color_RGBA getBackgroundColor() const { return _backgroundColor; }
+		constexpr Color_RGBA getBorderColor() const { return _borderColor; }
+		constexpr double getBorderWidth() const { return _borderWidth; }
+		constexpr double getRotationDegrees() const { return _rotationDegrees; }
+		constexpr double getRotationRadians() const { return _rotationRadians; }
 
-		constexpr virtual double getRotationDegrees(){ return _rotationDegrees; }
-		constexpr virtual double getRotationRadians(){ return _rotationRadians; }
+		inline void setPosition(const Vector2D& pos){ _pos = pos; }
+		inline void move(const Vector2D& delta){ _pos = _pos + delta; }
+		inline void setBackgroundColor(const Color_RGBA& color){ _backgroundColor = color; }
+		inline void setBorderColor(const Color_RGBA& color){ _borderColor = color; }
+		inline void setBorderWidth(const double width){ _borderWidth = width; }
+		inline void setRotationDegrees(double deg){ 
+			_rotationDegrees = deg; 
+			_rotationRadians = egui::math::degToRad(deg);
+		}
+		inline void setRotationRadians(double rad){ 
+			_rotationRadians = rad;
+			_rotationDegrees = egui::math::radToDeg(rad);
+		}
 		
 		virtual ~Shape() = default;
 	protected:

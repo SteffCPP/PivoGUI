@@ -4,17 +4,19 @@
 namespace egui{
 	class Rectangle : public Shape{
 	public:
-		constexpr Vector2D getSize(){ return _size; }
+		constexpr Vector2D getSize() const { return _size; }
+		inline void setSize(Vector2D size){ _size = size; }
 
-		Rectangle(const Vector2D size, const Vector2D pos, const Color_RGBA bgColor=egui::colors::Red, const double bordWidth=0, const Color_RGBA bdColor=egui::colors::Transparent, const double rotRad=0){
+		Rectangle(const Vector2D size, const Vector2D pos, const Color_RGBA bgColor=egui::colors::Red, const double bdWidth=0, const Color_RGBA bdColor=egui::colors::Transparent, const double rotRad=0){
 			_size = size;
 			_pos = pos;
 			_backgroundColor = bgColor;
-			_borderWidth = bordWidth;
+			_borderWidth = bdWidth;
 			_borderColor = bdColor;
 			_rotationRadians = rotRad;
 			_rotationDegrees = egui::math::radToDeg(rotRad);
 		}
+		Rectangle(){}
 	private:
 		void _draw(SDL_Renderer* __renderer) override {
 			SDL_FRect drawRect;

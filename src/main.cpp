@@ -2,7 +2,9 @@
 #include <iostream>
 
 int main(){
-	egui::Rectangle rect{{50, 50}, {300, 300}};
+	egui::Rectangle rect;
+	rect.setBackgroundColor(egui::colors::Green);
+	rect.setSize({30, 30});
 
 	egui::Window win("Test", {500, 500});
 	
