@@ -12,6 +12,7 @@ int main(){
 	egui::Window win;
 	win.create("Test", {500, 500});
 	win.backgroundColor() = egui::colors::White;
+	
 	win.assign(rect);
 	
 

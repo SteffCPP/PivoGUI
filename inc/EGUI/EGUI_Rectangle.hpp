@@ -1,8 +1,5 @@
 #pragma once
 #include "EGUI_Shape.hpp"
-#include "EGUI_Color.hpp"
-#include "EGUI_Vector2D.hpp"
-#include "EGUI_Math.hpp"
 
 namespace egui{
 	class Rectangle : public Shape{
