@@ -55,6 +55,7 @@ namespace egui{
 			}
 
 			SDL_RenderPresent(_renderer);
+			SDL_Delay(10);
 		}
 
 		void destroy(){
