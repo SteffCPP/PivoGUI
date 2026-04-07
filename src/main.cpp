@@ -1,18 +1,21 @@
 #include "EGUI/EGUI.hpp"
 #include <iostream>
 
-int main(){
-	egui::Rectangle rect;
-	rect.setBackgroundColor(egui::colors::Green);
-	rect.setSize({300, 300});
+void printHello(){
+	std::cout << "Hello World!";
+}
 
-	egui::Window win("Test", {500, 500});
-	
+int main(){
+	egui::Window win("Finestra e Frocio", {900, 900}, egui::colors::Cyan);
+
+	egui::Rectangle rect({30, 40}, {400, 400}, egui::colors::Red, 60, egui::colors::Blue);
+
 	win.assign(rect);
-	
+
 	while(win.isOpen()){
 		win.update();
-	}
 
+		rect.setOnClick(printHello);
+	}
 	return 0;
 }
