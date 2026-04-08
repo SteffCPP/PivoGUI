@@ -1,0 +1,4 @@
+C:/Users/Utente/Desktop/Coding/EasyGUI/build/CMakeFiles/EGUI.dir
+C:/Users/Utente/Desktop/Coding/EasyGUI/build/CMakeFiles/EGUI_app.dir
+C:/Users/Utente/Desktop/Coding/EasyGUI/build/CMakeFiles/edit_cache.dir
+C:/Users/Utente/Desktop/Coding/EasyGUI/build/CMakeFiles/rebuild_cache.dir

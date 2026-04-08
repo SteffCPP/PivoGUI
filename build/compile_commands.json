@@ -1,0 +1,98 @@
+[
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.button.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.button.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.button.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.button.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.circle.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.circle.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.circle.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.circle.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.color.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.color.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.color.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.color.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.grid.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.grid.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.grid.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.grid.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.math.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.math.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.math.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.math.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.panel.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.panel.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.panel.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.panel.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.rectangle.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.rectangle.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.rectangle.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.rectangle.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.shape.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.shape.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.shape.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.shape.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.slider.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.slider.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.slider.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.slider.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.text.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.text.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.text.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.text.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.vector.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.vector.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.vector.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.vector.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.widget.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.widget.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.widget.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.widget.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI.window.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI.window.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI.window.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI.window.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI.dir\\inc\\EGUI\\EGUI_base.cppm.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\inc\\EGUI\\EGUI_base.cppm",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/inc/EGUI/EGUI_base.cppm",
+  "output": "CMakeFiles/EGUI.dir/inc/EGUI/EGUI_base.cppm.obj"
+},
+{
+  "directory": "C:/Users/Utente/Desktop/Coding/EasyGUI/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/EGUI_app.dir/includes_CXX.rsp -g -std=gnu++20 -fmodules-ts -o CMakeFiles\\EGUI_app.dir\\src\\main.cpp.obj -c C:\\Users\\Utente\\Desktop\\Coding\\EasyGUI\\src\\main.cpp",
+  "file": "C:/Users/Utente/Desktop/Coding/EasyGUI/src/main.cpp",
+  "output": "CMakeFiles/EGUI_app.dir/src/main.cpp.obj"
+}
+]
