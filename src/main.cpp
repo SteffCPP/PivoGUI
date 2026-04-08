@@ -1,21 +1,22 @@
-#include "EGUI/EGUI.hpp"
 #include <iostream>
+#include "EGUI/EGUI.hpp"
 
-void printHello(){
-	std::cout << "Hello World!";
+void onClickRect(){
+	static size_t i=0;
+	std::cout << "Premuto "<< ++i << "\n";
 }
 
 int main(){
-	egui::Window win("Finestra e Frocio", {900, 900}, egui::colors::Cyan);
+	egui::Window win("Test", {200, 200});
 
-	egui::Rectangle rect({30, 40}, {400, 400}, egui::colors::Red, 60, egui::colors::Blue);
+	egui::Rectangle rect({50, 50}, {100, 100}, egui::colors::Magenta);
+	rect.setOnClick(onClickRect);
 
 	win.assign(rect);
 
 	while(win.isOpen()){
 		win.update();
-
-		rect.setOnClick(printHello);
 	}
+
 	return 0;
 }
