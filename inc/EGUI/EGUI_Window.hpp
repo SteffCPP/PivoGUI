@@ -21,8 +21,12 @@ namespace egui{
 		Window(	const std::string title,
 				const Vector2D size,
 				const Color_RGBA bgColor=egui::colors::White);
+		Window(){}
 		~Window();
 	private:
+		inline bool _checkWidgetsOrder() const;
+		inline void _sortWidgets();
+
 		SDL_Window* _win=nullptr;
 		SDL_Renderer* _renderer=nullptr;
 

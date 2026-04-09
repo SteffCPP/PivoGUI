@@ -1,14 +1,32 @@
 #include "EGUI_Window.hpp"
+#include "EGUI_SDL.cpp"
 
-#include "SDL3/SDL.h"
 #include <iostream>
+#include <utility>
 #include <thread>
 #include <chrono>
 
 namespace egui {
+inline bool Window::_checkWidgetsOrder() const {
+    if (_widgets.size() < 2){
+        if(_widgets.at(0)->getLayerNumber() > _widgets.at(1)->getLayerNumber())
+            return false;
+    }
+    for (size_t i=0; i < _widgets.size()-1; ++i) {
+        if (_widgets.at(i)->getLayerNumber() > _widgets.at(i+1)->getLayerNumber())
+            return false;
+    }
+    return true;
+}
+inline void Window::_sortWidgets(){
+    std::sort(_widgets.begin(), _widgets.end(), [](const Widget* a, const Widget* b){
+        return a->getLayerNumber() > b->getLayerNumber();
+    });
+}
+
 void Window::create(const std::string& title, 
                     const Vector2D& size, 
-                    const Color_RGBA& bgColor) {
+                    const Color_RGBA& bgColor){
     if (_isOpen || _win) return;
 
     // Inizializza SDL solo se non già fatto
@@ -35,8 +53,9 @@ void Window::create(const std::string& title,
     _isOpen = true;
 }
 
-void Window::update() {
-    if (!_win || !_renderer || !_isOpen) return;
+void Window::update(){
+    if(!_win || !_renderer || !_isOpen) return;
+    if(!_checkWidgetsOrder()) _sortWidgets();
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -50,8 +69,9 @@ void Window::update() {
 					SDL_FPoint mousePos = { event.button.x, event.button.y };
 
 					for(const auto& w : _widgets){
-						Widget::Hitbox::FRect hitboxRect = w->getHitbox().getRect();
-						SDL_FRect rect{ hitboxRect.x, hitboxRect.y, hitboxRect.w, hitboxRect.h};
+						Widget::Hitbox hitboxRect = w->getHitbox();
+						SDL_FRect rect{ hitboxRect.getPosition().X(), hitboxRect.getPosition().Y(), 
+                                        hitboxRect.getSize().X(), hitboxRect.getSize().Y()};
 						if(SDL_PointInRectFloat(&mousePos, &rect)){
 							w->_onClick();
 						}
@@ -94,7 +114,27 @@ void Window::destroy() {
 }
 
 void Window::assign(Widget& widget) {
-    _widgets.push_back(&widget);
+    size_t widLayerN = widget.getLayerNumber();
+    size_t i=0;
+
+    if(_widgets.empty()){
+        if (widLayerN == 0) widget.setLayerNumber(1);
+        _widgets.push_back(&widget);
+        return;
+    }
+    
+    if (widLayerN == 0) {
+        for (i=0; i<_widgets.size(); ++i) {
+            if (_widgets[i]->getLayerNumber() != i+1) break;
+        }
+        widget.setLayerNumber(i + 1);
+    } else {
+        for (i=0; i<_widgets.size(); ++i) {
+            if (_widgets[i]->getLayerNumber() > widLayerN) break;
+        }
+    }
+    
+    _widgets.insert(_widgets.begin() + i, &widget);
 }
 
 Window::Window(const std::string title,
@@ -105,6 +145,5 @@ Window::Window(const std::string title,
 
 Window::~Window() {
     destroy();
-    SDL_Quit();
 }
 }

@@ -5,21 +5,30 @@
 namespace egui{
 	class Circle : public Shape{
 	public:
-		constexpr double getRadius() const { return _radius; }
-		void setRadius(double radius){ _radius = radius; }
+		constexpr float getRadius() const { return _radius; }
+		void setRadius(float radius){ _radius = radius; }
 
-		Circle(double radius, egui::Color_RGBA bgColor=egui::colors::Red, double bdWidth=0, egui::Color_RGBA bdColor=egui::colors::Transparent){
+		Circle(	const float radius, 
+				const Vector2D& pos,
+				const Color_RGBA& bgColor=colors::Red, 
+				const float bdWidth=0, 
+				const Color_RGBA& bdColor=colors::Transparent){
 			_radius = radius;
+			_pos = pos;
 			_backgroundColor = bgColor;
 			_borderWidth = bdWidth;
 			_borderColor = bdColor;
 		}
 		Circle(){}
 	private:
-		void _draw(SDL_Renderer* __renderer) override {
-			
-		}
+		void _draw(SDL_Renderer* __renderer) override;
 
-		double _radius{0};
+		inline void _drawFilledCircle(	SDL_Renderer* __renderer, 
+										const float __cx,
+										const float __cy,
+										const float __radius,
+										const Color_RGBA& __color);
+
+		float _radius{0};
 	};
 }

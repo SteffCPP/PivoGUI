@@ -20,9 +20,9 @@ namespace egui{
 		inline void setRotationDegrees(double deg);
 		inline void setRotationRadians(double rad);
 		
+		Shape(){ _type = WidgetType::SHAPE; }
 		virtual ~Shape() = default;
 	protected:
-		WidgetType _type{WidgetType::RECTANGLE};
 		double _rotationDegrees{0}, _rotationRadians{0};
 
 		double _borderWidth{0};
