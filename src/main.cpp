@@ -2,7 +2,7 @@
 #include "EGUI/EGUI.hpp"
 
 void onClickRect(){
-	static size_t i=0;
+	static std::size_t i=0;
 	std::cout << "Premuto "<< ++i << "\n";
 }
 

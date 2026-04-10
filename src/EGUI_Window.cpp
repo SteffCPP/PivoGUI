@@ -12,7 +12,7 @@ inline bool Window::_checkWidgetsOrder() const {
         if(_widgets.at(0)->getLayerNumber() > _widgets.at(1)->getLayerNumber())
             return false;
     }
-    for (size_t i=0; i < _widgets.size()-1; ++i) {
+    for (std::size_t i=0; i < _widgets.size()-1; ++i) {
         if (_widgets.at(i)->getLayerNumber() > _widgets.at(i+1)->getLayerNumber())
             return false;
     }
@@ -114,8 +114,8 @@ void Window::destroy() {
 }
 
 void Window::assign(Widget& widget) {
-    size_t widLayerN = widget.getLayerNumber();
-    size_t i=0;
+    std::size_t widLayerN = widget.getLayerNumber();
+    std::size_t i=0;
 
     if(_widgets.empty()){
         if (widLayerN == 0) widget.setLayerNumber(1);

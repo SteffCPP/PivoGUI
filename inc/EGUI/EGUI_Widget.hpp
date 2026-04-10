@@ -50,17 +50,17 @@ namespace egui{
 		constexpr WidgetType getType() const { return _type; }
 		constexpr Vector2D getPosition() const { return _pos; }
 		constexpr Hitbox getHitbox() const { return _hitbox; }
-		constexpr size_t getLayerNumber() const { return _layerN; }
+		constexpr std::size_t getLayerNumber() const { return _layerN; }
 
 		inline void setPosition(const Vector2D& pos) { _pos = pos; _hitbox.setPosition(_pos); }
-		inline void setLayerNumber(const size_t n) { _layerN = n; }
+		inline void setLayerNumber(const std::size_t n) { _layerN = n; }
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
 		
 		std::function<void()> _onClick;
 		WidgetType _type{WidgetType::WIDGET};
 
-		size_t _layerN{0};
+		std::size_t _layerN{0};
 
 		Vector2D _pos{0, 0};
 		Hitbox _hitbox{{0, 0}, {0, 0}};
