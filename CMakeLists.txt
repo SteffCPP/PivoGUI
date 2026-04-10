@@ -4,6 +4,7 @@ project(EGUI LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
@@ -20,7 +21,7 @@ function(include_dependency libName gitURL gitTag)
     )
 endfunction()
 
-find_package(SDL3 REQUIRED)
+find_package(SDL3 QUIET)
 
 if(NOT SDL3_FOUND)
     message(STATUS "Getting SDL3 from Github")
@@ -42,6 +43,10 @@ target_link_libraries(EGUI PRIVATE SDL3::SDL3)
 
 add_executable(main src/main.cpp)
 
+set_target_properties(main PROPERTIES
+    BUILD_RPATH "$ORIGIN"
+    INSTALL_RPATH "$ORIGIN"
+)
 target_link_libraries(main PRIVATE EGUI)
 
 if(WIN32)
