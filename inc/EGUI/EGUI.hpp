@@ -13,4 +13,3 @@
 //#include "EGUI_TextInput.hpp"
 #include "EGUI_Vector.hpp"
 #include "EGUI_Window.hpp"
-#include "SDL3/SDL.h"
