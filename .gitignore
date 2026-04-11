@@ -1,5 +1,6 @@
 /objs
 /bin/main.exe
+/bin/main
 .ninja_deps
 .ninja_log
 build.ninja

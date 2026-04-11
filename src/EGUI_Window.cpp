@@ -69,7 +69,7 @@ void Window::update(){
 					SDL_FPoint mousePos = { event.button.x, event.button.y };
 
 					for(const auto& w : _widgets){
-						Widget::Hitbox hitboxRect = w->getHitbox();
+						Hitbox hitboxRect = w->getHitbox();
 						SDL_FRect rect{ hitboxRect.getPosition().X(), hitboxRect.getPosition().Y(), 
                                         hitboxRect.getSize().X(), hitboxRect.getSize().Y()};
 						if(SDL_PointInRectFloat(&mousePos, &rect)){

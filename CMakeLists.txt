@@ -13,7 +13,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 include(FetchContent)
 
 function(include_dependency libName gitURL gitTag)
-    FetchContent_Declare(${libName}
+    fetchcontent_declare(${libName}
         GIT_REPOSITORY ${gitURL}
         GIT_TAG ${gitTag}
         GIT_SHALLOW TRUE
@@ -26,6 +26,7 @@ find_package(SDL3 QUIET)
 if(NOT SDL3_FOUND)
     message(STATUS "Getting SDL3 from Github")
     include_dependency(SDL3 https://github.com/libsdl-org/SDL.git release-3.4.4)
+	fetchcontent_makeavailable(SDL3)
 else()
     message(STATUS "Using local SDL3")
 endif()
@@ -53,6 +54,6 @@ if(WIN32)
     add_custom_command(
         TARGET main POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:SDL3::SDL3>" "$<TARGET_FILE_DIR:main>"
-        VEBRATIM
+        VERBATIM
     )
 endif()

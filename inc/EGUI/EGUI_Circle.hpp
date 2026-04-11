@@ -18,6 +18,7 @@ namespace egui{
 			_backgroundColor = bgColor;
 			_borderWidth = bdWidth;
 			_borderColor = bdColor;
+			_type = WidgetType::CIRCLE;
 		}
 		Circle(){}
 	private:
