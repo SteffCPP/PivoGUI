@@ -2,6 +2,8 @@
 
 #include "EGUI_Dep.hpp"
 
+#include <cstddef>
+
 namespace egui{
 	class Widget : public drawable, public transformable, public interactable{		
 	protected:

@@ -25,11 +25,11 @@ namespace egui{
 
 		inline void setRotationDegrees(double deg){ 
 			_rotationDegrees = deg; 
-			_rotationRadians = math::degToRad(deg);
+			_rotationRadians = egui::math::degToRad(deg);
 		}
 		inline void setRotationRadians(double rad){ 
 			_rotationRadians = rad;
-			_rotationDegrees = math::radToDeg(rad);
+			_rotationDegrees = egui::math::radToDeg(rad);
 		}
 		constexpr double getRotationDegrees() const { return _rotationDegrees; }
 		constexpr double getRotationRadians() const { return _rotationRadians; }
@@ -141,8 +141,8 @@ namespace egui{
 		virtual ~transformable() = default;
 
 		Vector2D getPosition() const { return _pos; }
-
 		void setPosition(const Vector2D& pos) { _pos = pos; }
+
 
 		void move(const Vector2D& delta) {
 			_pos.x += delta.x;
