@@ -7,7 +7,7 @@ struct SDL_Rect;
 namespace egui{
 	class Rectangle : public Widget, public interactable{
 	public:
-		virtual bool contains(const Vector2D& point) const override {
+		virtual bool containsPoint(const Vector2D& point) const override {
 			auto pos = getPosition();
 			auto size = getSize();
 

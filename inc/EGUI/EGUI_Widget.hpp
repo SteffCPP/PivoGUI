@@ -2,9 +2,6 @@
 
 #include "EGUI_Dep.hpp"
 
-struct SDL_Renderer;
-struct SDL_FRect;
-
 namespace egui{
 	class Widget : public drawable, public transformable{		
 	protected:
@@ -20,7 +17,6 @@ namespace egui{
 		constexpr std::size_t getLayerNumber() const { return _layerN; }
 		inline void setLayerNumber(const std::size_t n) { _layerN = n; }
 
-		
 	protected:
 		constexpr WidgetType _getType() const { return _type; }
 		

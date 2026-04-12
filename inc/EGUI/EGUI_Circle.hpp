@@ -14,7 +14,7 @@ namespace egui{
 			setSize({radius*2, radius*2});
 		}
 
-		virtual bool contains(const Vector2D& point) const override {
+		virtual bool containsPoint(const Vector2D& point) const override {
 			auto c = getPosition();
 
 			float dx = point.x - (c.x + _radius);

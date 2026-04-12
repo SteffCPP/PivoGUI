@@ -57,7 +57,7 @@ namespace egui{
 	public:
 		virtual ~interactable() = default;
 		
-		virtual bool contains(const Vector2D& point) const = 0;
+		virtual bool containsPoint(const Vector2D& point) const = 0;
 
 		template<typename Func, typename... Args>
 		void setOnClick(Func&& func, Args&&... args){

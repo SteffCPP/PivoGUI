@@ -8,12 +8,12 @@ void onClickRect(){
 
 int main(){
 	egui::Window win;
-	win.create("Finestra", {300, 300});
+	win.create("Finestra", {600, 600});
 
 	egui::Rectangle rect({50, 50}, {100, 100}, egui::colors::Magenta);
 
-	egui::Circle circle(100.0F, {200, 200}, egui::colors::Blue, 10.0F, egui::colors::Yellow);
-
+	egui::Circle circle(100.0F, {400, 200}, egui::colors::Green, 10.0F, egui::colors::Black);
+	
 	win.assign(rect);
 	win.assign(circle);
 
