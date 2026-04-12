@@ -8,12 +8,14 @@
 
 namespace egui {
 inline bool Window::_checkWidgetsOrder() const {
-    if (_widgets.size() < 2){
+	if(_widgets.empty() || _widgets.size() == 1) return true;
+    if (_widgets.size() == 2){
         if(_widgets.at(0)->getLayerNumber() > _widgets.at(1)->getLayerNumber())
             return false;
 		else 
 			return true;
     }
+	
     for (std::size_t i=0; i < _widgets.size()-1; ++i) {
         if (_widgets.at(i)->getLayerNumber() > _widgets.at(i+1)->getLayerNumber())
             return false;

@@ -115,7 +115,6 @@ namespace egui{
 
 		const HoverContext& getHoverContext() const { return _hoverContext; }
 
-		bool isHovered() const { return _hovered; }
    	 	bool isPressed() const { return _pressed; }
 	protected:
 		bool _hovered{false};

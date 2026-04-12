@@ -42,7 +42,7 @@ target_include_directories(EGUI PUBLIC
 target_include_directories(EGUI PUBLIC ${SDL3_INCLUDE_DIRS})
 target_link_libraries(EGUI PRIVATE SDL3::SDL3)
 
-add_executable(main src/main.cpp)
+add_executable(main test/main.cpp)
 
 set_target_properties(main PROPERTIES
     BUILD_RPATH "$ORIGIN"
