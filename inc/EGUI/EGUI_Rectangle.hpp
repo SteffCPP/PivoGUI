@@ -5,7 +5,7 @@
 struct SDL_Rect;
 
 namespace egui{
-	class Rectangle : public Widget, public interactable{
+	class Rectangle : public Widget{
 	public:
 		virtual bool containsPoint(const Vector2D& point) const override {
 			auto pos = getPosition();

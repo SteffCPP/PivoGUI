@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace egui{
-	class Circle : public Widget, public interactable{
+	class Circle : public Widget{
 	public:
 		float getRadius() const { return _radius; }
 		void setRadius(float radius){ 

@@ -54,6 +54,15 @@ namespace egui{
 	};
 
 	class interactable{
+	protected:
+		struct HoverContext {
+			Vector2D mousePos;
+			bool leftButtonDown;
+			bool rightButtonDown;
+			bool middleButtonDown;
+			bool hovering;
+			float timeHovered;
+		};
 	public:
 		virtual ~interactable() = default;
 		
@@ -87,20 +96,45 @@ namespace egui{
 		}
 
 		template<typename Func, typename... Args>
-		void setOnExit(Func&& func, Args&&... args){
-			_onExit = [func = std::forward<Func>(func),
+		void setOnLeave(Func&& func, Args&&... args){
+			_onLeave = [func = std::forward<Func>(func),
 						... args = std::forward<Args>(args)](){
 				
 				func(args...);
 			};
 		}
 
+		template<typename Func, typename... Args>
+		void setOnRelease(Func&& func, Args&&... args){
+			_onRelease = [func = std::forward<Func>(func),
+						... args = std::forward<Args>(args)](){
+				
+				func(args...);
+			};
+		}
 
+		const HoverContext& getHoverContext() const { return _hoverContext; }
+
+		bool isHovered() const { return _hovered; }
+   	 	bool isPressed() const { return _pressed; }
 	protected:
+		bool _hovered{false};
+		bool _pressed{false};
+		bool _isClicking{false};
+
+		HoverContext _hoverContext;
+
+		void _triggerClick() const { if (_onClick) _onClick(); }
+		void _triggerHover() const { if (_onHover) _onHover(); }
+		void _triggerEnter() const { if (_onEnter) _onEnter(); }
+		void _triggerLeave() const { if (_onLeave) _onLeave(); }
+		void _triggerRelease() const { if(_onRelease) _onRelease(); }
+
 		std::function<void()> _onClick;
 		std::function<void()> _onHover;
     	std::function<void()> _onEnter;
-    	std::function<void()> _onExit;
+    	std::function<void()> _onLeave;
+		std::function<void()> _onRelease;
 	};
 
 	class transformable: public sizeable, public rotatable{

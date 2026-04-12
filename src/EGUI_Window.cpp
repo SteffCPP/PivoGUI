@@ -11,6 +11,8 @@ inline bool Window::_checkWidgetsOrder() const {
     if (_widgets.size() < 2){
         if(_widgets.at(0)->getLayerNumber() > _widgets.at(1)->getLayerNumber())
             return false;
+		else 
+			return true;
     }
     for (std::size_t i=0; i < _widgets.size()-1; ++i) {
         if (_widgets.at(i)->getLayerNumber() > _widgets.at(i+1)->getLayerNumber())
@@ -57,15 +59,55 @@ void Window::update(){
     if(!_win || !_renderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
 
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-            case SDL_EVENT_QUIT:{
-				_isOpen = false;
-			} break;
-            default: break;
+	defInputSystem._update();
+
+	if(defInputSystem._hasRequestedQuit()) destroy();
+	if(defInputSystem._hasRequestedWindowQuit().first && 
+		defInputSystem._hasRequestedWindowQuit().second == _win) destroy();
+
+	const Mouse& mouse = defInputSystem.getMouse();
+	const Keyboard& keyboard = defInputSystem.getKeyboard();
+
+	Vector2D mousePos = mouse.getPosition();
+
+	float _deltaTime = 0.016f;
+
+	for (auto& w : _widgets) {
+        bool inside = w->containsPoint(mousePos);
+
+		w->_hoverContext.mousePos = mousePos;
+        w->_hoverContext.leftButtonDown = mouse.leftDown();
+		w->_hoverContext.rightButtonDown = mouse.rightDown();
+		w->_hoverContext.middleButtonDown = mouse.middleDown();
+        w->_hoverContext.hovering = inside;
+
+        if (inside) {
+			w->_hoverContext.timeHovered += _deltaTime;
+            if (!w->_hovered) {
+                w->_hovered = true;
+                w->_triggerEnter();
+            }
+
+            w->_triggerHover();
+
+            if (mouse.isButtonDown(MouseButton::LEFT) && !w->_pressed) {
+                w->_pressed = true;
+                w->_triggerClick();
+            }else if(mouse.isButtonUp(MouseButton::LEFT) && w->_pressed){
+				w->_pressed = false;
+				w->_triggerRelease();
+			}
+        } else {
+            if (w->_hovered) {
+                w->_hovered = false;
+                w->_triggerLeave();
+            }
+            w->_pressed = false;
+
+			w->_hoverContext.timeHovered = 0.0f;
         }
     }
+
 
     SDL_SetRenderDrawColor(
         _renderer,
@@ -81,7 +123,7 @@ void Window::update(){
     }
 
     SDL_RenderPresent(_renderer);
-    SDL_Delay(5);
+    SDL_Delay(10);
 }
 
 void Window::destroy() {
@@ -120,6 +162,16 @@ void Window::assign(Widget& widget) {
     }
     
     _widgets.insert(_widgets.begin() + i, &widget);
+}
+
+void Window::remove(Widget& widget){
+	_widgets.erase(
+		std::remove_if(_widgets.begin(), _widgets.end(),
+					[&](const Widget* ptr){
+						return ptr == &widget;
+					}),
+		_widgets.end()
+	);
 }
 
 Window::Window(const std::string title,

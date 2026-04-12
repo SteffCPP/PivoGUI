@@ -1,5 +1,6 @@
 #pragma once
 #include "EGUI_Widget.hpp"
+#include "EGUI_InputSystem.hpp"
 
 #include <vector>
 #include <string>
@@ -17,6 +18,7 @@ namespace egui{
 		void update();
 		void destroy();
 		void assign(Widget& widget);
+		void remove(Widget& widget);
 
 		inline void setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
 		inline bool isOpen() const {return _isOpen; }

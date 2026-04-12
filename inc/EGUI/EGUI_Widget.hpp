@@ -3,7 +3,7 @@
 #include "EGUI_Dep.hpp"
 
 namespace egui{
-	class Widget : public drawable, public transformable{		
+	class Widget : public drawable, public transformable, public interactable{		
 	protected:
 		enum class WidgetType{
 			WIDGET,
