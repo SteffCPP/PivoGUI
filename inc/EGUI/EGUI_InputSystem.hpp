@@ -4,7 +4,7 @@
 
 namespace egui{
     class Mouse{
-    ,public:
+    public:
 
     private:
     
