@@ -40,8 +40,8 @@ void Window::create(const std::string& title,
     // Crea finestra e renderer
     if (!SDL_CreateWindowAndRenderer(
 			title.c_str(),
-            static_cast<int>(size.X()),
-            static_cast<int>(size.Y()),
+            static_cast<int>(size.x),
+            static_cast<int>(size.y),
             SDL_WINDOW_RESIZABLE,
             &_win,
             &_renderer)) {
@@ -62,21 +62,6 @@ void Window::update(){
         switch (event.type) {
             case SDL_EVENT_QUIT:{
 				_isOpen = false;
-			} break;
-                
-			case SDL_EVENT_MOUSE_BUTTON_DOWN:{
-				if(event.button.button == SDL_BUTTON_LEFT){
-					SDL_FPoint mousePos = { event.button.x, event.button.y };
-
-					for(const auto& w : _widgets){
-						Hitbox hitboxRect = w->getHitbox();
-						SDL_FRect rect{ hitboxRect.getPosition().X(), hitboxRect.getPosition().Y(), 
-                                        hitboxRect.getSize().X(), hitboxRect.getSize().Y()};
-						if(SDL_PointInRectFloat(&mousePos, &rect)){
-							w->_onClick();
-						}
-					}
-				}
 			} break;
             default: break;
         }

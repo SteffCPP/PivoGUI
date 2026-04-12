@@ -1,6 +1,9 @@
 #pragma once
-#include "EGUI_Rectangle.hpp"
+#include "EGUI_Widget.hpp"
+
+#include <vector>
 #include <string>
+
 struct SDL_Window;
 struct SDL_Renderer;
 

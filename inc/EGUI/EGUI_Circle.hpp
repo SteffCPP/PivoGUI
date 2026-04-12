@@ -1,12 +1,28 @@
 #pragma once
-#include "EGUI_Shape.hpp"
+
+#include "EGUI_Dep.hpp"
+#include "EGUI_Widget.hpp"
+
 #include <vector>
 
 namespace egui{
-	class Circle : public Shape{
+	class Circle : public Widget, public interactable{
 	public:
-		constexpr float getRadius() const { return _radius; }
-		void setRadius(float radius){ _radius = radius; }
+		float getRadius() const { return _radius; }
+		void setRadius(float radius){ 
+			_radius = radius; 
+			setSize({radius*2, radius*2});
+		}
+
+		virtual bool contains(const Vector2D& point) const override {
+			auto c = getPosition();
+
+			float dx = point.x - (c.x + _radius);
+			float dy = point.y - (c.y + _radius);
+
+			return dx*dx + dy*dy <= _radius*_radius;
+		}
+
 
 		Circle(	const float radius, 
 				const Vector2D& pos,

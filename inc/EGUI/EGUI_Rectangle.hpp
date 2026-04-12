@@ -1,11 +1,21 @@
 #pragma once
-#include "EGUI_Shape.hpp"
+
+#include "EGUI_Widget.hpp"
+
 struct SDL_Rect;
 
 namespace egui{
-	class Rectangle : public Shape, transformable{
+	class Rectangle : public Widget, public interactable{
 	public:
-		inline void setSize(const Vector2D& size) override { _size = size; _hitbox.setSize(_size); }
+		virtual bool contains(const Vector2D& point) const override {
+			auto pos = getPosition();
+			auto size = getSize();
+
+			return point.x >= pos.x &&
+				point.x <= pos.x + size.x &&
+				point.y >= pos.y &&
+				point.y <= pos.y + size.y;
+		}
 
 		Rectangle(	const Vector2D& size, 
 					const Vector2D& pos, 

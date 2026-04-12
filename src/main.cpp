@@ -11,7 +11,6 @@ int main(){
 	win.create("Finestra", {300, 300});
 
 	egui::Rectangle rect({50, 50}, {100, 100}, egui::colors::Magenta);
-	rect.setOnClick(onClickRect);
 
 	egui::Circle circle(100.0F, {200, 200}, egui::colors::Blue, 10.0F, egui::colors::Yellow);
 

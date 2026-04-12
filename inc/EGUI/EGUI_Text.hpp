@@ -1,3 +1,5 @@
+#pragma once
+
 #include "EGUI_Widget.hpp"
 
 namespace egui{

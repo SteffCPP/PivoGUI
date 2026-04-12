@@ -17,14 +17,11 @@ Rectangle::Rectangle(	const Vector2D& size,
 	_rotationRadians = rotRad;
 	_rotationDegrees = math::radToDeg(rotRad);
 	_type = WidgetType::RECTANGLE;
-
-	_hitbox.setPosition(pos);
-	_hitbox.setSize(size);
 }
 Rectangle::Rectangle(){}
 
 void Rectangle::_draw(SDL_Renderer* __renderer) {
-	SDL_FRect drawRect{_hitbox.getPosition().X(), _hitbox.getPosition().Y(), _hitbox.getSize().X(), _hitbox.getSize().Y()};
+	SDL_FRect drawRect{_pos.x, _pos.y, _size.x, _size.y};
 	SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
 	SDL_RenderFillRect(__renderer, &drawRect);
 

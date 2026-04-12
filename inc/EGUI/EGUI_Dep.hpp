@@ -2,14 +2,18 @@
 
 #include "EGUI_Vector.hpp"
 #include "EGUI_Math.hpp"
-#include "EGUI_Hitbox.hpp"
+#include "EGUI_Color.hpp"
+
+#include <functional>
 
 struct SDL_Renderer;
 
 namespace egui{
 	class sizeable{
 	public:
-		constexpr virtual Vector2D getSize() const { return _size; }
+		virtual ~sizeable() = default;
+
+		virtual Vector2D getSize() const { return _size; }
 		virtual void setSize(const Vector2D& size){ _size = size; }
 	protected:
 		Vector2D _size{0, 0};
@@ -17,6 +21,8 @@ namespace egui{
 
 	class rotatable{
 	public:
+		virtual ~rotatable() = default;
+
 		inline void setRotationDegrees(double deg){ 
 			_rotationDegrees = deg; 
 			_rotationRadians = math::degToRad(deg);
@@ -31,9 +37,27 @@ namespace egui{
 		double _rotationDegrees{0}, _rotationRadians{0};
 	};
 
+	class drawable{
+	public:
+		virtual ~drawable() = default;
+
+		constexpr Color_RGBA getBackgroundColor() const { return _backgroundColor; }
+		constexpr Color_RGBA getBorderColor() const { return _borderColor; }
+
+		inline void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
+		inline void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
+	protected:
+		virtual void _draw(SDL_Renderer* __renderer) = 0;
+
+		Color_RGBA _backgroundColor{egui::colors::Black}, _borderColor{egui::colors::Transparent};
+		float _borderWidth{0};
+	};
+
 	class interactable{
 	public:
-		Hitbox getHitbox() const { return _hitbox; }
+		virtual ~interactable() = default;
+		
+		virtual bool contains(const Vector2D& point) const = 0;
 
 		template<typename Func, typename... Args>
 		void setOnClick(Func&& func, Args&&... args){
@@ -44,18 +68,54 @@ namespace egui{
 			};
 		}
 
+		template<typename Func, typename... Args>
+		void setOnHover(Func&& func, Args&&... args){
+			_onHover = [func = std::forward<Func>(func),
+						... args = std::forward<Args>(args)](){
+				
+				func(args...);
+			};
+		}
+
+		template<typename Func, typename... Args>
+		void setOnEnter(Func&& func, Args&&... args){
+			_onEnter = [func = std::forward<Func>(func),
+						... args = std::forward<Args>(args)](){
+				
+				func(args...);
+			};
+		}
+
+		template<typename Func, typename... Args>
+		void setOnExit(Func&& func, Args&&... args){
+			_onExit = [func = std::forward<Func>(func),
+						... args = std::forward<Args>(args)](){
+				
+				func(args...);
+			};
+		}
+
+
 	protected:
 		std::function<void()> _onClick;
-
-		Hitbox _hitbox{{0, 0}, {0, 0}};
+		std::function<void()> _onHover;
+    	std::function<void()> _onEnter;
+    	std::function<void()> _onExit;
 	};
 
-	class drawable{
+	class transformable: public sizeable, public rotatable{
+	public:
+		virtual ~transformable() = default;
+
+		Vector2D getPosition() const { return _pos; }
+
+		void setPosition(const Vector2D& pos) { _pos = pos; }
+
+		void move(const Vector2D& delta) {
+			_pos.x += delta.x;
+			_pos.y += delta.y;
+		}
 	protected:
-		virtual void _draw(SDL_Renderer* __renderer) = 0;
+		Vector2D _pos{0, 0};
 	};
-
-
-
-	class transformable: public sizeable, public rotatable{};
 }

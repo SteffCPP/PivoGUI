@@ -3,8 +3,8 @@
 
 namespace egui{
 void Circle::_draw(SDL_Renderer* __renderer) {
-	_drawFilledCircle(__renderer, _pos.X(), _pos.Y(), _radius , _borderColor);
-	_drawFilledCircle(__renderer, _pos.X(), _pos.Y(), _radius - _borderWidth ,_backgroundColor);
+	_drawFilledCircle(__renderer, _pos.x, _pos.y, _radius , _borderColor);
+	_drawFilledCircle(__renderer, _pos.x, _pos.y, _radius - _borderWidth ,_backgroundColor);
 }
 
 inline void Circle::_drawFilledCircle(	SDL_Renderer* __renderer, 
