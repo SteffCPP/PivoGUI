@@ -190,10 +190,7 @@ namespace egui{
 		Pivot getPivot() const { return _pivot; }
 		void setPivot(const Pivot& pivot){ _pivot = pivot; }
 
-		void move(const Vector2D& delta) {
-			_pos.x += delta.x;
-			_pos.y += delta.y;
-		}
+		void move(const Vector2D& delta) { _pos = _pos + delta; }
 	protected:
 		Vector2D _computePivotOffset() const {
 			switch(_pivot){
