@@ -1,6 +1,6 @@
 /*
 EGUI - Easy Graphical User Interface
-Copyright (c) 2026 Rando Stefano (randostefano39@proton.me)
+Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
