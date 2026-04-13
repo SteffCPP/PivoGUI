@@ -31,8 +31,8 @@ else()
     message(STATUS "Using local SDL3")
 endif()
 
-file(GLOB_RECURSE EGUI_SOURCES src/*.cpp)
-list(FILTER EGUI_SOURCES EXCLUDE REGEX ".*main\\.cpp$")
+file(GLOB_RECURSE EGUI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS test/*.cpp)
 
 add_library(EGUI SHARED ${EGUI_SOURCES})
 target_include_directories(EGUI PUBLIC
@@ -42,18 +42,23 @@ target_include_directories(EGUI PUBLIC
 target_include_directories(EGUI PUBLIC ${SDL3_INCLUDE_DIRS})
 target_link_libraries(EGUI PRIVATE SDL3::SDL3)
 
-add_executable(main test/main.cpp)
 
-set_target_properties(main PROPERTIES
-    BUILD_RPATH "$ORIGIN"
-    INSTALL_RPATH "$ORIGIN"
-)
-target_link_libraries(main PRIVATE EGUI)
+foreach(SOURCE_FILE ${TEST_SOURCES})
+    get_filename_component(EXECUTABLE_NAME ${SOURCE_FILE} NAME_WE)
+    add_executable(${EXECUTABLE_NAME} ${SOURCE_FILE})
+	set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+		BUILD_RPATH "$ORIGIN"
+		INSTALL_RPATH "$ORIGIN"
+	)
+	target_link_libraries(${EXECUTABLE_NAME} PRIVATE EGUI)
 
-if(WIN32)
-    add_custom_command(
-        TARGET main POST_BUILD
-        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:SDL3::SDL3>" "$<TARGET_FILE_DIR:main>"
-        VERBATIM
-    )
-endif()
+	if(WIN32)
+		add_custom_command(
+			TARGET ${EXECUTABLE_NAME} POST_BUILD
+			COMMAND "${CMAKE_COMMAND}" -E copy_if_different "$<TARGET_FILE:SDL3::SDL3>" "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>"
+			VERBATIM
+		)
+	endif()
+endforeach()
+
+
