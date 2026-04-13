@@ -21,7 +21,10 @@ Rectangle::Rectangle(	const Vector2D& size,
 Rectangle::Rectangle(){}
 
 void Rectangle::_draw(SDL_Renderer* __renderer) {
-	SDL_FRect drawRect{_pos.x, _pos.y, _size.x, _size.y};
+	Vector2D offset = _computePivotOffset();
+	Vector2D finalPos = _pos - offset;
+
+	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
 	SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
 	SDL_RenderFillRect(__renderer, &drawRect);
 

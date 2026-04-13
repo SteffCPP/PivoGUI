@@ -142,9 +142,9 @@ int main(){
 			
 			ball.invertDX();
 
-			if(ball.getDY()>0 && padel1_Up){ 
+			if((ball.getDY()>0 && padel1_Up) || ball_Y2 <= padel1_Y1){ 
 				ball.invertDY();
-			}else if(ball.getDY()<0 && padel1_Down){
+			}else if((ball.getDY()<0 && padel1_Down) || ball_Y1 >= padel1_Y2){
 				ball.invertDY();
 			}else{
 				if(ball.getDX()<0) ball.getDX() -= 0.5f;
@@ -164,9 +164,9 @@ int main(){
 			
 			ball.invertDX();
 
-			if(ball.getDY()>0 && padel2_Up){ 
+			if((ball.getDY()>0 && padel2_Up) || ball_Y2 <= padel2_Y1){ 
 				ball.invertDY();
-			}else if(ball.getDY()<0 && padel2_Down){
+			}else if((ball.getDY()<0 && padel2_Down) || ball_Y1 >= padel2_Y2){
 				ball.invertDY();
 			}else{
 				if(ball.getDX()<0) ball.getDX() -= 0.5f;
@@ -187,7 +187,7 @@ int main(){
 		else if(padel2_Down) padel2.moveDown();
 
 
-		auto printScores = [scoreP1, scoreP2](){
+		auto printScores = [&scoreP1, &scoreP2](){
 			std::cout << "P1: " << scoreP1 << "; P2: " << scoreP2 << "\n";
 		};
 		// Point condition & Win Condition

@@ -3,8 +3,13 @@
 
 namespace egui{
 void Circle::_draw(SDL_Renderer* __renderer) {
-	_drawFilledCircle(__renderer, _pos.x, _pos.y, _radius , _borderColor);
-	_drawFilledCircle(__renderer, _pos.x, _pos.y, _radius - _borderWidth ,_backgroundColor);
+	Vector2D pivotOffset = _computePivotOffset();
+	Vector2D centerOffset = pivotOffset - Vector2D{_radius, _radius};
+	Vector2D finalCenter = _pos - centerOffset;
+
+
+	_drawFilledCircle(__renderer, finalCenter.x, finalCenter.y, _radius , _borderColor);
+	_drawFilledCircle(__renderer, finalCenter.x, finalCenter.y, _radius - _borderWidth ,_backgroundColor);
 }
 
 inline void Circle::_drawFilledCircle(	SDL_Renderer* __renderer, 

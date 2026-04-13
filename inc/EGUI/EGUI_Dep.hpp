@@ -46,6 +46,7 @@ namespace egui{
 
 		inline void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
 		inline void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
+	
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
 
@@ -137,18 +138,50 @@ namespace egui{
 	};
 
 	class transformable: public sizeable, public rotatable{
+	protected:
+		enum class Pivot{
+			TOP,
+			TOP_LEFT,
+			TOP_RIGHT,
+			LEFT,
+			RIGHT,
+			BOTTOM,
+			BOTTOM_LEFT,
+			BOTTOM_RIGHT,
+			CENTER
+		};
 	public:
 		virtual ~transformable() = default;
 
 		Vector2D getPosition() const { return _pos; }
 		void setPosition(const Vector2D& pos) { _pos = pos; }
 
+		Pivot getPivot() const { return _pivot; }
+		void setPivot(const Pivot& pivot){ _pivot = pivot; }
 
 		void move(const Vector2D& delta) {
 			_pos.x += delta.x;
 			_pos.y += delta.y;
 		}
 	protected:
+		Vector2D _computePivotOffset() const {
+			switch(_pivot){
+				case Pivot::TOP_LEFT:     return {0, 0};
+				case Pivot::TOP:          return {_size.x / 2, 0};
+				case Pivot::TOP_RIGHT:    return {_size.x, 0};
+
+				case Pivot::LEFT:         return {0, _size.y / 2};
+				case Pivot::CENTER:       return {_size.x / 2, _size.y / 2};
+				case Pivot::RIGHT:        return {_size.x, _size.y / 2};
+
+				case Pivot::BOTTOM_LEFT:  return {0, _size.y};
+				case Pivot::BOTTOM:       return {_size.x / 2, _size.y};
+				case Pivot::BOTTOM_RIGHT: return {_size.x, _size.y};
+			}
+			return {0, 0};
+		}
+		Pivot _pivot{Pivot::TOP_LEFT};
+		
 		Vector2D _pos{0, 0};
 	};
 }
