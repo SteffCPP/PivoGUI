@@ -20,7 +20,7 @@ namespace egui{
 		inline void setLayerNumber(const std::size_t n) { _layerN = n; }
 
 	protected:
-		constexpr WidgetType _getType() const { return _type; }
+		WidgetType _getType() const { return _type; }
 		
 		WidgetType _type{WidgetType::WIDGET};
 		std::size_t _layerN{0};

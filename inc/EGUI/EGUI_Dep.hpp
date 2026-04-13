@@ -41,8 +41,8 @@ namespace egui{
 	public:
 		virtual ~drawable() = default;
 
-		constexpr Color_RGBA getBackgroundColor() const { return _backgroundColor; }
-		constexpr Color_RGBA getBorderColor() const { return _borderColor; }
+	 	Color_RGBA getBackgroundColor() const { return _backgroundColor; }
+		Color_RGBA getBorderColor() const { return _borderColor; }
 
 		inline void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
 		inline void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
