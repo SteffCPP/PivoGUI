@@ -38,11 +38,11 @@ namespace egui{
 		
 	};
 
-	class TextLabel: public Widget, drawable, transformable{
-
+	class TextLabel: public Widget{
+		
 	};
 
-	class TextInputLabel: public Widget, drawable, transformable{
+	class TextInputLabel: public Widget{
 		
 	};
 
