@@ -64,15 +64,20 @@ void Window::create(const std::string& title,
                     const Color_RGBA& bgColor){
     if (_isOpen || _win) return;
 
-    // Inizializza SDL solo se non già fatto
     if (SDL_WasInit(0) == 0) {
         if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS) != true) {
             std::cerr << "Couldn't initialize SDL3: " << SDL_GetError() << "\n";
+            abort();
             return;
         }
+        if(TTF_Init() != true){
+            std::cerr << "Couldn't initialize SDL3_Image.\n";
+            abort();
+            return;
+        }
+        
     }
 
-    // Crea finestra e renderer
     if (!SDL_CreateWindowAndRenderer(
 			title.c_str(),
             static_cast<int>(size.x),

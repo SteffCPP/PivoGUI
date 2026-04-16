@@ -160,7 +160,7 @@ namespace egui{
 		void _triggerEnter() const { if (_onEnter) _onEnter(); }
 		void _triggerLeave() const { if (_onLeave) _onLeave(); }
 		void _triggerRelease() const { if(_onRelease) _onRelease(); }
-
+	private:
 		std::function<void()> _onClick;
 		std::function<void()> _onHover;
     	std::function<void()> _onEnter;
