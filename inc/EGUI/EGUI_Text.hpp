@@ -41,7 +41,7 @@ struct SDL_Renderer;
 
 namespace egui{
 	class Text{
-	private:
+	public:
 		enum class Style{
 			NORMAL 			= 0,
 			BOLD 			= 1 << 0,
@@ -49,7 +49,7 @@ namespace egui{
 			UNDERLINE 		= 1 << 2,
 			STRIKETHROUGH 	= 1 << 3
 		};
-		enum class TextAlignment{
+		enum class Alignment{
 			INVALID = -1,
 			LEFT,
 			CENTER,
@@ -58,19 +58,23 @@ namespace egui{
 	public:
 		void setText(const std::string& txt);
 		std::string getText() const;
+		void appendText(const std::string& txt);
 
 		void loadFont(const std::string& path, const float& size);
 
-		void setSize(const float& size);
-		float getSize() const;
+		void setFontSize(const float& size);
+		float getFontSize() const;
 
-		void setStyle(const Style& style);
+		void setStyle(const Style& style, const bool& flag);
 		Style getStyle() const;
 
 		void setColor(const Color_RGBA& color);
 		Color_RGBA getColor() const;
 
-		void setAlignment(Text::TextAlignment& align){ _alignment = align; }
+		void setSize(const Vector2D& size){ _size = size; }
+		Vector2D getSize() const { return _size; }
+
+		void setAlignment(Text::Alignment align){ _alignment = align; }
 
 		Text(){}
 		Text(const std::string& text,
@@ -79,22 +83,33 @@ namespace egui{
 			const Color_RGBA& color=egui::colors::White);
 		~Text();
 	private:
+		Vector2D _size{0, 0};
 		std::string _text{""};
 		Color_RGBA _color{egui::colors::White};
+		short _styles;
 
 		TTF_Text* _ttftext=nullptr;
 		TTF_Font* _ttffont=nullptr;
 
-		TextAlignment _alignment{TextAlignment::LEFT};
+		Alignment _alignment{Alignment::LEFT};
 
 		friend class TextLabel;
 		friend class TextLabelInput;
 	};
 
 	class TextLabel : public Widget{
-	private:
-		
 	public:
+		enum class TextBoxAlignment{
+			LEFT,
+			CENTER,
+			RIGHT
+		};
+		enum class TextBoxAlignmentVertical{
+			TOP,
+			CENTER,
+			BOTTOM
+		};
+
 		virtual bool containsPoint(const Vector2D& point) const override {
 			return point.x >= _pos.x &&
 				point.x <= _pos.x + _size.x &&
@@ -103,18 +118,49 @@ namespace egui{
 		}
 
 		void setPadding(const float& padding){ _padding = padding; }
+
+		void setTextboxAlignment(const TextBoxAlignment align){
+			_textboxAlignment = align;
+		}
+		TextBoxAlignment getTextboxAlignment() const { return _textboxAlignment; }
+
+		void setTextBoxAlignmentVertical(const TextBoxAlignmentVertical align){
+			_textboxAlignmentVertical = align;
+		}
+		TextBoxAlignmentVertical getTextboxAlignmentVertical() const { return _textboxAlignmentVertical; }
+
 		Text text;
 		TextLabel(){}
+		TextLabel(
+			const Vector2D& position,
+			const Vector2D& size,
+			const std::string& textStr,
+			const std::string& fontPath,
+			const float& fontSize,
+			const Color_RGBA& textColor = egui::colors::White)
+			{
+			_pos = position;
+			_size = size;
+
+			text.loadFont(fontPath, fontSize);
+			text.setText(textStr);
+			text.setColor(textColor);
+
+			_textboxAlignment = TextBoxAlignment::CENTER;
+			_textboxAlignmentVertical = TextBoxAlignmentVertical::CENTER;
+		}
 	private:
 		void _draw(SDL_Renderer* __renderer) override;
 
 		float _padding{10};
+		TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};
+		TextBoxAlignmentVertical _textboxAlignmentVertical{TextBoxAlignmentVertical::CENTER};
 	};
 
 	class TextLabelInput : public Widget{
 	public:
 
 	private:
-
+		
 	};
 }

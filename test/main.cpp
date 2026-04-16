@@ -2,23 +2,21 @@
 #include "EGUI/EGUI.hpp"
 
 int main(){
-	egui::Window win("Finestra", {800, 900}, egui::colors::Black);
-	egui::TextLabel label;
+	egui::Window win("Finestra", {800, 900});
 
-	label.setBackgroundColor(egui::colors::White);
-	label.setSize({500, 500});
+	egui::TextLabel label;
+	label.setBackgroundColor(egui::colors::Gray);
+	label.setSize({800, 800});
 	label.setPosition({50, 50});
-	label.text.loadFont("/home/stefano/Coding/EasyGUI/test/Kunaroh.ttf", 50);
-	label.text.setText("Ciao Mondo!");
-	label.text.setColor(egui::colors::Red);
+	label.text.loadFont("test/fonts/retro_gaming.ttf",100);
+	label.text.setText("STAMPA");
+	label.text.setColor(egui::colors::Cyan);
+	label.text.setSize({800, 200});
+	label.text.setStyle(egui::Text::Style::ITALIC, true);
 
 	win.assign(label);
 
 	while(win.isOpen()){
-
-
-
-
 		win.update();
 	}
 
