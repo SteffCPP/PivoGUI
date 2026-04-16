@@ -40,7 +40,7 @@ SOFTWARE.
 #include "EGUI_Rectangle.hpp"
 #include "EGUI_Circle.hpp"
 //#include "EGUI_Slider.hpp"
-//#include "EGUI_TextInput.hpp"
+#include "EGUI_Text.hpp"
 #include "EGUI_Vector.hpp"
 #include "EGUI_Window.hpp"
 #include "EGUI_InputSystem.hpp"

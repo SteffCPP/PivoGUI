@@ -39,13 +39,10 @@ namespace egui{
 	class Rectangle : public Widget{
 	public:
 		virtual bool containsPoint(const Vector2D& point) const override {
-			auto pos = getPosition();
-			auto size = getSize();
-
-			return point.x >= pos.x &&
-				point.x <= pos.x + size.x &&
-				point.y >= pos.y &&
-				point.y <= pos.y + size.y;
+			return point.x >= _pos.x &&
+				point.x <= _pos.x + _size.x &&
+				point.y >= _pos.y &&
+				point.y <= _pos.y + _size.y;
 		}
 
 		Rectangle(	const Vector2D& size, 

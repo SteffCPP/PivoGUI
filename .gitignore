@@ -1,6 +1,10 @@
 /objs
-/bin/*.exe
-/bin/main
+/test/bin/*.exe
+/test/bin/main
+/test/bin/pong
+
+/test/bin/*.dll
+
 .ninja_deps
 .ninja_log
 build.ninja

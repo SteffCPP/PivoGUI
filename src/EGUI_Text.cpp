@@ -1,0 +1,111 @@
+#include "EGUI_Text.hpp"
+#include "EGUI_SDL.cpp"
+
+#include <iostream>
+
+
+
+namespace egui{
+    #define FONT_NOT_LOADED_ERR \
+    if(_ttffont==nullptr){ \
+        std::cerr << "Impossible to update size: Font not loaded.\n"; \
+        abort(); \
+    }
+
+Text::Text( const std::string& text,
+			const std::string& fontPath, 
+			const float& size,
+			const Color_RGBA& color)
+{ 	
+	loadFont(fontPath, size); 
+	setText(text);
+	setColor(color);
+}
+
+Text::~Text(){
+    TTF_CloseFont(_ttffont);
+    _ttffont=nullptr;
+}   
+
+void Text::setStyle(const Style& style){ 
+    TTF_SetFontStyle(_ttffont, (short)style); 
+}
+Text::Style Text::getStyle() const { 
+    FONT_NOT_LOADED_ERR;
+    return (Style)TTF_GetFontStyle(_ttffont); 
+}
+
+void Text::setText(const std::string& txt){ _text = txt; }
+std::string Text::getText() const { return _text; }
+
+void Text::loadFont(const std::string& path, const float& size){ 
+    _ttffont = TTF_OpenFont(path.c_str(), size);
+
+    if(!_ttffont){
+        std::cerr << "TTF_OpenFont error: " << SDL_GetError() << "\n";
+        abort();
+    }
+}
+
+void Text::setSize(const float& size){
+    FONT_NOT_LOADED_ERR;
+    TTF_SetFontSize(_ttffont, size); 
+}
+float Text::getSize() const {
+    FONT_NOT_LOADED_ERR;
+    return TTF_GetFontSize(_ttffont); 
+}
+
+void Text::setColor(const Color_RGBA& color){ _color = color; }
+Color_RGBA Text::getColor() const { return _color; }
+
+
+
+
+
+
+void TextLabel::_draw(SDL_Renderer* __renderer){
+    // Rectangle of Label
+    Vector2D offset = _computePivotOffset();
+	Vector2D finalPos = _pos - offset;
+
+	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
+	SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
+	SDL_RenderFillRect(__renderer, &drawRect);
+
+	drawRect.x+=_borderWidth;
+	drawRect.y+=_borderWidth;
+	drawRect.w-=_borderWidth*2;
+	drawRect.h-=_borderWidth*2;
+	SDL_SetRenderDrawColor(__renderer, _backgroundColor.R(), _backgroundColor.G(), _backgroundColor.B(), _backgroundColor.A());
+	SDL_RenderFillRect(__renderer, &drawRect);
+
+    // Text
+    if(!text._ttffont){
+        std::cerr << "Font not loaded.\n";
+        return;
+    }
+    
+    SDL_Color txtColor = {text._color.R(), text._color.G(), text._color.B(), text._color.A()};
+    
+    TTF_SetFontWrapAlignment(text._ttffont, (TTF_HorizontalAlignment)text._alignment);
+    SDL_Surface* surfaceMessage = TTF_RenderText_Solid(text._ttffont, text._text.c_str(), text._text.size(), txtColor);
+    if(!surfaceMessage){
+        std::cerr << "TTF_RenderText_Solid error: " << SDL_GetError() << "\n";
+        return;
+    }
+    
+    SDL_Texture* message = SDL_CreateTextureFromSurface(__renderer, surfaceMessage);
+    
+    auto rectX = finalPos.x+_borderWidth+_padding;
+    auto rectY = finalPos.y+_borderWidth+_padding;
+    SDL_FRect rect = {rectX, rectY, text.getSize(), text.getSize()};
+    if(!SDL_RenderTexture(__renderer, message, NULL, &rect)){
+        std::cerr << "Error rendering texture of Text of TextLabel: " << SDL_GetError() << "\n";
+        abort();
+    }
+    
+    SDL_DestroySurface(surfaceMessage);
+    SDL_DestroyTexture(message);
+}
+}

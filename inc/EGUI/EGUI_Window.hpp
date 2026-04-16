@@ -52,7 +52,7 @@ namespace egui{
 		void remove(Widget& widget);
 
 		inline void setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
-		inline bool isOpen() const {return _isOpen; }
+		inline bool isOpen() const { return _isOpen; }
 
 		Window(	const std::string title,
 				const Vector2D size,

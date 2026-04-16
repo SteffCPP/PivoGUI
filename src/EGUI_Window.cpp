@@ -65,17 +65,16 @@ void Window::create(const std::string& title,
     if (_isOpen || _win) return;
 
     if (SDL_WasInit(0) == 0) {
-        if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS) != true) {
+        if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
             std::cerr << "Couldn't initialize SDL3: " << SDL_GetError() << "\n";
             abort();
             return;
         }
-        if(TTF_Init() != true){
-            std::cerr << "Couldn't initialize SDL3_Image.\n";
+        if(!TTF_Init()){
+            std::cerr << "Couldn't initialize SDL3_Image: " << SDL_GetError() << "\n";
             abort();
             return;
         }
-        
     }
 
     if (!SDL_CreateWindowAndRenderer(
@@ -91,6 +90,11 @@ void Window::create(const std::string& title,
 
     _backgroundColor = bgColor;
     _isOpen = true;
+
+    std::atexit([](){
+        SDL_Quit();
+        TTF_Quit();
+    });
 }
 
 void Window::update(){

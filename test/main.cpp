@@ -1,27 +1,26 @@
 #include <iostream>
 #include "EGUI/EGUI.hpp"
 
-constexpr size_t WIN_H = 800;
-constexpr size_t WIN_W = 900;
 int main(){
-	egui::Window win("Finestra", {WIN_W, WIN_H}, egui::colors::Black);
+	egui::Window win("Finestra", {800, 900}, egui::colors::Black);
+	egui::TextLabel label;
 
-	egui::Circle ball(5.0f, {400, 400}, egui::colors::White);
+	label.setBackgroundColor(egui::colors::White);
+	label.setSize({500, 500});
+	label.setPosition({50, 50});
+	label.text.loadFont("/home/stefano/Coding/EasyGUI/test/Kunaroh.ttf", 50);
+	label.text.setText("Ciao Mondo!");
+	label.text.setColor(egui::colors::Red);
 
-	win.assign(ball);
+	win.assign(label);
 
-	float deltaX=4.0f, deltaY=4.0f;
 	while(win.isOpen()){
+
+
+
+
 		win.update();
-
-		if(ball.getPosition().y>=WIN_H) deltaY*=-1;
-		if(ball.getPosition().y<=0) deltaY*=-1;
-
-		if(ball.getPosition().x>=WIN_W) deltaX*=-1;
-		if(ball.getPosition().x<=0) deltaX*=-1;
-
-
-		ball.move({deltaX, deltaY});
 	}
+
 	return 0;
 }
