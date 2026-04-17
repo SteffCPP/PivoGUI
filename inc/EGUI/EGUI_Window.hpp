@@ -63,8 +63,8 @@ namespace egui{
 		inline bool _checkWidgetsOrder() const;
 		inline void _sortWidgets();
 
-		SDL_Window* _win=nullptr;
-		SDL_Renderer* _renderer=nullptr;
+		SDL_Window* _sdlwin=nullptr;
+		SDL_Renderer* _sdlrenderer=nullptr;
 
 		std::vector<Widget*> _widgets;
 

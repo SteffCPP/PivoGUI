@@ -1,7 +1,62 @@
 #pragma once
 
+#include <string>
+
+struct MIX_Track;
+struct MIX_Mixer;
+
 namespace egui{
     struct Audio{
-        
+    public:
+        void setPath(const std::string& path){ _path = path; }
+        std::string getPath() const { return _path; }
+
+        Audio(){}
+        Audio(const std::string& path) : _path(path) {}
+    private:
+        MIX_Track* _track{nullptr};
+
+        int _volume{128};
+        double _startTime{0.0};
+	    double _pauseTime{0.0};
+        float _speed{1.0f};
+
+        std::string _path{""};
+
+        friend class Audio_System;
     };
+
+    class Audio_System{
+    public:
+        void play(Audio audio);
+        void pause(Audio audio);
+        void stop(Audio audio, const unsigned int nFadeOutFrames=0);
+        void resume(Audio audio);
+
+        std::size_t getTime(Audio audio);
+        void setTime(Audio audio, const double time);
+
+        void getVolume(Audio audio);
+        void setVolume(Audio audio, const unsigned int volume);
+        void increaseVolume(Audio audio, const int volumeDelta);
+
+        void getSpeed(Audio audio);
+        void setSpeed(Audio audio, const float speed);
+
+        Audio_System();
+    private:
+        #define CHECK_AUDIO_EXISTS if(!audio._track){ \
+            if(audio._track = MIX_CreateTrack(_mixmixer); !audio._track) \
+                std::cerr << "Error while creating track: " << SDL_GetError() << "\n"; \
+            if(MIX_Audio* music = MIX_LoadAudio(_mixmixer, audio._path.c_str(), true); !MIX_SetTrackAudio(audio._track, music)) \
+                std::cerr << "Error while setting track audio: " << SDL_GetError() << "\n"; \
+        }
+
+        std::size_t _globalPlayTime{0};
+        MIX_Mixer* _mixmixer{nullptr};
+
+        friend class Window;
+    };
+
+    extern Audio_System defAudioSys;
 } 

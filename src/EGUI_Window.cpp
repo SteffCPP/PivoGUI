@@ -62,7 +62,7 @@ inline void Window::_sortWidgets(){
 void Window::create(const std::string& title, 
                     const Vector2D& size, 
                     const Color_RGBA& bgColor){
-    if (_isOpen || _win) return;
+    if (_isOpen || _sdlwin) return;
 
     if (SDL_WasInit(0) == 0) {
         if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
@@ -70,10 +70,6 @@ void Window::create(const std::string& title,
             abort();
         }
         if(!TTF_Init()){ \
-            std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
-            abort(); 
-        }
-        if(!MIX_Init()){ \
             std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
             abort(); 
         }
@@ -90,8 +86,8 @@ void Window::create(const std::string& title,
             static_cast<int>(size.x),
             static_cast<int>(size.y),
             SDL_WINDOW_RESIZABLE,
-            &_win,
-            &_renderer)) {
+            &_sdlwin,
+            &_sdlrenderer)) {
         std::cerr << "Couldn't create window/renderer: " << SDL_GetError() << "\n";
         return;
     }
@@ -101,17 +97,17 @@ void Window::create(const std::string& title,
 }
 
 void Window::update(){
-    if(!_win || !_renderer || !_isOpen) return;
+    if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
+    
+	defInputSys._update();
 
-	defInputSystem._update();
+	if(defInputSys._hasRequestedQuit()) destroy();
+	if(defInputSys._hasRequestedWindowQuit().first && 
+		defInputSys._hasRequestedWindowQuit().second == _sdlwin) destroy();
 
-	if(defInputSystem._hasRequestedQuit()) destroy();
-	if(defInputSystem._hasRequestedWindowQuit().first && 
-		defInputSystem._hasRequestedWindowQuit().second == _win) destroy();
-
-	const Mouse& mouse = defInputSystem.mouse;
-	const Keyboard& keyboard = defInputSystem.keyboard;
+	const Mouse& mouse = defInputSys.mouse;
+	const Keyboard& keyboard = defInputSys.keyboard;
 
 	Vector2D mousePos = mouse.getPosition();
 
@@ -155,31 +151,31 @@ void Window::update(){
 
 
     SDL_SetRenderDrawColor(
-        _renderer,
+        _sdlrenderer,
         _backgroundColor.R(),
         _backgroundColor.G(),
         _backgroundColor.B(),
         _backgroundColor.A()
     );
-    SDL_RenderClear(_renderer);
+    SDL_RenderClear(_sdlrenderer);
 
     for (const auto& w : _widgets) {
-        w->_draw(_renderer);
+        w->_draw(_sdlrenderer);
     }
 
-    SDL_RenderPresent(_renderer);
+    SDL_RenderPresent(_sdlrenderer);
     SDL_Delay(10);
 }
 
 void Window::destroy() {
-    if (_renderer) {
-        SDL_DestroyRenderer(_renderer);
-        _renderer = nullptr;
+    if (_sdlrenderer) {
+        SDL_DestroyRenderer(_sdlrenderer);
+        _sdlrenderer = nullptr;
     }
 
-    if (_win) {
-        SDL_DestroyWindow(_win);
-        _win = nullptr;
+    if (_sdlwin) {
+        SDL_DestroyWindow(_sdlwin);
+        _sdlwin = nullptr;
     }
 
     _isOpen = false;

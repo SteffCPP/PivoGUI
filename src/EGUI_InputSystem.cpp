@@ -33,7 +33,7 @@ SOFTWARE.
 #include "EGUI_SDL.cpp"
 
 namespace egui{
-	Input_System defInputSystem;
+	Input_System defInputSys;
 
 Keys Input_System::_sdlkToKey(int sdlKey){
 	using namespace egui;

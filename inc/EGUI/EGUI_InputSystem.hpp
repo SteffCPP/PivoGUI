@@ -137,5 +137,5 @@ namespace egui{
 
 		friend class Window;
 	};
-	extern Input_System defInputSystem;
+	extern Input_System defInputSys;
 }

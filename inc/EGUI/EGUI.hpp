@@ -33,7 +33,7 @@ SOFTWARE.
 
 #include "EGUI_Button.hpp"
 #include "EGUI_Color.hpp"
-//#include "EGUI_Font.hpp"
+#include "EGUI_Audio.hpp"
 //#include "EGUI_Grid.hpp"
 #include "EGUI_Math.hpp"
 #include "EGUI_Panel.hpp"
