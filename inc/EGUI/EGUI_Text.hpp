@@ -100,14 +100,15 @@ namespace egui{
 	class TextLabel : public Widget{
 	public:
 		enum class TextBoxAlignment{
+			TOP_LEFT,
+			TOP,
+			TOP_RIGHT,
 			LEFT,
 			CENTER,
-			RIGHT
-		};
-		enum class TextBoxAlignmentVertical{
-			TOP,
-			CENTER,
-			BOTTOM
+			RIGHT,
+			BOTTOM_LEFT,
+			BOTTOM,
+			BOTTOM_RIGHT
 		};
 
 		virtual bool containsPoint(const Vector2D& point) const override {
@@ -124,12 +125,8 @@ namespace egui{
 		}
 		TextBoxAlignment getTextboxAlignment() const { return _textboxAlignment; }
 
-		void setTextBoxAlignmentVertical(const TextBoxAlignmentVertical align){
-			_textboxAlignmentVertical = align;
-		}
-		TextBoxAlignmentVertical getTextboxAlignmentVertical() const { return _textboxAlignmentVertical; }
-
 		Text text;
+
 		TextLabel(){}
 		TextLabel(
 			const Vector2D& position,
@@ -138,7 +135,7 @@ namespace egui{
 			const std::string& fontPath,
 			const float& fontSize,
 			const Color_RGBA& textColor = egui::colors::White)
-			{
+		{
 			_pos = position;
 			_size = size;
 
@@ -147,14 +144,12 @@ namespace egui{
 			text.setColor(textColor);
 
 			_textboxAlignment = TextBoxAlignment::CENTER;
-			_textboxAlignmentVertical = TextBoxAlignmentVertical::CENTER;
 		}
 	private:
 		void _draw(SDL_Renderer* __renderer) override;
 
 		float _padding{10};
 		TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};
-		TextBoxAlignmentVertical _textboxAlignmentVertical{TextBoxAlignmentVertical::CENTER};
 	};
 
 	class TextLabelInput : public Widget{

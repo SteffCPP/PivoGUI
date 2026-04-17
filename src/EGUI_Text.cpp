@@ -9,7 +9,6 @@ namespace egui{
     #define FONT_NOT_LOADED_ERR \
     if(_ttffont==nullptr){ \
         std::cerr << "Impossible to update size: Font not loaded.\n"; \
-        abort(); \
     }
 
 Text::Text( const std::string& text,
@@ -31,7 +30,7 @@ void Text::setStyle(const Style& style, const bool& flag){
     if(flag){
         _styles |= (short)style;
     }else{
-        _styles ^= (short)style;
+        _styles &= ~(short)style;
     }
     
     TTF_SetFontStyle(_ttffont, _styles);
@@ -113,33 +112,52 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
     float rectX = finalPos.x + _borderWidth + _padding;
     float rectY = finalPos.y + _borderWidth + _padding;
 
+    float offsetX = 0.0f;
+    float offsetY = 0.0f;
+
     switch(_textboxAlignment){
-        case TextBoxAlignment::CENTER:
-            rectX += (availableWidth - w) / 2.0f;
+        case TextBoxAlignment::TOP_LEFT:
             break;
 
-        case TextBoxAlignment::RIGHT:
-            rectX += (availableWidth - w);
+        case TextBoxAlignment::TOP:
+            offsetX = (availableWidth - w) / 2.0f;
+            break;
+
+        case TextBoxAlignment::TOP_RIGHT:
+            offsetX = (availableWidth - w);
             break;
 
         case TextBoxAlignment::LEFT:
-        default:
-            break;
-    }
-    
-    switch(_textboxAlignmentVertical){
-        case TextBoxAlignmentVertical::CENTER:
-            rectY += (availableHeight - h) / 2.0f;
+            offsetY = (availableHeight - h) / 2.0f;
             break;
 
-        case TextBoxAlignmentVertical::BOTTOM:
-            rectY += (availableHeight - h);
+        case TextBoxAlignment::CENTER:
+            offsetX = (availableWidth - w) / 2.0f;
+            offsetY = (availableHeight - h) / 2.0f;
             break;
 
-        case TextBoxAlignmentVertical::TOP:
-        default:
+        case TextBoxAlignment::RIGHT:
+            offsetX = (availableWidth - w);
+            offsetY = (availableHeight - h) / 2.0f;
+            break;
+
+        case TextBoxAlignment::BOTTOM_LEFT:
+            offsetY = (availableHeight - h);
+            break;
+
+        case TextBoxAlignment::BOTTOM:
+            offsetX = (availableWidth - w) / 2.0f;
+            offsetY = (availableHeight - h);
+            break;
+
+        case TextBoxAlignment::BOTTOM_RIGHT:
+            offsetX = (availableWidth - w);
+            offsetY = (availableHeight - h);
             break;
     }
+
+    rectX += offsetX;
+    rectY += offsetY;
 
     SDL_FRect rect = {rectX, rectY, (float)w, (float)h};
     if(!SDL_RenderTexture(__renderer, message, NULL, &rect)){
