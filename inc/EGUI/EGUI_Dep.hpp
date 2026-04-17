@@ -80,14 +80,19 @@ namespace egui{
 		void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
 		void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
 		
-		void setBorderWidth(const float& width){ _borderWidth = width; }
+		void setBorderWidth(const float width){ _borderWidth = width; }
 		float getBorderWidth() const { return _borderWidth; }
+
+		void setHide(const bool flag){ _hide = flag; }
 
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
 
 		Color_RGBA _backgroundColor{egui::colors::Black}, _borderColor{egui::colors::Transparent};
 		float _borderWidth{0};
+
+		#define CHECK_IF_HIDE if(_hide) return;
+		bool _hide{false};
 	};
 
 	class interactable{

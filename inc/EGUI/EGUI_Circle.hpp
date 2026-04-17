@@ -37,7 +37,7 @@ SOFTWARE.
 #include <vector>
 
 namespace egui{
-	class Circle : public Widget{
+	class Circle : public Widget, public texturable{
 	public:
 		float getRadius() const { return _radius; }
 		void setRadius(float radius){ 

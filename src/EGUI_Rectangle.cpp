@@ -53,6 +53,7 @@ Rectangle::Rectangle(	const Vector2D& size,
 Rectangle::Rectangle(){}
 
 void Rectangle::_draw(SDL_Renderer* __renderer) {
+	CHECK_IF_HIDE
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
 	Vector2D offset = _computePivotOffset();
@@ -60,9 +61,6 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
 	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
 
-	// =========================
-	// BORDO (solo linee)
-	// =========================
 	SDL_SetRenderDrawColor(
 		__renderer,
 		_borderColor.R(),

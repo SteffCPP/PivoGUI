@@ -68,13 +68,21 @@ void Window::create(const std::string& title,
         if (!SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
             std::cerr << "Couldn't initialize SDL3: " << SDL_GetError() << "\n";
             abort();
-            return;
         }
-        if(!TTF_Init()){
-            std::cerr << "Couldn't initialize SDL3_Image: " << SDL_GetError() << "\n";
-            abort();
-            return;
+        if(!TTF_Init()){ \
+            std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
+            abort(); 
         }
+        if(!MIX_Init()){ \
+            std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
+            abort(); 
+        }
+
+        std::atexit([](){
+            SDL_Quit();
+            TTF_Quit();
+            MIX_Quit();
+        });
     }
 
     if (!SDL_CreateWindowAndRenderer(
@@ -90,11 +98,6 @@ void Window::create(const std::string& title,
 
     _backgroundColor = bgColor;
     _isOpen = true;
-
-    std::atexit([](){
-        SDL_Quit();
-        TTF_Quit();
-    });
 }
 
 void Window::update(){
@@ -107,8 +110,8 @@ void Window::update(){
 	if(defInputSystem._hasRequestedWindowQuit().first && 
 		defInputSystem._hasRequestedWindowQuit().second == _win) destroy();
 
-	const Mouse& mouse = defInputSystem.getMouse();
-	const Keyboard& keyboard = defInputSystem.getKeyboard();
+	const Mouse& mouse = defInputSystem.mouse;
+	const Keyboard& keyboard = defInputSystem.keyboard;
 
 	Vector2D mousePos = mouse.getPosition();
 

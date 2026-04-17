@@ -100,6 +100,9 @@ Color_RGBA Text::getColor() const { return _color; }
 
 
 void TextLabel::_draw(SDL_Renderer* __renderer){
+    CHECK_IF_HIDE
+    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
+
     // Rectangle of Label
     Vector2D offset = _computePivotOffset();
 	Vector2D finalPos = _pos - offset;
@@ -196,5 +199,7 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
     
     SDL_DestroySurface(surfaceMessage);
     SDL_DestroyTexture(message);
+
+    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
 }

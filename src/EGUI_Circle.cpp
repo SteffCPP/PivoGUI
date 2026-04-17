@@ -31,35 +31,118 @@ SOFTWARE.
 
 #include "EGUI_Circle.hpp"
 #include "EGUI_SDL.cpp"
+#include <iostream>
 
 namespace egui{
 void Circle::_draw(SDL_Renderer* __renderer) {
+	CHECK_IF_HIDE
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
 	Vector2D pivotOffset = _computePivotOffset();
 	Vector2D centerOffset = pivotOffset - Vector2D{_radius, _radius};
 	Vector2D finalCenter = _pos - centerOffset;
 
-	_drawFilledCircle(__renderer, finalCenter.x, finalCenter.y, _radius , _borderColor);
-	_drawFilledCircle(__renderer, finalCenter.x, finalCenter.y, _radius - _borderWidth ,_backgroundColor);
-	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
+	float cx = std::round(finalCenter.x);
+	float cy = std::round(finalCenter.y);
+
+	float rOuter = std::round(_radius);
+	float rInner = std::round(_radius - _borderWidth);
+
+	SDL_SetRenderDrawColor(
+		__renderer,
+		_backgroundColor.R(),
+		_backgroundColor.G(),
+		_backgroundColor.B(),
+		_backgroundColor.A()
+	);
+	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
+
+	if (_hasImage) {
+		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
+		if (!image) {
+			std::cerr << "IMG_Load error: " << SDL_GetError() << "\n";
+			return;
+		}
+
+		SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+		SDL_DestroySurface(image);
+
+		float innerRadius = _radius - _borderWidth;
+		if (innerRadius < 0) innerRadius = 0;
+
+		int size = (int)(innerRadius * 2.0f);
+
+		SDL_FRect dst{
+			cx - innerRadius,
+			cy - innerRadius,
+			size,
+			size
+		};
+
+		SDL_RenderTexture(__renderer, tex, nullptr, &dst);
+
+		SDL_DestroyTexture(tex);
+	}
+	
+	SDL_SetRenderDrawColor(
+		__renderer,
+		_borderColor.R(),
+		_borderColor.G(),
+		_borderColor.B(),
+		_borderColor.A()
+	);
+
+	for (int y = -rOuter; y <= rOuter; y++) {
+		int xOuter = (int)std::floor(std::sqrt(rOuter * rOuter - y * y));
+		int xInner = (rInner > 0 && abs(y) <= rInner)
+			? (int)std::floor(std::sqrt(rInner * rInner - y * y))
+			: 0;
+
+		int yPos = cy + y;
+
+		// Left side
+		SDL_RenderLine(__renderer,
+			cx - xOuter, yPos,
+			cx - xInner, yPos
+		);
+
+		// Right side
+		SDL_RenderLine(__renderer,
+			cx + xInner, yPos,
+			cx + xOuter, yPos
+		);
+	}
 }
 
-inline void Circle::_drawFilledCircle(	SDL_Renderer* __renderer, 
-								        const float __cx, 
-								        const float __cy,
-								        const float __radius,
-								        const Color_RGBA& __color){
-	SDL_SetRenderDrawColor(__renderer, __color.R(), __color.G(), __color.B(), __color.A());
+inline void Circle::_drawFilledCircle(
+	SDL_Renderer* __renderer,
+	const float __cx,
+	const float __cy,
+	const float __radius,
+	const Color_RGBA& __color
+) {
+	if (__radius <= 0) return;
 
-	for(int dy = -__radius; dy <= __radius; dy++){
-		int dx = (int)sqrt(__radius * __radius - dy * dy);
+	SDL_SetRenderDrawColor(
+		__renderer,
+		__color.R(),
+		__color.G(),
+		__color.B(),
+		__color.A()
+	);
 
-		int x1 = __cx - dx;
-		int x2 = __cx + dx;
-		int y = __cy + dy;
+	int cx = (int)std::round(__cx);
+	int cy = (int)std::round(__cy);
+	int r  = (int)std::round(__radius);
 
-		SDL_RenderLine(__renderer, x1, y, x2, y);
+	for (int y = -r; y <= r; y++) {
+		int xSpan = (int)std::floor(std::sqrt(r * r - y * y));
+
+		int x1 = cx - xSpan;
+		int x2 = cx + xSpan;
+		int yy = cy + y;
+
+		SDL_RenderLine(__renderer, x1, yy, x2, yy);
 	}
 }
 }

@@ -8,7 +8,12 @@ int main(){
 	rect.setBorderColor(egui::colors::Red);
 	rect.setBorderWidth(20);
 
+	egui::Circle circle{100.0f, {500, 500}, egui::colors::Transparent};
+	circle.setBorderColor(egui::colors::Red);
+	circle.setBorderWidth(10);
+
 	win.assign(rect);
+	win.assign(circle);
 
 	while(win.isOpen()){
 		win.update();

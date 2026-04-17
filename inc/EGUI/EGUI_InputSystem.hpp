@@ -120,17 +120,10 @@ namespace egui{
 
 	class Input_System{
 	public:
-		void assignMouse(Mouse& mouse){ _mouse = mouse; }
-		void assignKeyboard(Keyboard& keyboard){ _keyboard = keyboard; }
-
-		Mouse getMouse() const { return _mouse; }
-		Keyboard getKeyboard() const { return _keyboard; }
+		Mouse mouse;
+		Keyboard keyboard;
 
 		Input_System(){}
-		Input_System(Mouse& mouse, Keyboard& keyboard){
-			assignMouse(mouse);
-			assignKeyboard(keyboard);
-		}
 	private:
 		Keys _sdlkToKey(int sdlKey);
 		MouseButton _sdlbToMouseButton(std::size_t button);
@@ -141,9 +134,6 @@ namespace egui{
 
 		bool _requestQuit{false};
 		std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
-
-		Mouse _mouse;
-		Keyboard _keyboard;
 
 		friend class Window;
 	};

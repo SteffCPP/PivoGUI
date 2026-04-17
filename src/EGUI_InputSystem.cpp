@@ -139,25 +139,25 @@ void Input_System::_update(){
 			// ---Mouse---
 		
             case SDL_EVENT_MOUSE_MOTION:{
-				_mouse._setPosition({event.motion.x, event.motion.y});
+				mouse._setPosition({event.motion.x, event.motion.y});
 			} break;
 
 			case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-				_mouse._setButtonDown(_sdlbToMouseButton(event.button.button));
+				mouse._setButtonDown(_sdlbToMouseButton(event.button.button));
 			} break;
 
 			case SDL_EVENT_MOUSE_BUTTON_UP: {
-				_mouse._setButtonUp(_sdlbToMouseButton(event.button.button));
+				mouse._setButtonUp(_sdlbToMouseButton(event.button.button));
 			} break;
 
 			// ---Keyboard---
 
 			case SDL_EVENT_KEY_DOWN: {
-				_keyboard._setKeyDown(_sdlkToKey(event.key.key));
+				keyboard._setKeyDown(_sdlkToKey(event.key.key));
 			} break;
 
 			case SDL_EVENT_KEY_UP: {
-				_keyboard._setKeyUp(_sdlkToKey(event.key.key));
+				keyboard._setKeyUp(_sdlkToKey(event.key.key));
 			} break;
 
             default: break;
