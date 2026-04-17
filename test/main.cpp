@@ -4,15 +4,11 @@
 int main(){
 	egui::Window win("Finestra", {800, 900});
 
-	egui::TextLabel label;
-	label.setBackgroundColor(egui::colors::Gray);
-	label.setSize({800, 800});
-	label.setPosition({50, 50});
-	label.text.loadFont("test/fonts/retro_gaming.ttf",100);
-	label.text.setText("STAMPA\nCIAO");
-	label.text.setColor(egui::colors::Cyan);
+	egui::Rectangle rect{{300, 300}, {50, 50}, egui::colors::Transparent};
+	rect.setBorderColor(egui::colors::Red);
+	rect.setBorderWidth(20);
 
-	win.assign(label);
+	win.assign(rect);
 
 	while(win.isOpen()){
 		win.update();

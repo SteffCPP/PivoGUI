@@ -43,4 +43,5 @@ SOFTWARE.
 #include "EGUI_Text.hpp"
 #include "EGUI_Vector.hpp"
 #include "EGUI_Window.hpp"
+#include "EGUI_Image.hpp"
 #include "EGUI_InputSystem.hpp"

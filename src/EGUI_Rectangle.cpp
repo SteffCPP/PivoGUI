@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include "EGUI_Rectangle.hpp"
 #include "EGUI_SDL.cpp"
+#include <iostream>
 
 namespace egui{
 Rectangle::Rectangle(	const Vector2D& size, 
@@ -52,18 +53,73 @@ Rectangle::Rectangle(	const Vector2D& size,
 Rectangle::Rectangle(){}
 
 void Rectangle::_draw(SDL_Renderer* __renderer) {
+	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
+
 	Vector2D offset = _computePivotOffset();
 	Vector2D finalPos = _pos - offset;
 
 	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
-	SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
-	SDL_RenderFillRect(__renderer, &drawRect);
 
-	drawRect.x+=_borderWidth;
-	drawRect.y+=_borderWidth;
-	drawRect.w-=_borderWidth*2;
-	drawRect.h-=_borderWidth*2;
-	SDL_SetRenderDrawColor(__renderer, _backgroundColor.R(), _backgroundColor.G(), _backgroundColor.B(), _backgroundColor.A());
-	SDL_RenderFillRect(__renderer, &drawRect);
+	// =========================
+	// BORDO (solo linee)
+	// =========================
+	SDL_SetRenderDrawColor(
+		__renderer,
+		_borderColor.R(),
+		_borderColor.G(),
+		_borderColor.B(),
+		_borderColor.A()
+	);
+
+	float x = std::round(drawRect.x);
+	float y = std::round(drawRect.y);
+	float w = std::round(drawRect.w);
+	float h = std::round(drawRect.h);
+	float b = _borderWidth;
+
+	for (int i = 0; i < _borderWidth; i++) {
+		SDL_FRect borderRect{
+			x + i,
+			y + i,
+			w - 2.0f * i,
+			h - 2.0f * i
+		};
+
+		SDL_RenderRect(__renderer, &borderRect);
+	}
+
+	SDL_FRect innerRect{
+		finalPos.x + _borderWidth,
+		finalPos.y + _borderWidth,
+		_size.x - _borderWidth * 2,
+		_size.y - _borderWidth * 2
+	};
+
+	SDL_SetRenderDrawColor(
+		__renderer,
+		_backgroundColor.R(),
+		_backgroundColor.G(),
+		_backgroundColor.B(),
+		_backgroundColor.A()
+	);
+	SDL_RenderFillRect(__renderer, &innerRect);
+
+	if (_hasImage) {
+		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
+		if (!image) {
+			std::cerr << "IMG_Load() error (error rendering image): "
+					  << SDL_GetError() << "\n";
+			return;
+		}
+
+		SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+
+		SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
+
+		SDL_DestroyTexture(tex);
+		SDL_DestroySurface(image);
+	}
+
+	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
 }

@@ -34,10 +34,12 @@ SOFTWARE.
 #include "EGUI_Vector.hpp"
 #include "EGUI_Math.hpp"
 #include "EGUI_Color.hpp"
+#include "EGUI_Image.hpp"
 
 #include <functional>
 
 struct SDL_Renderer;
+struct SDL_Texture;
 
 namespace egui{
 	class sizeable{
@@ -75,9 +77,12 @@ namespace egui{
 	 	Color_RGBA getBackgroundColor() const { return _backgroundColor; }
 		Color_RGBA getBorderColor() const { return _borderColor; }
 
-		inline void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
-		inline void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
-	
+		void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
+		void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
+		
+		void setBorderWidth(const float& width){ _borderWidth = width; }
+		float getBorderWidth() const { return _borderWidth; }
+
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
 
@@ -166,6 +171,16 @@ namespace egui{
     	std::function<void()> _onEnter;
     	std::function<void()> _onLeave;
 		std::function<void()> _onRelease;
+	};
+
+	class texturable{
+	public:
+		void assignImage(const Image img){ _img = img; _hasImage = true; }
+		void assignImage(const std::string& path){ _img.setPath(path); _hasImage = true; }
+		void removeImage(){ _hasImage = false; }
+	protected:
+		bool _hasImage{false};
+		Image _img;
 	};
 
 	class transformable: public sizeable, public rotatable{
