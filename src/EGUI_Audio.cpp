@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Audio.hpp"
+#include "EGUI_AudioSys.hpp"
 #include "EGUI_SDL.cpp"
 
 #include <iostream>

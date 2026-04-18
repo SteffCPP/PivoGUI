@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_InputSystem.hpp"
+#include "EGUI_InputSys.hpp"
 #include "EGUI_SDL.cpp"
 
 namespace egui{

@@ -22,9 +22,9 @@ copies or substantial portions of the Software.
 */
 
 #include "EGUI_Window.hpp"
-#include "EGUI_InputSystem.hpp"
+#include "EGUI_InputSys.hpp"
 #include "EGUI_SDL.cpp"
-#include "EGUI_Audio.hpp"
+#include "EGUI_AudioSys.hpp"
 
 #include <iostream>
 #include <utility>

@@ -24,7 +24,7 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include "EGUI_Color.hpp"
-#include "EGUI_Audio.hpp"
+#include "EGUI_AudioSys.hpp"
 //#include "EGUI_Grid.hpp"
 #include "EGUI_Math.hpp"
 #include "EGUI_Panel.hpp"
@@ -35,4 +35,4 @@ copies or substantial portions of the Software.
 #include "EGUI_Vector.hpp"
 #include "EGUI_Window.hpp"
 #include "EGUI_Image.hpp"
-#include "EGUI_InputSystem.hpp"
+#include "EGUI_InputSys.hpp"

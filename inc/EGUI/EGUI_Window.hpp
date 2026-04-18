@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #pragma once
 #include "EGUI_Widget.hpp"
-#include "EGUI_InputSystem.hpp"
+#include "EGUI_InputSys.hpp"
 
 #include <vector>
 #include <string>
