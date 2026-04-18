@@ -13,13 +13,8 @@ int main(){
 	win.assign(circle);
 
 	while(win.isOpen()){
-		if(egui::defInputSys.keyboard.isPressed(egui::Key::P)){
-			chopinFMinor.isPaused() ? 
-			chopinFMinor.resume() : chopinFMinor.pause();
-		}else if(egui::defInputSys.keyboard.isPressed(egui::Key::T))
-			egui::defAudioSys.setTime(chopinFMinor, egui::defAudioSys.getTime(chopinFMinor)+30000);
 		
-
+		
 		win.update();
 	}
 

@@ -94,6 +94,7 @@ void Window::create(const std::string& title,
         return;
     }
 
+    _lastTime = SDL_GetPerformanceCounter();
     _backgroundColor = bgColor;
     _isOpen = true;
 }
@@ -103,19 +104,18 @@ void Window::update(){
     if(!_checkWidgetsOrder()) _sortWidgets();
 
     const double targetFrameTime = 1000.0 / 60.0;
-
     Uint64 freq = SDL_GetPerformanceFrequency();
     Uint64 frameStart = SDL_GetPerformanceCounter();
-
     double delta = (frameStart - _lastTime) * 1000.0 / freq;
     _lastTime = frameStart;
 
     defInputSys._update();
-    defAudioSys._globalTime += delta;
+    defAudioSys._globalTime += (size_t)delta;
+    std::cout << "Delta: " << delta << "\n";
 
-    if(defInputSys._hasRequestedQuit()) destroy();
+    if(defInputSys._hasRequestedQuit()) { destroy(); return; }
     if(defInputSys._hasRequestedWindowQuit().first && 
-        defInputSys._hasRequestedWindowQuit().second == _sdlwin) destroy();
+        defInputSys._hasRequestedWindowQuit().second == _sdlwin){ destroy(); return; }
 
     const Mouse& mouse = defInputSys.mouse;
     const Keyboard& keyboard = defInputSys.keyboard;
@@ -180,8 +180,6 @@ void Window::update(){
     if(frameTime < targetFrameTime){
         SDL_Delay(static_cast<Uint32>(targetFrameTime - frameTime));
     }
-    
-    std::cout << "FPS: "<<1000.0/delta << "\n";
 }
 
 void Window::destroy() {

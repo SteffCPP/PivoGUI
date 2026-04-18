@@ -65,7 +65,7 @@ namespace egui{
                 std::cerr << "Error while setting track audio: " << SDL_GetError() << "\n"; \
         }
         #define CHECK_TRACK_EXISTS(returnValue) if(audio._track == nullptr) return returnValue;
-        std::size_t _globalTime{0};
+        std::size_t _globalTime=0;
         MIX_Mixer* _mixmixer{nullptr};
 
         friend class Window;

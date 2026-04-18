@@ -5,8 +5,6 @@
 #include <cinttypes>
 
 namespace egui{
-    Audio_System defAudioSys;
-
 void Audio::play(){
     defAudioSys.play(*this);
 }
@@ -34,6 +32,8 @@ Audio_System::Audio_System(){
         std::cerr << "Couldn't initialize defAudioSys: " << SDL_GetError() << "\n";
         return;
     }
+
+    _globalTime = 0;
 }
 
 void Audio_System::play(Audio& audio){
@@ -75,19 +75,15 @@ void Audio_System::stop(Audio& audio, const unsigned int nFadeOutFrames){
 }
 
 std::size_t Audio_System::getTime(Audio& audio){
-    CHECK_TRACK_EXISTS(0)
-
-    switch(audio._state){
-        case Audio::State::PLAYING:
-            return _globalTime - audio._startTime;
-
-        case Audio::State::PAUSED:
-            return audio._pauseTime - audio._startTime;
-
-        default:
-            return 0;
+    CHECK_TRACK_EXISTS(0);
+    if(audio._state == Audio::State::PLAYING){
+        return _globalTime - audio._startTime;
     }
 
+    if(audio._state == Audio::State::PAUSED){
+        return audio._pauseTime - audio._startTime;
+    }
+    
     return 0;
 }
 void Audio_System::setTime(Audio& audio, const std::size_t ms){
@@ -102,6 +98,10 @@ void Audio_System::setTime(Audio& audio, const std::size_t ms){
     if(audio._state == Audio::State::PAUSED){
         MIX_PauseTrack(audio._track);
         audio._pauseTime = _globalTime;
+    }else if(audio._state == Audio::State::STOPPED){
+        MIX_StopTrack(audio._track, 0);
+        audio._pauseTime = 0;
+        audio._startTime = 0;
     }else
         audio._pauseTime = 0;
 
@@ -122,4 +122,7 @@ void Audio_System::increaseVolume(Audio& audio, const int volumeDelta){}
 
 float Audio_System::getSpeed(Audio& audio){ return audio._speed; }
 void Audio_System::setSpeed(Audio& audio, const float speed){}
+
+
+    Audio_System defAudioSys;
 }
