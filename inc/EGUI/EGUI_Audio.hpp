@@ -42,13 +42,13 @@ namespace egui{
         void stop(const std::uint16_t nFadeOutFrames=0);
         void resume();
 
-        std::string getPath() const { return _path; }
+        std::string getPath() const;
 
-        State getState() const { return _state; }
-        bool isPaused() const { return _state == State::PAUSED; }
-        bool isPlaying() const { return _state == State::PLAYING; }
+        State getState() const;
+        bool isPaused() const;
+        bool isPlaying() const;
 
-        Audio(const std::string& path) : _path(path) {}
+        Audio(const std::string& path);
     private:
         MIX_Track* _track{nullptr};
 
@@ -81,13 +81,6 @@ namespace egui{
 
         Audio_System();
     private:
-        #define CHECK_TRACK_EXISTS_AND_CREATE if(!audio._track){ \
-            if(audio._track = MIX_CreateTrack(_mixmixer); !audio._track) \
-                std::cerr << "Error while creating track: " << SDL_GetError() << "\n"; \
-            if(MIX_Audio* music = MIX_LoadAudio(_mixmixer, audio._path.c_str(), true); !MIX_SetTrackAudio(audio._track, music)) \
-                std::cerr << "Error while setting track audio: " << SDL_GetError() << "\n"; \
-        }
-        #define CHECK_TRACK_EXISTS(returnValue) if(audio._track == nullptr) return returnValue;
         std::size_t _globalTime=0;
         MIX_Mixer* _mixmixer{nullptr};
 

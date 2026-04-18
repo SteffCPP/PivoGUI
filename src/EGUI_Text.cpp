@@ -32,6 +32,8 @@ namespace egui{
         std::cerr << "Impossible to update size: Font not loaded.\n"; \
     }
 
+// === Text ===
+
 Text::Text( const std::string& text,
 			const std::string& fontPath, 
 			const float& size,
@@ -86,10 +88,46 @@ float Text::getFontSize() const {
 void Text::setColor(const Color_RGBA& color){ _color = color; }
 Color_RGBA Text::getColor() const { return _color; }
 
+void Text::setSize(const Vector2D& size){ _size = size; }
+Vector2D Text::getSize() const { return _size; }
+
+void Text::setAlignment(Text::Alignment align){ _alignment = align; }
 
 
 
+// === TextLabel ===
+bool TextLabel::containsPoint(const Vector2D& point) const {
+	return point.x >= _pos.x &&
+		point.x <= _pos.x + _size.x &&
+		point.y >= _pos.y &&
+		point.y <= _pos.y + _size.y;
+}
 
+void TextLabel::setPadding(const float& padding){ _padding = padding; }
+
+void TextLabel::setTextboxAlignment(const TextBoxAlignment align){
+	_textboxAlignment = align;
+}
+TextLabel::TextBoxAlignment TextLabel::getTextboxAlignment() const { return _textboxAlignment; }
+
+TextLabel::TextLabel(){}
+TextLabel::TextLabel(
+	const Vector2D& position,
+	const Vector2D& size,
+	const std::string& textStr,
+	const std::string& fontPath,
+	const float& fontSize,
+	const Color_RGBA& textColor = egui::colors::White)
+{
+	_pos = position;
+	_size = size;
+
+	text.loadFont(fontPath, fontSize);
+	text.setText(textStr);
+	text.setColor(textColor);
+
+	_textboxAlignment = TextBoxAlignment::CENTER;
+}
 
 void TextLabel::_draw(SDL_Renderer* __renderer){
     CHECK_IF_HIDE
@@ -100,14 +138,14 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
 	Vector2D finalPos = _pos - offset;
 
 	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
-	SDL_SetRenderDrawColor(__renderer, _borderColor.R(), _borderColor.G(), _borderColor.B(), _borderColor.A());
+	SDL_SetRenderDrawColor(__renderer, _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
 	SDL_RenderFillRect(__renderer, &drawRect);
 
 	drawRect.x+=_borderWidth;
 	drawRect.y+=_borderWidth;
 	drawRect.w-=_borderWidth*2;
 	drawRect.h-=_borderWidth*2;
-	SDL_SetRenderDrawColor(__renderer, _backgroundColor.R(), _backgroundColor.G(), _backgroundColor.B(), _backgroundColor.A());
+	SDL_SetRenderDrawColor(__renderer, _backgroundColor.r, _backgroundColor.g, _backgroundColor.b, _backgroundColor.a);
 	SDL_RenderFillRect(__renderer, &drawRect);
 
     // Text
@@ -116,7 +154,7 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
         return;
     }
     
-    SDL_Color txtColor = {(std::uint8_t)text._color.R(), (std::uint8_t)text._color.G(), (std::uint8_t)text._color.B(), (std::uint8_t)text._color.A()};
+    SDL_Color txtColor = {(std::uint8_t)text._color.r, (std::uint8_t)text._color.g, (std::uint8_t)text._color.b, (std::uint8_t)text._color.a};
     
     TTF_SetFontWrapAlignment(text._ttffont, (TTF_HorizontalAlignment)text._alignment);
     SDL_Surface* surfaceMessage = TTF_RenderText_Solid_Wrapped(text._ttffont, text._text.c_str(), text._text.size(), txtColor, text._size.x);

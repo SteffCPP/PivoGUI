@@ -152,10 +152,10 @@ void Window::update(){
 
     SDL_SetRenderDrawColor(
         _sdlrenderer,
-        _backgroundColor.R(),
-        _backgroundColor.G(),
-        _backgroundColor.B(),
-        _backgroundColor.A()
+        _backgroundColor.r,
+        _backgroundColor.g,
+        _backgroundColor.b,
+        _backgroundColor.a
     );
     SDL_RenderClear(_sdlrenderer);
 
@@ -222,6 +222,10 @@ void Window::remove(Widget& widget){
 	);
 }
 
+void Window::setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
+bool Window::isOpen() const { return _isOpen; }
+
+Window::Window(){}
 Window::Window(const std::string title,
                const Vector2D size,
                const Color_RGBA bgColor) {

@@ -63,10 +63,10 @@ namespace egui{
 		void setColor(const Color_RGBA& color);
 		Color_RGBA getColor() const;
 
-		void setSize(const Vector2D& size){ _size = size; }
-		Vector2D getSize() const { return _size; }
+		void setSize(const Vector2D& size);
+		Vector2D getSize() const;
 
-		void setAlignment(Text::Alignment align){ _alignment = align; }
+		void setAlignment(Text::Alignment align);
 
 		Text(){}
 		Text(const std::string& text,
@@ -103,40 +103,23 @@ namespace egui{
 			BOTTOM_RIGHT
 		};
 
-		virtual bool containsPoint(const Vector2D& point) const override {
-			return point.x >= _pos.x &&
-				point.x <= _pos.x + _size.x &&
-				point.y >= _pos.y &&
-				point.y <= _pos.y + _size.y;
-		}
+		virtual bool containsPoint(const Vector2D& point) const override;
 
-		void setPadding(const float& padding){ _padding = padding; }
+		void setPadding(const float& padding);
 
-		void setTextboxAlignment(const TextBoxAlignment align){
-			_textboxAlignment = align;
-		}
-		TextBoxAlignment getTextboxAlignment() const { return _textboxAlignment; }
+		void setTextboxAlignment(const TextBoxAlignment align);
+		TextBoxAlignment getTextboxAlignment() const;
 
 		Text text;
 
-		TextLabel(){}
+		TextLabel();
 		TextLabel(
 			const Vector2D& position,
 			const Vector2D& size,
 			const std::string& textStr,
 			const std::string& fontPath,
 			const float& fontSize,
-			const Color_RGBA& textColor = egui::colors::White)
-		{
-			_pos = position;
-			_size = size;
-
-			text.loadFont(fontPath, fontSize);
-			text.setText(textStr);
-			text.setColor(textColor);
-
-			_textboxAlignment = TextBoxAlignment::CENTER;
-		}
+			const Color_RGBA& textColor = egui::colors::White);
 	private:
 		void _draw(SDL_Renderer* __renderer) override;
 
@@ -144,10 +127,10 @@ namespace egui{
 		TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};
 	};
 
-	class TextLabelInput : public Widget{
+	/*class TextLabelInput : public Widget{
 	public:
 
 	private:
 		
-	};
+	};*/
 }

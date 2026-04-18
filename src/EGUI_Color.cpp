@@ -24,16 +24,24 @@ copies or substantial portions of the Software.
 #include "EGUI_Color.hpp"
 
 namespace egui{
-	namespace colors{
-		Color_RGBA Red{255, 0, 0};
-		Color_RGBA Green{0, 128, 0};
-		Color_RGBA Blue{0, 0, 255};
-		Color_RGBA Black{0, 0, 0};
-		Color_RGBA White{255, 255, 255};
-		Color_RGBA Yellow{255, 255, 0};
-		Color_RGBA Cyan{0, 255, 255};
-		Color_RGBA Magenta{255, 0, 255};
-		Color_RGBA Gray{34, 34, 34};
-		Color_RGBA Transparent{0, 0, 0, 0};
-	}
+Color_RGBA::Color_RGBA(const std::uint8_t R, const std::uint8_t G, const std::uint8_t B, const std::uint8_t A){
+	r = R;
+	g = G; 
+	b = B; 
+	a = A;
+}
+
+
+namespace colors{
+	Color_RGBA Red{255, 0, 0};
+	Color_RGBA Green{0, 128, 0};
+	Color_RGBA Blue{0, 0, 255};
+	Color_RGBA Black{0, 0, 0};
+	Color_RGBA White{255, 255, 255};
+	Color_RGBA Yellow{255, 255, 0};
+	Color_RGBA Cyan{0, 255, 255};
+	Color_RGBA Magenta{255, 0, 255};
+	Color_RGBA Gray{34, 34, 34};
+	Color_RGBA Transparent{0, 0, 0, 0};
+}
 }

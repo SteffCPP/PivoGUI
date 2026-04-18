@@ -43,13 +43,13 @@ namespace egui{
 		void assign(Widget& widget);
 		void remove(Widget& widget);
 
-		inline void setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
-		inline bool isOpen() const { return _isOpen; }
+		void setBackgroundColor(Color_RGBA color);
+		bool isOpen() const;
 
 		Window(	const std::string title,
 				const Vector2D size,
 				const Color_RGBA bgColor=egui::colors::White);
-		Window(){}
+		Window();
 		~Window();
 	private:
 		inline bool _checkWidgetsOrder() const;

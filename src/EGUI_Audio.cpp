@@ -28,6 +28,17 @@ copies or substantial portions of the Software.
 #include <cinttypes>
 
 namespace egui{
+#define CHECK_TRACK_EXISTS_AND_CREATE if(!audio._track){ \
+        if(audio._track = MIX_CreateTrack(_mixmixer); !audio._track) \
+            std::cerr << "Error while creating track: " << SDL_GetError() << "\n"; \
+        if(MIX_Audio* music = MIX_LoadAudio(_mixmixer, audio._path.c_str(), true); !MIX_SetTrackAudio(audio._track, music)) \
+            std::cerr << "Error while setting track audio: " << SDL_GetError() << "\n"; \
+    }
+#define CHECK_TRACK_EXISTS(returnValue) if(audio._track == nullptr) return returnValue;
+        
+
+// === Audio ===
+
 void Audio::play(){
     defAudioSys.play(*this);
 }
@@ -40,8 +51,13 @@ void Audio::resume(){
 void Audio::pause(){
     defAudioSys.pause(*this);
 }
+std::string Audio::getPath() const { return _path; }
+Audio::State Audio::getState() const { return _state; }
+bool Audio::isPaused() const { return _state == State::PAUSED; }
+bool Audio::isPlaying() const { return _state == State::PLAYING; }
+Audio::Audio(const std::string& path){ _path = path; }
 
-
+// === Audio_System ===
 
 Audio_System::Audio_System(){
     if(!MIX_Init()){

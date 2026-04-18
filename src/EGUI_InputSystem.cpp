@@ -25,7 +25,49 @@ copies or substantial portions of the Software.
 #include "EGUI_SDL.cpp"
 
 namespace egui{
-	Input_System defInputSys;
+// === Mouse ===
+
+Vector2D Mouse::getPosition() const { return _pos; }
+bool Mouse::isButtonDown(MouseButton button) const { return _buttons.find(button)->second; }
+bool Mouse::isButtonUp(MouseButton button) const { return !isButtonDown(button); }
+bool Mouse::leftDown() const { return _buttons.find(MouseButton::LEFT)->second; }
+bool Mouse::rightDown() const { return _buttons.find(MouseButton::MIDDLE)->second; }
+bool Mouse::middleDown() const { return _buttons.find(MouseButton::RIGHT)->second; }
+void Mouse::_setPosition(const Vector2D& pos){ _pos = pos; }
+void Mouse::_setButtonDown(MouseButton button){ _buttons[button] = true; }
+void Mouse::_setButtonUp(MouseButton button){ _buttons[button] = false; }
+
+// === Keyboard === 
+
+bool Keyboard::isDown(Key key) const {
+	auto it = _keys.find(key);
+	return it != _keys.end() && it->second;
+}
+bool Keyboard::isUp(Key key) const {
+	auto it = _keys.find(key);
+	return it != _keys.end() && !it->second;
+}
+bool Keyboard::isPressed(Key key) const {
+	return isDown(key) && !_wasDown(key);
+}
+bool Keyboard::isReleased(Key key) const {
+	return !isDown(key) && _wasDown(key);
+}
+void Keyboard::_update(){
+	_prevKeys = _keys;
+}
+bool Keyboard::_wasDown(Key key) const {
+	auto it = _prevKeys.find(key);
+	return it != _prevKeys.end() && it->second;
+}
+void Keyboard::_setKeyDown(Key key){
+	_keys[key] = true;
+}
+void Keyboard::_setKeyUp(Key key){
+	_keys[key] = false;
+}
+
+// == Input_System ===
 
 Input_System::Input_System(){
 	for(size_t i = static_cast<size_t>(Key::A); i<=static_cast<size_t>(Key::UNKNOWN); ++i){
@@ -109,7 +151,6 @@ Key Input_System::_sdlkToKey(int sdlKey){
 		default: return Key::UNKNOWN;
 	}
 }
-
 MouseButton Input_System::_sdlbToMouseButton(std::size_t button){
 	switch(button){
 		case 1: return MouseButton::LEFT;
@@ -119,7 +160,6 @@ MouseButton Input_System::_sdlbToMouseButton(std::size_t button){
 	}
 	return MouseButton::UNKNOWN;
 }
-
 void Input_System::_update(){
 	keyboard._update();
 	
@@ -164,4 +204,8 @@ void Input_System::_update(){
         }
     }
 }
+bool Input_System::_hasRequestedQuit() const  { return _requestQuit; }
+std::pair<bool, SDL_Window*> Input_System::_hasRequestedWindowQuit() const { return _requestWindowQuit; }
+
+Input_System defInputSys;
 }

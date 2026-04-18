@@ -30,12 +30,7 @@ struct SDL_Rect;
 namespace egui{
 	class Rectangle : public Widget, public texturable{
 	public:
-		virtual bool containsPoint(const Vector2D& point) const override {
-			return point.x >= _pos.x &&
-				point.x <= _pos.x + _size.x &&
-				point.y >= _pos.y &&
-				point.y <= _pos.y + _size.y;
-		}
+		virtual bool containsPoint(const Vector2D& point) const override;
 
 		Rectangle(	const Vector2D& size, 
 					const Vector2D& pos, 

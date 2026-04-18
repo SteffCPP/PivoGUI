@@ -26,6 +26,13 @@ copies or substantial portions of the Software.
 #include <iostream>
 
 namespace egui{
+bool Rectangle::containsPoint(const Vector2D& point) const {
+	return point.x >= _pos.x &&
+		point.x <= _pos.x + _size.x &&
+		point.y >= _pos.y &&
+		point.y <= _pos.y + _size.y;
+}
+
 Rectangle::Rectangle(	const Vector2D& size, 
 						const Vector2D& pos, 
 						const Color_RGBA& bgColor, 
@@ -55,10 +62,10 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
 	SDL_SetRenderDrawColor(
 		__renderer,
-		_borderColor.R(),
-		_borderColor.G(),
-		_borderColor.B(),
-		_borderColor.A()
+		_borderColor.r,
+		_borderColor.g,
+		_borderColor.b,
+		_borderColor.a
 	);
 
 	float x = std::round(drawRect.x);
@@ -87,10 +94,10 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
 	SDL_SetRenderDrawColor(
 		__renderer,
-		_backgroundColor.R(),
-		_backgroundColor.G(),
-		_backgroundColor.B(),
-		_backgroundColor.A()
+		_backgroundColor.r,
+		_backgroundColor.g,
+		_backgroundColor.b,
+		_backgroundColor.a
 	);
 	SDL_RenderFillRect(__renderer, &innerRect);
 

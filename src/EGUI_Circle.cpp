@@ -26,6 +26,34 @@ copies or substantial portions of the Software.
 #include <iostream>
 
 namespace egui{
+float Circle::getRadius() const { return _radius; }
+void Circle::setRadius(float radius){ 
+	_radius = radius;
+	setSize({radius*2, radius*2});
+}
+bool Circle::containsPoint(const Vector2D& point) const {
+	auto c = getPosition();
+
+	float dx = point.x - (c.x + _radius);
+	float dy = point.y - (c.y + _radius);
+
+	return dx*dx + dy*dy <= _radius*_radius;
+}
+Circle::Circle(	const float radius, 
+				const Vector2D& pos,
+				const Color_RGBA& bgColor=colors::Red, 
+				const float bdWidth=0, 
+				const Color_RGBA& bdColor=colors::Transparent){
+	_radius = radius;
+	_pos = pos;
+	_backgroundColor = bgColor;
+	_borderWidth = bdWidth;
+	_borderColor = bdColor;
+	_type = WidgetType::CIRCLE;
+}
+Circle::Circle(){}
+
+
 void Circle::_draw(SDL_Renderer* __renderer) {
 	CHECK_IF_HIDE
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
@@ -42,10 +70,10 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 
 	SDL_SetRenderDrawColor(
 		__renderer,
-		_backgroundColor.R(),
-		_backgroundColor.G(),
-		_backgroundColor.B(),
-		_backgroundColor.A()
+		_backgroundColor.r,
+		_backgroundColor.g,
+		_backgroundColor.b,
+		_backgroundColor.a
 	);
 	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
 
@@ -78,10 +106,10 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	
 	SDL_SetRenderDrawColor(
 		__renderer,
-		_borderColor.R(),
-		_borderColor.G(),
-		_borderColor.B(),
-		_borderColor.A()
+		_borderColor.r,
+		_borderColor.g,
+		_borderColor.b,
+		_borderColor.a
 	);
 
 	for (int y = -rOuter; y <= rOuter; y++) {
@@ -117,10 +145,10 @@ inline void Circle::_drawFilledCircle(
 
 	SDL_SetRenderDrawColor(
 		__renderer,
-		__color.R(),
-		__color.G(),
-		__color.B(),
-		__color.A()
+		__color.r,
+		__color.g,
+		__color.b,
+		__color.a
 	);
 
 	int cx = (int)std::round(__cx);

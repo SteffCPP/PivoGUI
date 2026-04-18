@@ -69,19 +69,17 @@ namespace egui{
 
     class Mouse{
     public:
-		Vector2D getPosition() const { return _pos; }
+		Vector2D getPosition() const;
 		
-		bool isButtonDown(MouseButton button) const { return _buttons.find(button)->second; }
-		bool isButtonUp(MouseButton button) const { return !isButtonDown(button); }
-
-		bool leftDown() const { return _buttons.find(MouseButton::LEFT)->second; }
-		bool rightDown() const { return _buttons.find(MouseButton::MIDDLE)->second; }
-		bool middleDown() const { return _buttons.find(MouseButton::RIGHT)->second; }
-
+		bool isButtonDown(MouseButton button) const;
+		bool isButtonUp(MouseButton button) const;
+		bool leftDown() const;
+		bool rightDown() const;
+		bool middleDown() const;
     private:
-		void _setPosition(const Vector2D& pos){ _pos = pos; }
-		void _setButtonDown(MouseButton button){ _buttons[button] = true; }
-		void _setButtonUp(MouseButton button){ _buttons[button] = false; }
+		void _setPosition(const Vector2D& pos);
+		void _setButtonDown(MouseButton button);
+		void _setButtonUp(MouseButton button);
 
 		Vector2D _pos{0, 0};
 		std::unordered_map<MouseButton, bool> _buttons{{MouseButton::LEFT, false}, {MouseButton::MIDDLE, false}, {MouseButton::RIGHT, false}};
@@ -91,38 +89,19 @@ namespace egui{
 
     class Keyboard{
     public:
-		bool isDown(Key key) const {
-			auto it = _keys.find(key);
-			return it != _keys.end() && it->second;
-		}
-		bool isUp(Key key) const {
-			auto it = _keys.find(key);
-			return it != _keys.end() && !it->second;
-		}
+		bool isDown(Key key) const;
+		bool isUp(Key key) const;
 
-		bool isPressed(Key key) const {
-			return isDown(key) && !_wasDown(key);
-		}
+		bool isPressed(Key key) const;
 
-		bool isReleased(Key key) const {
-			return !isDown(key) && _wasDown(key);
-		}
+		bool isReleased(Key key) const;
     private:
-		void _update(){
-			_prevKeys = _keys;
-		}
+		void _update();
 
-		bool _wasDown(Key key) const {
-			auto it = _prevKeys.find(key);
-			return it != _prevKeys.end() && it->second;
-		}
+		bool _wasDown(Key key) const;
 
-		void _setKeyDown(Key key){
-			_keys[key] = true;
-		}
-		void _setKeyUp(Key key){
-			_keys[key] = false;
-		}
+		void _setKeyDown(Key key);
+		void _setKeyUp(Key key);
 
 		std::unordered_map<Key, bool> _keys;
 		std::unordered_map<Key, bool> _prevKeys;
@@ -142,8 +121,8 @@ namespace egui{
 		MouseButton _sdlbToMouseButton(std::size_t button);
 		void _update();
 
-		bool _hasRequestedQuit() const  { return _requestQuit; }
-		std::pair<bool, SDL_Window*> _hasRequestedWindowQuit() const { return _requestWindowQuit; }
+		bool _hasRequestedQuit() const;
+		std::pair<bool, SDL_Window*> _hasRequestedWindowQuit() const;
 
 		bool _requestQuit{false};
 		std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
