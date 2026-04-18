@@ -3,7 +3,7 @@
 EGUI is a modern API entirely written in C++, that communicates with SDL3, SDL_image, SDL_ttf and SDL_mixer to provide the programmer an easy expirience working with them.
 
 ## Documentation
-You can check out the documentation here, in the [documentation folder (docs folder)]().
+You can check out the documentation here, in the [documentation folder (docs folder)](https://github.com/SteffCPP/EGUI/tree/main/docs).
 
 ## License
 The EGUI library is distributed under the [zlib/libpng license](https://opensource.org/license/Zlib). <br>For informations check [LICENSE](https://github.com/SteffCPP/EGUI/blob/main/LICENSE).
