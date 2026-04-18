@@ -63,13 +63,15 @@ namespace egui{
 		inline bool _checkWidgetsOrder() const;
 		inline void _sortWidgets();
 
-		SDL_Window* _sdlwin=nullptr;
-		SDL_Renderer* _sdlrenderer=nullptr;
+		SDL_Window* _sdlwin{nullptr};
+		SDL_Renderer* _sdlrenderer{nullptr};
 
 		std::vector<Widget*> _widgets;
 
 		Color_RGBA _backgroundColor{egui::colors::White};
 
-		bool _isOpen=false;
+		bool _isOpen{false};
+
+		size_t _lastTime{0};
 	};
 }

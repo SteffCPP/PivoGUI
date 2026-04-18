@@ -2,11 +2,28 @@
 #include "EGUI_SDL.cpp"
 
 #include <iostream>
+#include <cinttypes>
+
 namespace egui{
     Audio_System defAudioSys;
 
+void Audio::play(){
+    defAudioSys.play(*this);
+}
+void Audio::stop(const std::uint16_t nFadeOutFrames){
+    defAudioSys.stop(*this, nFadeOutFrames);
+}
+void Audio::resume(){
+    defAudioSys.resume(*this);
+}
+void Audio::pause(){
+    defAudioSys.pause(*this);
+}
+
+
+
 Audio_System::Audio_System(){
-    if(!MIX_Init()){ \
+    if(!MIX_Init()){
         std::cerr << "Couldn't initialize SDL3_mixer " << SDL_GetError() << "\n"; 
         abort(); 
     }
@@ -19,51 +36,90 @@ Audio_System::Audio_System(){
     }
 }
 
-void Audio_System::play(Audio audio){
-    CHECK_AUDIO_EXISTS
+void Audio_System::play(Audio& audio){
+    CHECK_TRACK_EXISTS_AND_CREATE
+    MIX_SetTrackGain(audio._track, audio._volume);
     MIX_PlayTrack(audio._track, 0);
 
-    audio._startTime=_globalPlayTime;
+    audio._startTime = _globalTime;
+    audio._state = Audio::State::PLAYING;
 }
-void Audio_System::pause(Audio audio){
-    CHECK_AUDIO_EXISTS
+void Audio_System::pause(Audio& audio){
+    CHECK_TRACK_EXISTS()
+    if(!MIX_TrackPlaying(audio._track)) return;
+    
     MIX_PauseTrack(audio._track);
 
-    audio._pauseTime = _globalPlayTime;
+    audio._pauseTime = _globalTime;
+    audio._state = Audio::State::PAUSED;
 }
-void Audio_System::resume(Audio audio){
-    CHECK_AUDIO_EXISTS
+void Audio_System::resume(Audio& audio){
+    CHECK_TRACK_EXISTS()
+    if(!MIX_TrackPaused(audio._track)) return;
+
     MIX_ResumeTrack(audio._track);
 
     audio._pauseTime=0;
+    audio._state = Audio::State::PLAYING;
 }
-void Audio_System::stop(Audio audio, const unsigned int nFadeOutFrames){
-    CHECK_AUDIO_EXISTS
+void Audio_System::stop(Audio& audio, const unsigned int nFadeOutFrames){
+    CHECK_TRACK_EXISTS()
+    if(!MIX_TrackPlaying(audio._track)) return;
+
     MIX_StopTrack(audio._track, nFadeOutFrames);
 
     MIX_DestroyTrack(audio._track);
-    audio._startTime=0;
+    audio._track = nullptr;
+    audio._startTime = 0;
+    audio._state = Audio::State::STOPPED;
 }
 
-std::size_t Audio_System::getTime(Audio audio){
-    #define RETURN_CHECK if(audio._startTime > audio._pauseTime){ \
-            return _globalPlayTime - audio._startTime; \
-        }else{  \
-            return _globalPlayTime - audio._pauseTime; }
-        
-    if(_globalPlayTime>audio._startTime){
-        RETURN_CHECK
+std::size_t Audio_System::getTime(Audio& audio){
+    CHECK_TRACK_EXISTS(0)
+
+    switch(audio._state){
+        case Audio::State::PLAYING:
+            return _globalTime - audio._startTime;
+
+        case Audio::State::PAUSED:
+            return audio._pauseTime - audio._startTime;
+
+        default:
+            return 0;
     }
-    else{
-        RETURN_CHECK
-    }
+
+    return 0;
 }
-void Audio_System::setTime(Audio audio, const double time){}
+void Audio_System::setTime(Audio& audio, const std::size_t ms){
+    CHECK_TRACK_EXISTS()
 
-void Audio_System::getVolume(Audio audio){}
-void Audio_System::setVolume(Audio audio, const unsigned int volume){}
-void Audio_System::increaseVolume(Audio audio, const int volumeDelta){}
+    SDL_PropertiesID props = SDL_CreateProperties();
+    SDL_SetNumberProperty(props, MIX_PROP_PLAY_START_MILLISECOND_NUMBER, ms);
+    MIX_PlayTrack(audio._track, props);
 
-void Audio_System::getSpeed(Audio audio){}
-void Audio_System::setSpeed(Audio audio, const float speed){}
+    SDL_DestroyProperties(props);
+
+    if(audio._state == Audio::State::PAUSED){
+        MIX_PauseTrack(audio._track);
+        audio._pauseTime = _globalTime;
+    }else
+        audio._pauseTime = 0;
+
+    audio._startTime = _globalTime - ms;
+}
+
+float Audio_System::getVolume(Audio& audio){ return audio._volume; }
+void Audio_System::setVolume(Audio& audio, float volume){
+    if(volume<0.0f) volume = 0.0f;
+    if(volume>1.0f) volume = 1.0f;
+    audio._volume = volume;
+
+    CHECK_TRACK_EXISTS()
+
+    MIX_SetTrackGain(audio._track, audio._volume);
+}
+void Audio_System::increaseVolume(Audio& audio, const int volumeDelta){}
+
+float Audio_System::getSpeed(Audio& audio){ return audio._speed; }
+void Audio_System::setSpeed(Audio& audio, const float speed){}
 }

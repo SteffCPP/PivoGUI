@@ -37,11 +37,11 @@ int main(){
 	while(win.isOpen()){
 		win.update();
 
-		if(egui::defInputSys.keyboard.isDown(egui::Keys::W)) pad1.move({0, -5});
-		if(egui::defInputSys.keyboard.isDown(egui::Keys::S)) pad1.move({0, 5});
+		if(egui::defInputSys.keyboard.isDown(egui::Key::W)) pad1.move({0, -5});
+		if(egui::defInputSys.keyboard.isDown(egui::Key::S)) pad1.move({0, 5});
 
-		if(egui::defInputSys.keyboard.isDown(egui::Keys::UP)) pad2.move({0, -5});
-		if(egui::defInputSys.keyboard.isDown(egui::Keys::DOWN)) pad2.move({0, 5});
+		if(egui::defInputSys.keyboard.isDown(egui::Key::UP)) pad2.move({0, -5});
+		if(egui::defInputSys.keyboard.isDown(egui::Key::DOWN)) pad2.move({0, 5});
 
 		checkPadelPos(pad1);
 		checkPadelPos(pad2);

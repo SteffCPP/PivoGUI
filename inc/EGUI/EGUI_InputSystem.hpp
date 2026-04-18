@@ -39,7 +39,7 @@ SOFTWARE.
 struct SDL_Window; 
 
 namespace egui{
-	enum class Keys {
+	enum class Key {
 		A, B, C, D, E, F, G,
 		H, I, J, K, L, M, N,
 		O, P, Q, R, S, T, U,
@@ -99,20 +99,41 @@ namespace egui{
 
     class Keyboard{
     public:
-		bool isDown(Keys key) const {
+		bool isDown(Key key) const {
 			auto it = _keys.find(key);
 			return it != _keys.end() && it->second;
 		}
-    private:
-		void _setKeyDown(Keys key){
-			_keys[key] = true;
-		}	
+		bool isUp(Key key) const {
+			auto it = _keys.find(key);
+			return it != _keys.end() && !it->second;
+		}
 
-		void _setKeyUp(Keys key){
+		bool isPressed(Key key) const {
+			return isDown(key) && !_wasDown(key);
+		}
+
+		bool isReleased(Key key) const {
+			return !isDown(key) && _wasDown(key);
+		}
+    private:
+		void _update(){
+			_prevKeys = _keys;
+		}
+
+		bool _wasDown(Key key) const {
+			auto it = _prevKeys.find(key);
+			return it != _prevKeys.end() && it->second;
+		}
+
+		void _setKeyDown(Key key){
+			_keys[key] = true;
+		}
+		void _setKeyUp(Key key){
 			_keys[key] = false;
 		}
 
-		std::unordered_map<Keys, bool> _keys;
+		std::unordered_map<Key, bool> _keys;
+		std::unordered_map<Key, bool> _prevKeys;
 
 		friend class Input_System;
     };
@@ -123,9 +144,9 @@ namespace egui{
 		Mouse mouse;
 		Keyboard keyboard;
 
-		Input_System(){}
+		Input_System();
 	private:
-		Keys _sdlkToKey(int sdlKey);
+		Key _sdlkToKey(int sdlKey);
 		MouseButton _sdlbToMouseButton(std::size_t button);
 		void _update();
 

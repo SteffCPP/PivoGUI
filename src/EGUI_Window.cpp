@@ -30,7 +30,9 @@ SOFTWARE.
 */
 
 #include "EGUI_Window.hpp"
+#include "EGUI_InputSystem.hpp"
 #include "EGUI_SDL.cpp"
+#include "EGUI_Audio.hpp"
 
 #include <iostream>
 #include <utility>
@@ -99,31 +101,39 @@ void Window::create(const std::string& title,
 void Window::update(){
     if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
-    
-	defInputSys._update();
 
-	if(defInputSys._hasRequestedQuit()) destroy();
-	if(defInputSys._hasRequestedWindowQuit().first && 
-		defInputSys._hasRequestedWindowQuit().second == _sdlwin) destroy();
+    const double targetFrameTime = 1000.0 / 60.0;
 
-	const Mouse& mouse = defInputSys.mouse;
-	const Keyboard& keyboard = defInputSys.keyboard;
+    Uint64 freq = SDL_GetPerformanceFrequency();
+    Uint64 frameStart = SDL_GetPerformanceCounter();
 
-	Vector2D mousePos = mouse.getPosition();
+    double delta = (frameStart - _lastTime) * 1000.0 / freq;
+    _lastTime = frameStart;
 
-	float _deltaTime = 0.016f;
+    defInputSys._update();
+    defAudioSys._globalTime += delta;
 
-	for (auto& w : _widgets) {
+    if(defInputSys._hasRequestedQuit()) destroy();
+    if(defInputSys._hasRequestedWindowQuit().first && 
+        defInputSys._hasRequestedWindowQuit().second == _sdlwin) destroy();
+
+    const Mouse& mouse = defInputSys.mouse;
+    const Keyboard& keyboard = defInputSys.keyboard;
+
+    Vector2D mousePos = mouse.getPosition();
+
+    for (auto& w : _widgets) {
         bool inside = w->containsPoint(mousePos);
 
-		w->_hoverContext.mousePos = mousePos;
+        w->_hoverContext.mousePos = mousePos;
         w->_hoverContext.leftButtonDown = mouse.leftDown();
-		w->_hoverContext.rightButtonDown = mouse.rightDown();
-		w->_hoverContext.middleButtonDown = mouse.middleDown();
+        w->_hoverContext.rightButtonDown = mouse.rightDown();
+        w->_hoverContext.middleButtonDown = mouse.middleDown();
         w->_hoverContext.hovering = inside;
 
         if (inside) {
-			w->_hoverContext.timeHovered += _deltaTime;
+            w->_hoverContext.timeHovered += delta;
+
             if (!w->_hovered) {
                 w->_hovered = true;
                 w->_triggerEnter();
@@ -134,21 +144,19 @@ void Window::update(){
             if (mouse.isButtonDown(MouseButton::LEFT) && !w->_pressed) {
                 w->_pressed = true;
                 w->_triggerClick();
-            }else if(mouse.isButtonUp(MouseButton::LEFT) && w->_pressed){
-				w->_pressed = false;
-				w->_triggerRelease();
-			}
+            } else if(mouse.isButtonUp(MouseButton::LEFT) && w->_pressed){
+                w->_pressed = false;
+                w->_triggerRelease();
+            }
         } else {
             if (w->_hovered) {
                 w->_hovered = false;
                 w->_triggerLeave();
             }
             w->_pressed = false;
-
-			w->_hoverContext.timeHovered = 0.0f;
+            w->_hoverContext.timeHovered = 0.0f;
         }
     }
-
 
     SDL_SetRenderDrawColor(
         _sdlrenderer,
@@ -164,7 +172,16 @@ void Window::update(){
     }
 
     SDL_RenderPresent(_sdlrenderer);
-    SDL_Delay(10);
+
+
+    Uint64 frameEnd = SDL_GetPerformanceCounter();
+    double frameTime = (frameEnd - frameStart) * 1000.0 / freq;
+
+    if(frameTime < targetFrameTime){
+        SDL_Delay(static_cast<Uint32>(targetFrameTime - frameTime));
+    }
+    
+    std::cout << "FPS: "<<1000.0/delta << "\n";
 }
 
 void Window::destroy() {

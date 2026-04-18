@@ -35,80 +35,86 @@ SOFTWARE.
 namespace egui{
 	Input_System defInputSys;
 
-Keys Input_System::_sdlkToKey(int sdlKey){
+Input_System::Input_System(){
+	for(size_t i = static_cast<size_t>(Key::A); i<=static_cast<size_t>(Key::UNKNOWN); ++i){
+		keyboard._keys[static_cast<Key>(i)] = false;
+	}
+}
+
+Key Input_System::_sdlkToKey(int sdlKey){
 	using namespace egui;
 
 	switch (sdlKey) {
-		case SDLK_A: return Keys::A;
-		case SDLK_B: return Keys::B;
-		case SDLK_C: return Keys::C;
-		case SDLK_D: return Keys::D;
-		case SDLK_E: return Keys::E;
-		case SDLK_F: return Keys::F;
-		case SDLK_G: return Keys::G;
-		case SDLK_H: return Keys::H;
-		case SDLK_I: return Keys::I;
-		case SDLK_J: return Keys::J;
-		case SDLK_K: return Keys::K;
-		case SDLK_L: return Keys::L;
-		case SDLK_M: return Keys::M;
-		case SDLK_N: return Keys::N;
-		case SDLK_O: return Keys::O;
-		case SDLK_P: return Keys::P;
-		case SDLK_Q: return Keys::Q;
-		case SDLK_R: return Keys::R;
-		case SDLK_S: return Keys::S;
-		case SDLK_T: return Keys::T;
-		case SDLK_U: return Keys::U;
-		case SDLK_V: return Keys::V;
-		case SDLK_W: return Keys::W;
-		case SDLK_X: return Keys::X;
-		case SDLK_Y: return Keys::Y;
-		case SDLK_Z: return Keys::Z;
+		case SDLK_A: return Key::A;
+		case SDLK_B: return Key::B;
+		case SDLK_C: return Key::C;
+		case SDLK_D: return Key::D;
+		case SDLK_E: return Key::E;
+		case SDLK_F: return Key::F;
+		case SDLK_G: return Key::G;
+		case SDLK_H: return Key::H;
+		case SDLK_I: return Key::I;
+		case SDLK_J: return Key::J;
+		case SDLK_K: return Key::K;
+		case SDLK_L: return Key::L;
+		case SDLK_M: return Key::M;
+		case SDLK_N: return Key::N;
+		case SDLK_O: return Key::O;
+		case SDLK_P: return Key::P;
+		case SDLK_Q: return Key::Q;
+		case SDLK_R: return Key::R;
+		case SDLK_S: return Key::S;
+		case SDLK_T: return Key::T;
+		case SDLK_U: return Key::U;
+		case SDLK_V: return Key::V;
+		case SDLK_W: return Key::W;
+		case SDLK_X: return Key::X;
+		case SDLK_Y: return Key::Y;
+		case SDLK_Z: return Key::Z;
 
-		case SDLK_0: return Keys::Num0;
-		case SDLK_1: return Keys::Num1;
-		case SDLK_2: return Keys::Num2;
-		case SDLK_3: return Keys::Num3;
-		case SDLK_4: return Keys::Num4;
-		case SDLK_5: return Keys::Num5;
-		case SDLK_6: return Keys::Num6;
-		case SDLK_7: return Keys::Num7;
-		case SDLK_8: return Keys::Num8;
-		case SDLK_9: return Keys::Num9;
+		case SDLK_0: return Key::Num0;
+		case SDLK_1: return Key::Num1;
+		case SDLK_2: return Key::Num2;
+		case SDLK_3: return Key::Num3;
+		case SDLK_4: return Key::Num4;
+		case SDLK_5: return Key::Num5;
+		case SDLK_6: return Key::Num6;
+		case SDLK_7: return Key::Num7;
+		case SDLK_8: return Key::Num8;
+		case SDLK_9: return Key::Num9;
 
-		case SDLK_ESCAPE: return Keys::ESCAPE;
-		case SDLK_RETURN: return Keys::ENTER;
-		case SDLK_SPACE:  return Keys::SPACE;
-		case SDLK_TAB:    return Keys::TAB;
-		case SDLK_BACKSPACE: return Keys::BACKSPACE;
+		case SDLK_ESCAPE: return Key::ESCAPE;
+		case SDLK_RETURN: return Key::ENTER;
+		case SDLK_SPACE:  return Key::SPACE;
+		case SDLK_TAB:    return Key::TAB;
+		case SDLK_BACKSPACE: return Key::BACKSPACE;
 
-		case SDLK_UP:    return Keys::UP;
-		case SDLK_DOWN:  return Keys::DOWN;
-		case SDLK_LEFT:  return Keys::LEFT;
-		case SDLK_RIGHT: return Keys::RIGHT;
+		case SDLK_UP:    return Key::UP;
+		case SDLK_DOWN:  return Key::DOWN;
+		case SDLK_LEFT:  return Key::LEFT;
+		case SDLK_RIGHT: return Key::RIGHT;
 
-		case SDLK_LSHIFT: return Keys::LSHIFT;
-		case SDLK_RSHIFT: return Keys::RSHIFT;
-		case SDLK_LCTRL:  return Keys::LCTRL;
-		case SDLK_RCTRL:  return Keys::RCTRL;
-		case SDLK_LALT:   return Keys::LALT;
-		case SDLK_RALT:   return Keys::RALT;
+		case SDLK_LSHIFT: return Key::LSHIFT;
+		case SDLK_RSHIFT: return Key::RSHIFT;
+		case SDLK_LCTRL:  return Key::LCTRL;
+		case SDLK_RCTRL:  return Key::RCTRL;
+		case SDLK_LALT:   return Key::LALT;
+		case SDLK_RALT:   return Key::RALT;
 
-		case SDLK_F1: return Keys::F1;
-		case SDLK_F2: return Keys::F2;
-		case SDLK_F3: return Keys::F3;
-		case SDLK_F4: return Keys::F4;
-		case SDLK_F5: return Keys::F5;
-		case SDLK_F6: return Keys::F6;
-		case SDLK_F7: return Keys::F7;
-		case SDLK_F8: return Keys::F8;
-		case SDLK_F9: return Keys::F9;
-		case SDLK_F10: return Keys::F10;
-		case SDLK_F11: return Keys::F11;
-		case SDLK_F12: return Keys::F12;
+		case SDLK_F1: return Key::F1;
+		case SDLK_F2: return Key::F2;
+		case SDLK_F3: return Key::F3;
+		case SDLK_F4: return Key::F4;
+		case SDLK_F5: return Key::F5;
+		case SDLK_F6: return Key::F6;
+		case SDLK_F7: return Key::F7;
+		case SDLK_F8: return Key::F8;
+		case SDLK_F9: return Key::F9;
+		case SDLK_F10: return Key::F10;
+		case SDLK_F11: return Key::F11;
+		case SDLK_F12: return Key::F12;
 
-		default: return Keys::UNKNOWN;
+		default: return Key::UNKNOWN;
 	}
 }
 
@@ -123,6 +129,8 @@ MouseButton Input_System::_sdlbToMouseButton(std::size_t button){
 }
 
 void Input_System::_update(){
+	keyboard._update();
+	
 	SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
