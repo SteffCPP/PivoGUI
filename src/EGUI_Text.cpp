@@ -117,7 +117,7 @@ TextLabel::TextLabel(
 	const std::string& textStr,
 	const std::string& fontPath,
 	const float& fontSize,
-	const Color_RGBA& textColor = egui::colors::White)
+	const Color_RGBA& textColor)
 {
 	_pos = position;
 	_size = size;

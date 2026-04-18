@@ -41,9 +41,9 @@ bool Circle::containsPoint(const Vector2D& point) const {
 }
 Circle::Circle(	const float radius, 
 				const Vector2D& pos,
-				const Color_RGBA& bgColor=colors::Red, 
-				const float bdWidth=0, 
-				const Color_RGBA& bdColor=colors::Transparent){
+				const Color_RGBA& bgColor, 
+				const float bdWidth, 
+				const Color_RGBA& bdColor){
 	_radius = radius;
 	_pos = pos;
 	_backgroundColor = bgColor;
