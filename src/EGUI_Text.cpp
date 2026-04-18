@@ -116,7 +116,7 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
         return;
     }
     
-    SDL_Color txtColor = {text._color.R(), text._color.G(), text._color.B(), text._color.A()};
+    SDL_Color txtColor = {(std::uint8_t)text._color.R(), (std::uint8_t)text._color.G(), (std::uint8_t)text._color.B(), (std::uint8_t)text._color.A()};
     
     TTF_SetFontWrapAlignment(text._ttffont, (TTF_HorizontalAlignment)text._alignment);
     SDL_Surface* surfaceMessage = TTF_RenderText_Solid_Wrapped(text._ttffont, text._text.c_str(), text._text.size(), txtColor, text._size.x);
