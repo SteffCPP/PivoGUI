@@ -13,4 +13,4 @@ pong:
 runMain: 
 	test/bin/main
 runPong:
-	test/bin/runPong
+	test/bin/pong
