@@ -67,8 +67,8 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 		SDL_FRect dst{
 			cx - innerRadius,
 			cy - innerRadius,
-			size,
-			size
+			(float)size,
+			(float)size
 		};
 
 		SDL_RenderTexture(__renderer, tex, nullptr, &dst);
