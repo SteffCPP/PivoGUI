@@ -17,10 +17,7 @@ file(GLOB_RECURSE EGUI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
 add_library(EGUI SHARED ${EGUI_SOURCES})
 
-target_include_directories(EGUI PUBLIC
-    ${PROJECT_SOURCE_DIR}/inc
-    ${PROJECT_SOURCE_DIR}/inc/EGUI
-)
+target_include_directories(EGUI PUBLIC ${PROJECT_SOURCE_DIR}/inc/EGUI)
 
 target_link_libraries(EGUI PRIVATE
     SDL3::SDL3

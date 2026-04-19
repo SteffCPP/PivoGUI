@@ -28,8 +28,6 @@ copies or substantial portions of the Software.
 
 #include <iostream>
 #include <utility>
-#include <thread>
-#include <chrono>
 
 namespace egui {
 inline bool Window::_checkWidgetsOrder() const {
@@ -92,9 +90,17 @@ void Window::create(const std::string& title,
     _isOpen = true;
 }
 
+Vector2D Window::getSize() const { return _size; }
+
 void Window::update(){
     if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
+    int w, h;
+    if(SDL_GetWindowSize(_sdlwin, &w, &h) && (w!=_size.x || h!=_size.y)){
+        _size.x = w;
+        _size.y = h;
+    }
+
 
     const double targetFrameTime = 1000.0 / 60.0;
     Uint64 freq = SDL_GetPerformanceFrequency();
