@@ -69,65 +69,61 @@ namespace egui{
 
     class Mouse{
     public:
-		Vector2D getPosition() const;
+		static Vector2D getPosition();
 		
-		bool isButtonDown(MouseButton button) const;
-		bool isButtonUp(MouseButton button) const;
-		bool leftDown() const;
-		bool rightDown() const;
-		bool middleDown() const;
+		static bool isButtonDown(MouseButton button);
+		static bool isButtonUp(MouseButton button);
+		static bool leftDown();
+		static bool rightDown();
+		static bool middleDown();
     private:
-		void _setPosition(const Vector2D& pos);
-		void _setButtonDown(MouseButton button);
-		void _setButtonUp(MouseButton button);
+		static void _setPosition(const Vector2D& pos);
+		static void _setButtonDown(MouseButton button);
+		static void _setButtonUp(MouseButton button);
+		static MouseButton _sdlbToMouseButton(std::size_t button);
 
-		Vector2D _pos{0, 0};
-		std::unordered_map<MouseButton, bool> _buttons{{MouseButton::LEFT, false}, {MouseButton::MIDDLE, false}, {MouseButton::RIGHT, false}};
+	 	static inline Vector2D _pos;
+		static inline std::unordered_map<MouseButton, bool> _buttons{{MouseButton::LEFT, false}, {MouseButton::MIDDLE, false}, {MouseButton::RIGHT, false}};
 
-		friend class Input_System;
+		friend class Input_Manager;
     };
 
     class Keyboard{
     public:
-		bool isDown(Key key) const;
-		bool isUp(Key key) const;
+		static bool isDown(Key key);
+		static bool isUp(Key key);
 
-		bool isPressed(Key key) const;
+		static bool isPressed(Key key);
 
-		bool isReleased(Key key) const;
+		static bool isReleased(Key key);
     private:
-		void _update();
+		static Key _sdlkToKey(int sdlKey);
+		static void _update();
 
-		bool _wasDown(Key key) const;
+		static bool _wasDown(Key key);
 
-		void _setKeyDown(Key key);
-		void _setKeyUp(Key key);
+		static void _setKeyDown(Key key);
+		static void _setKeyUp(Key key);
 
-		std::unordered_map<Key, bool> _keys;
-		std::unordered_map<Key, bool> _prevKeys;
+		static inline std::unordered_map<Key, bool> _keys;
+		static inline std::unordered_map<Key, bool> _prevKeys;
 
-		friend class Input_System;
+		friend class Input_Manager;
     };
 
 
-	class Input_System{
+	class Input_Manager{
 	public:
-		Mouse mouse;
-		Keyboard keyboard;
-
-		Input_System();
+		Input_Manager();
 	private:
-		Key _sdlkToKey(int sdlKey);
-		MouseButton _sdlbToMouseButton(std::size_t button);
-		void _update();
+		static void _update();
 
-		bool _hasRequestedQuit() const;
-		std::pair<bool, SDL_Window*> _hasRequestedWindowQuit() const;
+		static bool _hasRequestedQuit();
+		static std::pair<bool, SDL_Window*> _hasRequestedWindowQuit();
 
-		bool _requestQuit{false};
-		std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
+		static inline bool _requestQuit{false};
+		static inline std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
 
 		friend class Window;
 	};
-	extern Input_System defInputSys;
 }

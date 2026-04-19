@@ -57,65 +57,157 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 	Vector2D offset = _computePivotOffset();
 	Vector2D finalPos = _pos - offset;
 
-	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
+	// Faster rendering without rotation
+	if(!_hasRotation()){
+		SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
 
-	SDL_SetRenderDrawColor(
-		__renderer,
-		_borderColor.r,
-		_borderColor.g,
-		_borderColor.b,
-		_borderColor.a
-	);
+		SDL_SetRenderDrawColor(
+			__renderer,
+			_borderColor.r,
+			_borderColor.g,
+			_borderColor.b,
+			_borderColor.a
+		);
 
-	float x = std::round(drawRect.x);
-	float y = std::round(drawRect.y);
-	float w = std::round(drawRect.w);
-	float h = std::round(drawRect.h);
-	float b = _borderWidth;
+		float x = std::round(drawRect.x);
+		float y = std::round(drawRect.y);
+		float w = std::round(drawRect.w);
+		float h = std::round(drawRect.h);
+		float b = _borderWidth;
 
-	for (int i = 0; i < _borderWidth; i++) {
-		SDL_FRect borderRect{
-			x + i,
-			y + i,
-			w - 2.0f * i,
-			h - 2.0f * i
-		};
+		for (int i = 0; i < _borderWidth; i++) {
+			SDL_FRect borderRect{
+				x + i,
+				y + i,
+				w - 2.0f * i,
+				h - 2.0f * i
+			};
 
-		SDL_RenderRect(__renderer, &borderRect);
-	}
-
-	SDL_FRect innerRect{
-		finalPos.x + _borderWidth,
-		finalPos.y + _borderWidth,
-		_size.x - _borderWidth * 2,
-		_size.y - _borderWidth * 2
-	};
-
-	SDL_SetRenderDrawColor(
-		__renderer,
-		_backgroundColor.r,
-		_backgroundColor.g,
-		_backgroundColor.b,
-		_backgroundColor.a
-	);
-	SDL_RenderFillRect(__renderer, &innerRect);
-
-	if (_hasImage) {
-		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
-		if (!image) {
-			std::cerr << "IMG_Load() error (error rendering image): "
-					  << SDL_GetError() << "\n";
-			return;
+			SDL_RenderRect(__renderer, &borderRect);
 		}
 
-		SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+		SDL_FRect innerRect{
+			finalPos.x + _borderWidth,
+			finalPos.y + _borderWidth,
+			_size.x - _borderWidth * 2,
+			_size.y - _borderWidth * 2
+		};
 
-		SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
+		SDL_SetRenderDrawColor(
+			__renderer,
+			_backgroundColor.r,
+			_backgroundColor.g,
+			_backgroundColor.b,
+			_backgroundColor.a
+		);
+		SDL_RenderFillRect(__renderer, &innerRect);
 
-		SDL_DestroyTexture(tex);
-		SDL_DestroySurface(image);
+		if (_hasImage) {
+			SDL_Surface* image = IMG_Load(_img.getPath().c_str());
+			if (!image) {
+				std::cerr << "IMG_Load() error (error rendering image): "
+						<< SDL_GetError() << "\n";
+				return;
+			}
+
+			SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+
+			SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
+
+			SDL_DestroyTexture(tex);
+			SDL_DestroySurface(image);
+		}
+
+		SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
+		return;
 	}
+	
+	SDL_Texture* target = SDL_CreateTexture(
+        __renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
+        (int)_size.x,
+        (int)_size.y
+    );
 
-	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
+    SDL_SetTextureBlendMode(target, SDL_BLENDMODE_BLEND);
+
+    SDL_SetRenderTarget(__renderer, target);
+
+    SDL_SetRenderDrawColor(__renderer, 0, 0, 0, 0);
+    SDL_RenderClear(__renderer);
+
+    SDL_FRect localRect{0, 0, _size.x, _size.y};
+
+    SDL_SetRenderDrawColor(
+        __renderer,
+        _borderColor.r,
+        _borderColor.g,
+        _borderColor.b,
+        _borderColor.a
+    );
+
+    for (int i = 0; i < _borderWidth; i++) {
+        SDL_FRect borderRect{
+            (float)i,
+            (float)i,
+            _size.x - 2.0f * i,
+            _size.y - 2.0f * i
+        };
+        SDL_RenderRect(__renderer, &borderRect);
+    }
+
+    SDL_FRect innerRect{
+        (float)_borderWidth,
+        (float)_borderWidth,
+        _size.x - _borderWidth * 2,
+        _size.y - _borderWidth * 2
+    };
+
+    SDL_SetRenderDrawColor(
+        __renderer,
+        _backgroundColor.r,
+        _backgroundColor.g,
+        _backgroundColor.b,
+        _backgroundColor.a
+    );
+    SDL_RenderFillRect(__renderer, &innerRect);
+
+    if (_hasImage){
+        SDL_Surface* image = IMG_Load(_img.getPath().c_str());
+        if (!image){
+            std::cerr << "IMG_Load() error: " << SDL_GetError() << "\n";
+			return;
+        }
+        SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+        SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
+
+        SDL_DestroyTexture(tex);
+        SDL_DestroySurface(image);
+        
+    }
+
+    SDL_SetRenderTarget(__renderer, NULL);
+
+    SDL_FRect dst{finalPos.x, finalPos.y, _size.x, _size.y};
+
+    SDL_FPoint center{
+        _size.x / 2.0f,
+        _size.y / 2.0f
+    };
+
+    SDL_RenderTextureRotated(
+        __renderer,
+        target,
+        NULL,
+        &dst,
+        getRotation(),
+        &center,
+        SDL_FLIP_NONE
+    );
+
+    SDL_DestroyTexture(target);
+
+    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
 }

@@ -27,36 +27,45 @@ copies or substantial portions of the Software.
 namespace egui{
 // === Mouse ===
 
-Vector2D Mouse::getPosition() const { return _pos; }
-bool Mouse::isButtonDown(MouseButton button) const { return _buttons.find(button)->second; }
-bool Mouse::isButtonUp(MouseButton button) const { return !isButtonDown(button); }
-bool Mouse::leftDown() const { return _buttons.find(MouseButton::LEFT)->second; }
-bool Mouse::rightDown() const { return _buttons.find(MouseButton::MIDDLE)->second; }
-bool Mouse::middleDown() const { return _buttons.find(MouseButton::RIGHT)->second; }
+Vector2D Mouse::getPosition() { return _pos; }
+bool Mouse::isButtonDown(MouseButton button) { return _buttons.find(button)->second; }
+bool Mouse::isButtonUp(MouseButton button) { return !isButtonDown(button); }
+bool Mouse::leftDown() { return _buttons.find(MouseButton::LEFT)->second; }
+bool Mouse::rightDown() { return _buttons.find(MouseButton::MIDDLE)->second; }
+bool Mouse::middleDown() { return _buttons.find(MouseButton::RIGHT)->second; }
 void Mouse::_setPosition(const Vector2D& pos){ _pos = pos; }
 void Mouse::_setButtonDown(MouseButton button){ _buttons[button] = true; }
 void Mouse::_setButtonUp(MouseButton button){ _buttons[button] = false; }
+MouseButton Mouse::_sdlbToMouseButton(std::size_t button){
+	switch(button){
+		case 1: return MouseButton::LEFT;
+		case 2: return MouseButton::RIGHT;
+		case 3: return MouseButton::MIDDLE;
+		default: return MouseButton::UNKNOWN;
+	}
+	return MouseButton::UNKNOWN;
+}
 
 // === Keyboard === 
 
-bool Keyboard::isDown(Key key) const {
+bool Keyboard::isDown(Key key) {
 	auto it = _keys.find(key);
 	return it != _keys.end() && it->second;
 }
-bool Keyboard::isUp(Key key) const {
+bool Keyboard::isUp(Key key) {
 	auto it = _keys.find(key);
 	return it != _keys.end() && !it->second;
 }
-bool Keyboard::isPressed(Key key) const {
+bool Keyboard::isPressed(Key key) {
 	return isDown(key) && !_wasDown(key);
 }
-bool Keyboard::isReleased(Key key) const {
+bool Keyboard::isReleased(Key key) {
 	return !isDown(key) && _wasDown(key);
 }
 void Keyboard::_update(){
 	_prevKeys = _keys;
 }
-bool Keyboard::_wasDown(Key key) const {
+bool Keyboard::_wasDown(Key key) {
 	auto it = _prevKeys.find(key);
 	return it != _prevKeys.end() && it->second;
 }
@@ -66,16 +75,7 @@ void Keyboard::_setKeyDown(Key key){
 void Keyboard::_setKeyUp(Key key){
 	_keys[key] = false;
 }
-
-// == Input_System ===
-
-Input_System::Input_System(){
-	for(size_t i = static_cast<size_t>(Key::A); i<=static_cast<size_t>(Key::UNKNOWN); ++i){
-		keyboard._keys[static_cast<Key>(i)] = false;
-	}
-}
-
-Key Input_System::_sdlkToKey(int sdlKey){
+Key Keyboard::_sdlkToKey(int sdlKey){
 	using namespace egui;
 
 	switch (sdlKey) {
@@ -151,17 +151,15 @@ Key Input_System::_sdlkToKey(int sdlKey){
 		default: return Key::UNKNOWN;
 	}
 }
-MouseButton Input_System::_sdlbToMouseButton(std::size_t button){
-	switch(button){
-		case 1: return MouseButton::LEFT;
-		case 2: return MouseButton::RIGHT;
-		case 3: return MouseButton::MIDDLE;
-		default: return MouseButton::UNKNOWN;
-	}
-	return MouseButton::UNKNOWN;
+
+// === Input_Manager ===
+
+Input_Manager::Input_Manager(){
+	_requestQuit=false;
+	_requestWindowQuit={false,nullptr};
 }
-void Input_System::_update(){
-	keyboard._update();
+void Input_Manager::_update(){
+	egui::Keyboard::_update();
 	
 	SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -179,33 +177,31 @@ void Input_System::_update(){
 			// ---Mouse---
 		
             case SDL_EVENT_MOUSE_MOTION:{
-				mouse._setPosition({event.motion.x, event.motion.y});
+				Mouse::_setPosition({event.motion.x, event.motion.y});
 			} break;
 
 			case SDL_EVENT_MOUSE_BUTTON_DOWN: {
-				mouse._setButtonDown(_sdlbToMouseButton(event.button.button));
+				Mouse::_setButtonDown(Mouse::_sdlbToMouseButton(event.button.button));
 			} break;
 
 			case SDL_EVENT_MOUSE_BUTTON_UP: {
-				mouse._setButtonUp(_sdlbToMouseButton(event.button.button));
+				Mouse::_setButtonUp(Mouse::_sdlbToMouseButton(event.button.button));
 			} break;
 
 			// ---Keyboard---
 
 			case SDL_EVENT_KEY_DOWN: {
-				keyboard._setKeyDown(_sdlkToKey(event.key.key));
+				Keyboard::_setKeyDown(Keyboard::_sdlkToKey(event.key.key));
 			} break;
 
 			case SDL_EVENT_KEY_UP: {
-				keyboard._setKeyUp(_sdlkToKey(event.key.key));
+				Keyboard::_setKeyUp(Keyboard::_sdlkToKey(event.key.key));
 			} break;
 
             default: break;
         }
     }
 }
-bool Input_System::_hasRequestedQuit() const  { return _requestQuit; }
-std::pair<bool, SDL_Window*> Input_System::_hasRequestedWindowQuit() const { return _requestWindowQuit; }
-
-Input_System defInputSys;
+bool Input_Manager::_hasRequestedQuit() { return _requestQuit; }
+std::pair<bool, SDL_Window*> Input_Manager::_hasRequestedWindowQuit() { return _requestWindowQuit; }
 }

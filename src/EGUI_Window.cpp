@@ -101,16 +101,16 @@ void Window::update(){
     double delta = (frameStart - _lastTime) * 1000.0 / freq;
     _lastTime = frameStart;
 
-    defInputSys._update();
+    Input_Manager::_update();
     defAudioSys._globalTime += (size_t)delta;
     std::cout << "Delta: " << delta << "\n";
 
-    if(defInputSys._hasRequestedQuit()) { destroy(); return; }
-    if(defInputSys._hasRequestedWindowQuit().first && 
-        defInputSys._hasRequestedWindowQuit().second == _sdlwin){ destroy(); return; }
+    if(Input_Manager::_hasRequestedQuit()) { destroy(); return; }
+    if(Input_Manager::_hasRequestedWindowQuit().first && 
+        Input_Manager::_hasRequestedWindowQuit().second == _sdlwin){ destroy(); return; }
 
-    const Mouse& mouse = defInputSys.mouse;
-    const Keyboard& keyboard = defInputSys.keyboard;
+    const Mouse& mouse = Mouse();
+    const Keyboard& keyboard = Keyboard();
 
     Vector2D mousePos = mouse.getPosition();
 

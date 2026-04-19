@@ -167,6 +167,8 @@ namespace egui{
 		void assignImage(const Image img);
 		void assignImage(const std::string& path);
 		void removeImage();
+
+		texturable();
 	protected:
 		bool _hasImage{false};
 		Image _img;

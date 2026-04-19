@@ -42,6 +42,8 @@ void texturable::assignImage(const Image img){ _img = img; _hasImage = true; }
 void texturable::assignImage(const std::string& path){ _img.setPath(path); _hasImage = true; }
 void texturable::removeImage(){ _hasImage = false; }
 
+texturable::texturable(){}
+
 // === transformable ===
 
 Vector2D transformable::getPosition() const { return _pos; }

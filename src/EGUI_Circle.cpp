@@ -68,6 +68,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	float rOuter = std::round(_radius);
 	float rInner = std::round(_radius - _borderWidth);
 
+	// Background 
 	SDL_SetRenderDrawColor(
 		__renderer,
 		_backgroundColor.r,
@@ -77,6 +78,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	);
 	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
 
+	// Image
 	if (_hasImage) {
 		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
 		if (!image) {
@@ -112,6 +114,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 		_borderColor.a
 	);
 
+	// Border
 	for (int y = -rOuter; y <= rOuter; y++) {
 		int xOuter = (int)std::floor(std::sqrt(rOuter * rOuter - y * y));
 		int xInner = (rInner > 0 && abs(y) <= rInner)
