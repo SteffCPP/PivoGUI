@@ -23,6 +23,8 @@ copies or substantial portions of the Software.
 
 #include "EGUI_Circle.hpp"
 #include "EGUI_SDL.cpp"
+#include "EGUI_TextureManager.hpp"
+
 #include <iostream>
 
 namespace egui{
@@ -85,14 +87,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
 
 	if (_hasImage) {
-		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
-		if (!image) {
-			std::cerr << "IMG_Load error: " << SDL_GetError() << "\n";
-			return;
-		}
-
-		SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
-		SDL_DestroySurface(image);
+		SDL_Texture* tex = Texture_Manager::load(_img.getPath());
 
 		float innerRadius = _radius - _borderWidth;
 		if (innerRadius < 0) innerRadius = 0;

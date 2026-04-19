@@ -22,7 +22,9 @@ copies or substantial portions of the Software.
 */
 
 #include "EGUI_Rectangle.hpp"
+#include "EGUI_TextureManager.hpp"
 #include "EGUI_SDL.cpp"
+
 #include <iostream>
 
 namespace egui{
@@ -101,19 +103,11 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 		SDL_RenderFillRect(__renderer, &innerRect);
 
 		if (_hasImage) {
-			SDL_Surface* image = IMG_Load(_img.getPath().c_str());
-			if (!image) {
-				std::cerr << "IMG_Load() error (error rendering image): "
-						<< SDL_GetError() << "\n";
-				return;
-			}
-
-			SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
+			SDL_Texture* tex = Texture_Manager::load(_img.getPath());
 
 			SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
 
 			SDL_DestroyTexture(tex);
-			SDL_DestroySurface(image);
 		}
 
 		SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);

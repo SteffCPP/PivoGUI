@@ -36,3 +36,4 @@ copies or substantial portions of the Software.
 #include "EGUI_Window.hpp"
 #include "EGUI_Image.hpp"
 #include "EGUI_InputSys.hpp"
+#include "EGUI_TextureManager.hpp"
