@@ -135,9 +135,6 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
 
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
-    // =========================
-    // PIVOT + LABEL POSITION
-    // =========================
     Vector2D topLeft = _pos + _computePivotOffset();
 
     SDL_FRect labelRect{
@@ -152,9 +149,6 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
         _pos.y - topLeft.y
     };
 
-    // =========================
-    // LABEL TEXTURE
-    // =========================
     SDL_Texture* labelTexture = SDL_CreateTexture(
         __renderer,
         SDL_PIXELFORMAT_RGBA8888,
@@ -198,9 +192,6 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
 
     SDL_DestroyTexture(labelTexture);
 
-    // =========================
-    // TEXT (LOCAL SPACE FIRST)
-    // =========================
     if(!text._ttffont) return;
 
     SDL_Color textColor{
