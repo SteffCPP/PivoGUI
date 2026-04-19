@@ -38,21 +38,20 @@ Rectangle::Rectangle(	const Vector2D& size,
 						const Color_RGBA& bgColor, 
 						const float bdWidth, 
 						const Color_RGBA& bdColor, 
-						const float rotRad){
+						const float rotDeg){
 			
 	_size = size;
 	_pos = pos;
 	_backgroundColor = bgColor;
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
-	_rotationRadians = rotRad;
-	_rotationDegrees = math::radToDeg(rotRad);
+	_rotation = rotDeg;
 	_type = WidgetType::RECTANGLE;
 }
 Rectangle::Rectangle(){}
 
 void Rectangle::_draw(SDL_Renderer* __renderer) {
-	CHECK_IF_HIDE
+	if(_hide) return;
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
 	Vector2D offset = _computePivotOffset();

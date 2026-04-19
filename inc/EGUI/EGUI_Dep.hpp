@@ -38,8 +38,8 @@ namespace egui{
 	public:
 		virtual ~sizeable() = default;
 
-		virtual Vector2D getSize() const { return _size; }
-		virtual void setSize(const Vector2D& size){ _size = size; }
+		virtual Vector2D getSize() const;
+		virtual void setSize(const Vector2D& size);
 	protected:
 		Vector2D _size{0, 0};
 	};
@@ -48,34 +48,27 @@ namespace egui{
 	public:
 		virtual ~rotatable() = default;
 
-		inline void setRotationDegrees(double deg){ 
-			_rotationDegrees = deg; 
-			_rotationRadians = egui::math::degToRad(deg);
-		}
-		inline void setRotationRadians(double rad){ 
-			_rotationRadians = rad;
-			_rotationDegrees = egui::math::radToDeg(rad);
-		}
-		constexpr double getRotationDegrees() const { return _rotationDegrees; }
-		constexpr double getRotationRadians() const { return _rotationRadians; }
+		void setRotation(double deg);
+		double getRotation() const;
 	protected:
-		double _rotationDegrees{0}, _rotationRadians{0};
+		bool _hasRotation() const;
+		double _rotation{0};
 	};
 
 	class drawable{
 	public:
 		virtual ~drawable() = default;
 
-	 	Color_RGBA getBackgroundColor() const { return _backgroundColor; }
-		Color_RGBA getBorderColor() const { return _borderColor; }
+	 	Color_RGBA getBackgroundColor() const;
+		Color_RGBA getBorderColor() const;
 
-		void setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
-		void setBorderColor(const Color_RGBA& color) { _borderColor = color; }
+		void setBackgroundColor(const Color_RGBA& color);
+		void setBorderColor(const Color_RGBA& color);
 		
-		void setBorderWidth(const float width){ _borderWidth = width; }
-		float getBorderWidth() const { return _borderWidth; }
+		void setBorderWidth(const float width);
+		float getBorderWidth() const;
 
-		void setHide(const bool flag){ _hide = flag; }
+		void setHide(const bool flag);
 
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
@@ -83,7 +76,6 @@ namespace egui{
 		Color_RGBA _backgroundColor{egui::colors::Black}, _borderColor{egui::colors::Transparent};
 		float _borderWidth{0};
 
-		#define CHECK_IF_HIDE if(_hide) return;
 		bool _hide{false};
 	};
 
@@ -147,9 +139,9 @@ namespace egui{
 			};
 		}
 
-		const HoverContext& getHoverContext() const { return _hoverContext; }
+		const HoverContext& getHoverContext() const;
 
-   	 	bool isPressed() const { return _pressed; }
+   	 	bool isPressed() const;
 	protected:
 		bool _hovered{false};
 		bool _pressed{false};
@@ -157,11 +149,11 @@ namespace egui{
 
 		HoverContext _hoverContext;
 
-		void _triggerClick() const { if (_onClick) _onClick(); }
-		void _triggerHover() const { if (_onHover) _onHover(); }
-		void _triggerEnter() const { if (_onEnter) _onEnter(); }
-		void _triggerLeave() const { if (_onLeave) _onLeave(); }
-		void _triggerRelease() const { if(_onRelease) _onRelease(); }
+		void _triggerClick() const;
+		void _triggerHover() const;
+		void _triggerEnter() const;
+		void _triggerLeave() const;
+		void _triggerRelease() const;
 	private:
 		std::function<void()> _onClick;
 		std::function<void()> _onHover;
@@ -172,9 +164,9 @@ namespace egui{
 
 	class texturable{
 	public:
-		void assignImage(const Image img){ _img = img; _hasImage = true; }
-		void assignImage(const std::string& path){ _img.setPath(path); _hasImage = true; }
-		void removeImage(){ _hasImage = false; }
+		void assignImage(const Image img);
+		void assignImage(const std::string& path);
+		void removeImage();
 	protected:
 		bool _hasImage{false};
 		Image _img;
@@ -196,30 +188,15 @@ namespace egui{
 	public:
 		virtual ~transformable() = default;
 
-		Vector2D getPosition() const { return _pos; }
-		void setPosition(const Vector2D& pos) { _pos = pos; }
+		Vector2D getPosition() const;
+		void setPosition(const Vector2D& pos);
 
-		Pivot getPivot() const { return _pivot; }
-		void setPivot(const Pivot& pivot){ _pivot = pivot; }
+		Pivot getPivot() const;
+		void setPivot(const Pivot& pivot);
 
-		void move(const Vector2D& delta) { _pos = _pos + delta; }
+		void move(const Vector2D& delta);
 	protected:
-		Vector2D _computePivotOffset() const {
-			switch(_pivot){
-				case Pivot::TOP_LEFT:     return {0, 0};
-				case Pivot::TOP:          return {_size.x / 2, 0};
-				case Pivot::TOP_RIGHT:    return {_size.x, 0};
-
-				case Pivot::LEFT:         return {0, _size.y / 2};
-				case Pivot::CENTER:       return {_size.x / 2, _size.y / 2};
-				case Pivot::RIGHT:        return {_size.x, _size.y / 2};
-
-				case Pivot::BOTTOM_LEFT:  return {0, _size.y};
-				case Pivot::BOTTOM:       return {_size.x / 2, _size.y};
-				case Pivot::BOTTOM_RIGHT: return {_size.x, _size.y};
-			}
-			return {0, 0};
-		}
+		Vector2D _computePivotOffset() const;
 		Pivot _pivot{Pivot::TOP_LEFT};
 		
 		Vector2D _pos{0, 0};

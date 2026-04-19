@@ -55,7 +55,7 @@ Circle::Circle(){}
 
 
 void Circle::_draw(SDL_Renderer* __renderer) {
-	CHECK_IF_HIDE
+	if(_hide) return;
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
 	Vector2D pivotOffset = _computePivotOffset();

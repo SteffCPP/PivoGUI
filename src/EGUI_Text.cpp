@@ -27,10 +27,10 @@ copies or substantial portions of the Software.
 #include <iostream>
 
 namespace egui{
-    #define FONT_NOT_LOADED_ERR \
-    if(_ttffont==nullptr){ \
-        std::cerr << "Impossible to update size: Font not loaded.\n"; \
-    }
+#define FONT_NOT_LOADED_ERR \
+if(_ttffont==nullptr){ \
+    std::cerr << "Impossible to update size: Font not loaded.\n"; \
+}
 
 // === Text ===
 
@@ -96,6 +96,7 @@ void Text::setAlignment(Text::Alignment align){ _alignment = align; }
 
 
 // === TextLabel ===
+
 bool TextLabel::containsPoint(const Vector2D& point) const {
 	return point.x >= _pos.x &&
 		point.x <= _pos.x + _size.x &&
@@ -130,7 +131,7 @@ TextLabel::TextLabel(
 }
 
 void TextLabel::_draw(SDL_Renderer* __renderer){
-    CHECK_IF_HIDE
+    if(_hide) return;
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
     // Rectangle of Label
