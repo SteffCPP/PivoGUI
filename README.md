@@ -6,7 +6,11 @@ EGUI, or Embedded Graphics Utility Interface, is a modern and easy API entirely 
 You can check out the documentation here, in the [documentation folder (docs folder)](https://github.com/SteffCPP/EGUI/tree/main/docs).
 
 ## Download
-You can download the newest version of EGUI, for your platform, on the [releases page](https://github.com/SteffCPP/EGUI/releases).
+You can download the newest version of EGUI, for your platform, on the [releases page](https://github.com/SteffCPP/EGUI/releases). <br>
+The currently supported platforms are: Linux, Windows.
+
+### DISCLAIMER FOR WINDOWS 
+Since this is a SDL3 API, you will need to have the SDL3.dll, SDL3_mixer.dll, SDL3_ttf.dll and SDL3_image.dll files in your binary directory. <br> If not your binary will not run and give an error.
 
 ## License
 The EGUI library is distributed under the [zlib/libpng license](https://opensource.org/license/Zlib). <br>For informations check [LICENSE](https://github.com/SteffCPP/EGUI/blob/main/LICENSE).
