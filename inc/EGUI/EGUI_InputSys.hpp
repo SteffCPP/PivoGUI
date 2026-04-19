@@ -24,106 +24,115 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include "EGUI_Dep.hpp"
-
 #include <utility>
 #include <unordered_map>
 
-struct SDL_Window; 
+struct SDL_Window;
 
-namespace egui{
-	enum class Key {
-		A, B, C, D, E, F, G,
-		H, I, J, K, L, M, N,
-		O, P, Q, R, S, T, U,
-		V, W, X, Y, Z,
+namespace egui {
+	
+enum class Key {
+    A, B, C, D, E, F, G,
+    H, I, J, K, L, M, N,
+    O, P, Q, R, S, T, U,
+    V, W, X, Y, Z,
 
-		Num0, Num1, Num2, Num3, Num4,
-		Num5, Num6, Num7, Num8, Num9,
+    Num0, Num1, Num2, Num3, Num4,
+    Num5, Num6, Num7, Num8, Num9,
 
-		ESCAPE,
-		ENTER,
-		SPACE,
-		TAB,
-		BACKSPACE,
+    ESCAPE,
+    ENTER,
+    SPACE,
+    TAB,
+    BACKSPACE,
 
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 
-		LSHIFT, RSHIFT,
-		LCTRL,  RCTRL,
-		LALT,   RALT,
+    LSHIFT, RSHIFT,
+    LCTRL, RCTRL,
+    LALT, RALT,
 
-		F1, F2, F3, F4, F5, F6,
-		F7, F8, F9, F10, F11, F12,
+    F1, F2, F3, F4, F5, F6,
+    F7, F8, F9, F10, F11, F12,
 
-		UNKNOWN
-	};
-	enum class MouseButton{
-		LEFT,
-		MIDDLE,
-		RIGHT,
-		UNKNOWN
-	};
+    UNKNOWN
+};
 
-    class Mouse{
-    public:
-		static Vector2D getPosition();
-		
-		static bool isButtonDown(MouseButton button);
-		static bool isButtonUp(MouseButton button);
-		static bool leftDown();
-		static bool rightDown();
-		static bool middleDown();
-    private:
-		static void _setPosition(const Vector2D& pos);
-		static void _setButtonDown(MouseButton button);
-		static void _setButtonUp(MouseButton button);
-		static MouseButton _sdlbToMouseButton(std::size_t button);
+enum class MouseButton {
+    LEFT,
+    MIDDLE,
+    RIGHT,
+    UNKNOWN
+};
 
-	 	static inline Vector2D _pos;
-		static inline std::unordered_map<MouseButton, bool> _buttons{{MouseButton::LEFT, false}, {MouseButton::MIDDLE, false}, {MouseButton::RIGHT, false}};
+class Mouse {
+public:
+    static Vector2D getPosition();
 
-		friend class Input_Manager;
+    static bool isButtonDown(MouseButton button);
+    static bool isButtonUp(MouseButton button);
+
+    static bool leftDown();
+    static bool rightDown();
+    static bool middleDown();
+
+private:
+    static void _setPosition(const Vector2D& pos);
+    static void _setButtonDown(MouseButton button);
+    static void _setButtonUp(MouseButton button);
+    static MouseButton _sdlbToMouseButton(std::size_t button);
+
+    static inline Vector2D _pos{};
+
+    static inline std::unordered_map<MouseButton, bool> _buttons{
+        {MouseButton::LEFT, false},
+        {MouseButton::MIDDLE, false},
+        {MouseButton::RIGHT, false}
     };
 
-    class Keyboard{
-    public:
-		static bool isDown(Key key);
-		static bool isUp(Key key);
+    friend class Input_Manager;
+};
 
-		static bool isPressed(Key key);
+class Keyboard {
+public:
+    static bool isDown(Key key);
+    static bool isUp(Key key);
 
-		static bool isReleased(Key key);
-    private:
-		static Key _sdlkToKey(int sdlKey);
-		static void _update();
+    static bool isPressed(Key key);
+    static bool isReleased(Key key);
 
-		static bool _wasDown(Key key);
+private:
+    static Key _sdlkToKey(int sdlKey);
+    static void _update();
+    static bool _wasDown(Key key);
 
-		static void _setKeyDown(Key key);
-		static void _setKeyUp(Key key);
+    static void _setKeyDown(Key key);
+    static void _setKeyUp(Key key);
 
-		static inline std::unordered_map<Key, bool> _keys;
-		static inline std::unordered_map<Key, bool> _prevKeys;
+    static inline std::unordered_map<Key, bool> _keys{};
+    static inline std::unordered_map<Key, bool> _prevKeys{};
 
-		friend class Input_Manager;
-    };
+    static void _initKeys();
 
+    friend class Input_Manager;
+};
 
-	class Input_Manager{
-	public:
-		Input_Manager();
-	private:
-		static void _update();
+class Input_Manager {
+public:
+    Input_Manager();
 
-		static bool _hasRequestedQuit();
-		static std::pair<bool, SDL_Window*> _hasRequestedWindowQuit();
+private:
+    static void _update();
 
-		static inline bool _requestQuit{false};
-		static inline std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
+    static bool _hasRequestedQuit();
+    static std::pair<bool, SDL_Window*> _hasRequestedWindowQuit();
 
-		friend class Window;
-	};
+    static inline bool _requestQuit{false};
+    static inline std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
+
+    friend class Window;
+};
 }
