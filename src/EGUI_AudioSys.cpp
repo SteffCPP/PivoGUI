@@ -163,7 +163,7 @@ void Audio_Manager::setVolume(Audio& audio, float volume) {
     if (audio._track)
         MIX_SetTrackGain(audio._track, volume);
 }
-void Audio_Manager::increaseVolume(Audio& audio, float delta) {
+void Audio_Manager::changeVolume(Audio& audio, float delta) {
     setVolume(audio, audio._volume + delta);
 }
 float Audio_Manager::getSpeed(const Audio& audio) {

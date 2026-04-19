@@ -28,18 +28,33 @@ copies or substantial portions of the Software.
 struct SDL_Rect;
 
 namespace egui{
-	class Rectangle : public Widget, public texturable{
-	public:
-		virtual bool containsPoint(const Vector2D& point) const override;
+	class Rectangle : public Widget, public texturable {
+public:
+    /// Checks if a point is inside the rectangle.
+    /// @param point Point in world coordinates.
+    /// @return True if the point is inside the rectangle.
+    virtual bool containsPoint(const Vector2D& point) const override;
 
-		Rectangle(	const Vector2D& size, 
-					const Vector2D& pos, 
-					const Color_RGBA& bgColor=egui::colors::Red, 
-					const float bdWidth=0, 
-					const Color_RGBA& bdColor=egui::colors::Transparent, 
-					const float rotRad=0);
-		Rectangle();
-	private:
-		void _draw(SDL_Renderer* __renderer) override;
-	};
+    /// Constructs a Rectangle with size, position, colors and rotation.
+    /// @param size Size of the rectangle (width, height).
+    /// @param pos Position of the rectangle in world space.
+    /// @param bgColor Background color (default = red).
+    /// @param bdWidth Border thickness in pixels (default = 0).
+    /// @param bdColor Border color (default = transparent).
+    /// @param rotRad Rotation in radians (default = 0).
+    Rectangle(const Vector2D& size,
+              const Vector2D& pos,
+              const Color_RGBA& bgColor = egui::colors::Red,
+              const float bdWidth = 0,
+              const Color_RGBA& bdColor = egui::colors::Transparent,
+              const float rotRad = 0);
+
+    /// Default constructor.
+    Rectangle();
+
+private:
+    /// Internal render function for the rectangle.
+    /// @param __renderer SDL rendering context.
+    void _draw(SDL_Renderer* __renderer) override;
+};
 }

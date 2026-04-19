@@ -30,6 +30,47 @@ void drawable::toggleHide(const bool flag){ _hide = flag; }
 const interactable::HoverContext& interactable::getHoverContext() const { return _hoverContext; }
 bool interactable::isPressed() const { return _pressed; }
 
+template<typename Func, typename... Args>
+void interactable::setOnClick(Func&& func, Args&&... args){
+	_onClick = [func = std::forward<Func>(func),
+				... args = std::forward<Args>(args)](){
+				
+		func(args...);
+	};
+}
+template<typename Func, typename... Args>
+void interactable::setOnHover(Func&& func, Args&&... args){
+	_onHover = [func = std::forward<Func>(func),
+				... args = std::forward<Args>(args)](){
+				
+		func(args...);
+	};
+}
+template<typename Func, typename... Args>
+void interactable::setOnEnter(Func&& func, Args&&... args){
+	_onEnter = [func = std::forward<Func>(func),
+				... args = std::forward<Args>(args)](){
+				
+		func(args...);
+	};
+}
+template<typename Func, typename... Args>
+void interactable::setOnLeave(Func&& func, Args&&... args){
+	_onLeave = [func = std::forward<Func>(func),
+				... args = std::forward<Args>(args)](){
+				
+		func(args...);
+	};
+}
+template<typename Func, typename... Args>
+void interactable::setOnRelease(Func&& func, Args&&... args){
+	_onRelease = [func = std::forward<Func>(func),
+				... args = std::forward<Args>(args)](){
+				
+		func(args...);
+	};
+}
+
 void interactable::_triggerClick() const { if (_onClick) _onClick(); }
 void interactable::_triggerHover() const { if (_onHover) _onHover(); }
 void interactable::_triggerEnter() const { if (_onEnter) _onEnter(); }

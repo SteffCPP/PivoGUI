@@ -31,6 +31,7 @@ struct SDL_Window;
 
 namespace egui {
 	
+/// Represents keyboard keys used by the input system.
 enum class Key {
     A, B, C, D, E, F, G,
     H, I, J, K, L, M, N,
@@ -61,28 +62,59 @@ enum class Key {
     UNKNOWN
 };
 
+/// Represents mouse buttons used by the input system.
 enum class MouseButton {
-    LEFT,
-    MIDDLE,
-    RIGHT,
-    UNKNOWN
+    LEFT,     ///< Left mouse button.
+    MIDDLE,   ///< Middle mouse button (wheel click).
+    RIGHT,    ///< Right mouse button.
+    UNKNOWN   ///< Undefined or unsupported button.
 };
 
 class Mouse {
 public:
+
+    /// Gets the current mouse position in screen coordinates.
+    /// @return Mouse position as Vector2D.
     static Vector2D getPosition();
 
+    /// Checks if a mouse button is currently pressed.
+    /// @param button Mouse button to check.
+    /// @return True if button is down.
     static bool isButtonDown(MouseButton button);
+
+    /// Checks if a mouse button is currently released.
+    /// @param button Mouse button to check.
+    /// @return True if button is up.
     static bool isButtonUp(MouseButton button);
 
+    /// Checks if left mouse button is pressed.
+    /// @return True if left button is down.
     static bool leftDown();
+
+    /// Checks if right mouse button is pressed.
+    /// @return True if right button is down.
     static bool rightDown();
+
+    /// Checks if middle mouse button is pressed.
+    /// @return True if middle button is down.
     static bool middleDown();
 
 private:
+    /// Sets mouse position (internal use only).
+    /// @param pos New mouse position.
     static void _setPosition(const Vector2D& pos);
+
+    /// Marks a mouse button as pressed.
+    /// @param button Button to set as down.
     static void _setButtonDown(MouseButton button);
+
+    /// Marks a mouse button as released.
+    /// @param button Button to set as up.
     static void _setButtonUp(MouseButton button);
+
+    /// Converts SDL mouse button index to MouseButton enum.
+    /// @param button SDL button index.
+    /// @return Converted MouseButton.
     static MouseButton _sdlbToMouseButton(std::size_t button);
 
     static inline Vector2D _pos{};
@@ -98,23 +130,53 @@ private:
 
 class Keyboard {
 public:
+
+    /// Checks if a key is currently pressed.
+    /// @param key Key to check.
+    /// @return True if key is down.
     static bool isDown(Key key);
+
+    /// Checks if a key is currently released.
+    /// @param key Key to check.
+    /// @return True if key is up.
     static bool isUp(Key key);
 
+    /// Checks if a key was just pressed this frame.
+    /// @param key Key to check.
+    /// @return True if key transitioned from up to down.
     static bool isPressed(Key key);
+
+    /// Checks if a key was just released this frame.
+    /// @param key Key to check.
+    /// @return True if key transitioned from down to up.
     static bool isReleased(Key key);
 
 private:
+    /// Converts SDL keycode to internal Key enum.
+    /// @param sdlKey SDL keycode.
+    /// @return Converted Key enum.
     static Key _sdlkToKey(int sdlKey);
+
+    /// Updates keyboard state (called each frame).
     static void _update();
+
+    /// Checks previous frame state of a key.
+    /// @param key Key to check.
+    /// @return True if key was previously down.
     static bool _wasDown(Key key);
 
+    /// Marks a key as pressed.
+    /// @param key Key to set.
     static void _setKeyDown(Key key);
+
+    /// Marks a key as released.
+    /// @param key Key to set.
     static void _setKeyUp(Key key);
 
     static inline std::unordered_map<Key, bool> _keys{};
     static inline std::unordered_map<Key, bool> _prevKeys{};
 
+    /// Initializes key map state.
     static void _initKeys();
 
     friend class Input_Manager;
@@ -122,12 +184,19 @@ private:
 
 class Input_Manager {
 public:
+    /// Constructs the input system.
     Input_Manager();
-
 private:
+
+    /// Updates all input states (keyboard + mouse).
     static void _update();
 
+    /// Checks if the application requested global quit.
+    /// @return True if quit was requested.
     static bool _hasRequestedQuit();
+
+    /// Checks if a specific window requested quit.
+    /// @return Pair (requested, window pointer).
     static std::pair<bool, SDL_Window*> _hasRequestedWindowQuit();
 
     static inline bool _requestQuit{false};

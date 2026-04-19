@@ -32,38 +32,72 @@ struct SDL_Window;
 struct SDL_Renderer;
 
 namespace egui{
-	class Window{
-	public:
-		void create(const std::string& title, 
-					const Vector2D& size, 
-					const Color_RGBA& bgColor=egui::colors::White);
+	/// Core window system of the engine.
+/// Manages SDL window, renderer and all registered widgets.
+class Window {
+public:
+    /// Creates the window with given parameters.
+    /// @param title Window title.
+    /// @param size Window size in pixels (width, height).
+    /// @param bgColor Background color (default = white).
+    void create(const std::string& title,
+                const Vector2D& size,
+                const Color_RGBA& bgColor = egui::colors::White);
 
-		void update();
-		void destroy();
-		void assign(Widget& widget);
-		void remove(Widget& widget);
+    /// Main update loop.
+    /// Handles rendering, input processing and widget updates.
+    void update();
 
-		void setBackgroundColor(Color_RGBA color);
-		bool isOpen() const;
+    /// Destroys the window and frees all resources.
+    void destroy();
 
-		Window(	const std::string title,
-				const Vector2D size,
-				const Color_RGBA bgColor=egui::colors::White);
-		Window();
-		~Window();
-	private:
-		inline bool _checkWidgetsOrder() const;
-		inline void _sortWidgets();
+    /// Assigns a widget to be managed and rendered by the window.
+    /// @param widget Widget to add.
+    void assign(Widget& widget);
 
-		SDL_Window* _sdlwin{nullptr};
-		SDL_Renderer* _sdlrenderer{nullptr};
+    /// Removes a widget from the window.
+    /// @param widget Widget to remove.
+    void remove(Widget& widget);
 
-		std::vector<Widget*> _widgets;
+    /// Sets the background color of the window.
+    /// @param color New background color.
+    void setBackgroundColor(Color_RGBA color);
 
-		Color_RGBA _backgroundColor{egui::colors::White};
+    /// Checks if the window is currently open.
+    /// @return True if window is running.
+    bool isOpen() const;
 
-		bool _isOpen{false};
+    /// Constructs a Window with parameters.
+    /// @param title Window title.
+    /// @param size Window size in pixels.
+    /// @param bgColor Background color (default = white).
+    Window(const std::string title,
+           const Vector2D size,
+           const Color_RGBA bgColor = egui::colors::White);
 
-		size_t _lastTime{0};
-	};
+    /// Default constructor.
+    Window();
+
+    /// Destructor.
+    ~Window();
+
+private:
+    /// Checks if widget ordering is valid.
+    /// @return True if widgets are correctly ordered.
+    inline bool _checkWidgetsOrder() const;
+
+    /// Sorts widgets based on layer and rendering priority.
+    inline void _sortWidgets();
+
+    SDL_Window* _sdlwin{nullptr};
+    SDL_Renderer* _sdlrenderer{nullptr};
+
+    std::vector<Widget*> _widgets;
+
+    Color_RGBA _backgroundColor{egui::colors::White};
+
+    bool _isOpen{false};
+
+    size_t _lastTime{0};
+};
 }

@@ -34,172 +34,219 @@ struct SDL_Renderer;
 struct SDL_Texture;
 
 namespace egui{
-	class sizeable{
-	public:
-		virtual ~sizeable() = default;
+	class sizeable {
+public:
+    virtual ~sizeable() = default;
 
-		virtual Vector2D getSize() const;
-		virtual void setSize(const Vector2D& size);
-	protected:
-		Vector2D _size{0, 0};
-	};
+    /// Gets the size of the object.
+    /// @return Size as a Vector2D (width, height).
+    virtual Vector2D getSize() const;
 
-	class rotatable{
-	public:
-		virtual ~rotatable() = default;
+    /// Sets the size of the object.
+    /// @param size New size (width, height).
+    virtual void setSize(const Vector2D& size);
 
-		void setRotation(double deg);
-		double getRotation() const;
-	protected:
-		bool _hasRotation() const;
-		double _rotation{0};
-	};
+protected:
+    Vector2D _size{0, 0};
+};
 
-	class drawable{
-	public:
-		virtual ~drawable() = default;
+class rotatable {
+public:
+    virtual ~rotatable() = default;
 
-	 	Color_RGBA getBackgroundColor() const;
-		Color_RGBA getBorderColor() const;
+    /// Sets the rotation angle in degrees.
+    /// @param deg Rotation angle (degrees).
+    void setRotation(double deg);
 
-		void setBackgroundColor(const Color_RGBA& color);
-		void setBorderColor(const Color_RGBA& color);
-		
-		void setBorderWidth(const float width);
-		float getBorderWidth() const;
+    /// Gets the current rotation angle.
+    /// @return Rotation in degrees.
+    double getRotation() const;
 
-		void toggleHide(const bool flag);
+protected:
+    /// Checks if rotation is enabled/meaningful for this object.
+    /// @return True if rotation is applied.
+    bool _hasRotation() const;
 
-	protected:
-		virtual void _draw(SDL_Renderer* __renderer) = 0;
+    double _rotation{0};
+};
 
-		Color_RGBA _backgroundColor{egui::colors::Black}, _borderColor{egui::colors::Transparent};
-		float _borderWidth{0};
+class drawable {
+public:
+    virtual ~drawable() = default;
 
-		bool _hide{false};
-	};
+    /// Gets the background color.
+    /// @return Current background color.
+    Color_RGBA getBackgroundColor() const;
 
-	class interactable{
-	protected:
-		struct HoverContext {
-			Vector2D mousePos;
-			bool leftButtonDown;
-			bool rightButtonDown;
-			bool middleButtonDown;
-			bool hovering;
-			float timeHovered;
-		};
-	public:
-		virtual ~interactable() = default;
-		
-		virtual bool containsPoint(const Vector2D& point) const = 0;
+    /// Gets the border color.
+    /// @return Current border color.
+    Color_RGBA getBorderColor() const;
 
-		template<typename Func, typename... Args>
-		void setOnClick(Func&& func, Args&&... args){
-			_onClick = [func = std::forward<Func>(func),
-						... args = std::forward<Args>(args)](){
-				
-				func(args...);
-			};
-		}
+    /// Sets the background color.
+    /// @param color New background color.
+    void setBackgroundColor(const Color_RGBA& color);
 
-		template<typename Func, typename... Args>
-		void setOnHover(Func&& func, Args&&... args){
-			_onHover = [func = std::forward<Func>(func),
-						... args = std::forward<Args>(args)](){
-				
-				func(args...);
-			};
-		}
+    /// Sets the border color.
+    /// @param color New border color.
+    void setBorderColor(const Color_RGBA& color);
 
-		template<typename Func, typename... Args>
-		void setOnEnter(Func&& func, Args&&... args){
-			_onEnter = [func = std::forward<Func>(func),
-						... args = std::forward<Args>(args)](){
-				
-				func(args...);
-			};
-		}
+    /// Sets the border width.
+    /// @param width Border thickness in pixels.
+    void setBorderWidth(const float width);
 
-		template<typename Func, typename... Args>
-		void setOnLeave(Func&& func, Args&&... args){
-			_onLeave = [func = std::forward<Func>(func),
-						... args = std::forward<Args>(args)](){
-				
-				func(args...);
-			};
-		}
+    /// Gets the border width.
+    /// @return Border thickness in pixels.
+    float getBorderWidth() const;
 
-		template<typename Func, typename... Args>
-		void setOnRelease(Func&& func, Args&&... args){
-			_onRelease = [func = std::forward<Func>(func),
-						... args = std::forward<Args>(args)](){
-				
-				func(args...);
-			};
-		}
+    /// Hides or shows the object.
+    /// @param flag True to hide, false to show.
+    void toggleHide(const bool flag);
 
-		const HoverContext& getHoverContext() const;
+protected:
+    /// Internal render function called by the UI system.
+    /// @param __renderer SDL renderer context.
+    virtual void _draw(SDL_Renderer* __renderer) = 0;
 
-   	 	bool isPressed() const;
-	protected:
-		bool _hovered{false};
-		bool _pressed{false};
-		bool _isClicking{false};
+    Color_RGBA _backgroundColor{egui::colors::Black};
+    Color_RGBA _borderColor{egui::colors::Transparent};
+    float _borderWidth{0};
 
-		HoverContext _hoverContext;
+    bool _hide{false};
+};
 
-		void _triggerClick() const;
-		void _triggerHover() const;
-		void _triggerEnter() const;
-		void _triggerLeave() const;
-		void _triggerRelease() const;
-	private:
-		std::function<void()> _onClick;
-		std::function<void()> _onHover;
-    	std::function<void()> _onEnter;
-    	std::function<void()> _onLeave;
-		std::function<void()> _onRelease;
-	};
+class interactable {
+protected:
+    /// Stores current mouse interaction state.
+    struct HoverContext {
+        Vector2D mousePos;          ///< Current mouse position.
+        bool leftButtonDown;        ///< Left mouse button state.
+        bool rightButtonDown;       ///< Right mouse button state.
+        bool middleButtonDown;      ///< Middle mouse button state.
+        bool hovering;              ///< True if mouse is over the object.
+        float timeHovered;          ///< Time spent hovering.
+    };
 
-	class texturable{
-	public:
-		void assignImage(const Image img);
-		void assignImage(const std::string& path);
-		void removeImage();
+public:
+    virtual ~interactable() = default;
 
-		texturable();
-	protected:
-		bool _hasImage{false};
-		Image _img;
-	};
+    /// Checks if a point is inside the object.
+    /// @param point Point in world space.
+    /// @return True if point is inside.
+    virtual bool containsPoint(const Vector2D& point) const = 0;
 
-	class transformable: public sizeable, public rotatable{
-	public:
-		enum class Pivot{
-			TOP,
-			TOP_LEFT,
-			TOP_RIGHT,
-			LEFT,
-			RIGHT,
-			BOTTOM,
-			BOTTOM_LEFT,
-			BOTTOM_RIGHT,
-			CENTER
-		};
-		virtual ~transformable() = default;
+    /// Sets callback for click event.
+    template<typename Func, typename... Args>
+    void setOnClick(Func&& func, Args&&... args);
 
-		Vector2D getPosition() const;
-		void setPosition(const Vector2D& pos);
+    /// Sets callback for hover event.
+    template<typename Func, typename... Args>
+    void setOnHover(Func&& func, Args&&... args);
 
-		Pivot getPivot() const;
-		void setPivot(const Pivot& pivot);
+    /// Sets callback for enter event.
+    template<typename Func, typename... Args>
+    void setOnEnter(Func&& func, Args&&... args);
 
-		void move(const Vector2D& delta);
-	protected:
-		Vector2D _computePivotOffset() const;
-		Pivot _pivot{Pivot::TOP_LEFT};
-		
-		Vector2D _pos{0, 0};
-	};
+    /// Sets callback for leave event.
+    template<typename Func, typename... Args>
+    void setOnLeave(Func&& func, Args&&... args);
+
+    /// Sets callback for release event.
+    template<typename Func, typename... Args>
+    void setOnRelease(Func&& func, Args&&... args);
+
+    /// Gets current hover context.
+    /// @return Hover interaction state.
+    const HoverContext& getHoverContext() const;
+
+    /// Checks if object is currently pressed.
+    /// @return True if pressed.
+    bool isPressed() const;
+
+protected:
+    bool _hovered{false};
+    bool _pressed{false};
+    bool _isClicking{false};
+
+    HoverContext _hoverContext;
+
+    void _triggerClick() const;
+    void _triggerHover() const;
+    void _triggerEnter() const;
+    void _triggerLeave() const;
+    void _triggerRelease() const;
+
+private:
+    std::function<void()> _onClick;
+    std::function<void()> _onHover;
+    std::function<void()> _onEnter;
+    std::function<void()> _onLeave;
+    std::function<void()> _onRelease;
+};
+
+class texturable {
+public:
+    /// Assigns an image to the object.
+    /// @param img Image resource to assign.
+    void assignImage(const Image img);
+
+    /// Assigns an image from file path.
+    /// @param path Path to image file.
+    void assignImage(const std::string& path);
+
+    /// Removes the current image.
+    void removeImage();
+
+    texturable();
+
+protected:
+    bool _hasImage{false};
+    Image _img;
+};
+
+class transformable : public sizeable, public rotatable {
+public:
+    /// Pivot point for transformations.
+    enum class Pivot {
+        TOP,
+        TOP_LEFT,
+        TOP_RIGHT,
+        LEFT,
+        RIGHT,
+        BOTTOM,
+        BOTTOM_LEFT,
+        BOTTOM_RIGHT,
+        CENTER
+    };
+
+    virtual ~transformable() = default;
+
+    /// Gets the position of the object.
+    /// @return Position in world space.
+    Vector2D getPosition() const;
+
+    /// Sets the position of the object.
+    /// @param pos New position.
+    void setPosition(const Vector2D& pos);
+
+    /// Gets the current pivot type.
+    /// @return Pivot mode.
+    Pivot getPivot() const;
+
+    /// Sets the pivot type.
+    /// @param pivot New pivot mode.
+    void setPivot(const Pivot& pivot);
+
+    /// Moves the object by delta.
+    /// @param delta Movement offset.
+    void move(const Vector2D& delta);
+
+protected:
+    /// Computes pivot offset based on size and pivot mode.
+    /// @return Offset vector.
+    Vector2D _computePivotOffset() const;
+
+    Pivot _pivot{Pivot::TOP_LEFT};
+
+    Vector2D _pos{0, 0};
+};
 }

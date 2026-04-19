@@ -26,22 +26,37 @@ copies or substantial portions of the Software.
 #include <algorithm>
 
 namespace egui{
-	struct Color_RGBA{
-		std::uint8_t r{0}, g{0}, b{0}, a{255};
-		
-		Color_RGBA(const std::uint8_t R, const std::uint8_t G, const std::uint8_t B, const std::uint8_t A=255);
-	};
+	struct Color_RGBA {
 
-	namespace colors{
-		extern Color_RGBA Red;
-		extern Color_RGBA Green;
-		extern Color_RGBA Blue;
-		extern Color_RGBA Black;
-		extern Color_RGBA White;
-		extern Color_RGBA Yellow;
-		extern Color_RGBA Cyan;
-		extern Color_RGBA Magenta;
-		extern Color_RGBA Gray;
-		extern Color_RGBA Transparent;
-	}
+    /// Red, Green, Blue, Alpha color representation (RGBA).
+	
+    std::uint8_t r{0};
+    std::uint8_t g{0};
+    std::uint8_t b{0};
+    std::uint8_t a{255};
+
+    /// Constructs a color using RGBA components.
+    /// @param R Red channel value [0 - 255].
+    /// @param G Green channel value [0 - 255].
+    /// @param B Blue channel value [0 - 255].
+    /// @param A Alpha channel value [0 - 255] (default = 255 opaque).
+    Color_RGBA(const std::uint8_t R,
+               const std::uint8_t G,
+               const std::uint8_t B,
+               const std::uint8_t A = 255);
+};
+
+/// Predefined common colors.
+namespace colors {
+    extern Color_RGBA Red;        ///< Pure red color (255, 0, 0, 255)
+    extern Color_RGBA Green;      ///< Pure green color (0, 255, 0, 255)
+    extern Color_RGBA Blue;       ///< Pure blue color (0, 0, 255, 255)
+    extern Color_RGBA Black;      ///< Black color (0, 0, 0, 255)
+    extern Color_RGBA White;      ///< White color (255, 255, 255, 255)
+    extern Color_RGBA Yellow;     ///< Yellow color (255, 255, 0, 255)
+    extern Color_RGBA Cyan;       ///< Cyan color (0, 255, 255, 255)
+    extern Color_RGBA Magenta;    ///< Magenta color (255, 0, 255, 255)
+    extern Color_RGBA Gray;       ///< Gray color (128, 128, 128, 255)
+    extern Color_RGBA Transparent;///< Fully transparent color (0, 0, 0, 0)
+}
 }

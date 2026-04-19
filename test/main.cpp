@@ -17,7 +17,6 @@ int main(){
 	win.assign(label);
 	while(win.isOpen()){
 		
-		
 		win.update();
 	}
 

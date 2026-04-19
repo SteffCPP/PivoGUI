@@ -32,100 +32,173 @@ struct TTF_Text;
 struct SDL_Renderer;
 
 namespace egui{
-	class Text{
-	public:
-		enum class Style{
-			NORMAL 			= 0,
-			BOLD 			= 1 << 0,
-			ITALIC 			= 1 << 1,
-			UNDERLINE 		= 1 << 2,
-			STRIKETHROUGH 	= 1 << 3
-		};
-		enum class Alignment{
-			INVALID = -1,
-			LEFT,
-			CENTER,
-			RIGHT
-		};
-	public:
-		void setText(const std::string& txt);
-		std::string getText() const;
-		void appendText(const std::string& txt);
+	class Text {
+public:
+    /// Text style flags (bitmask).
+    enum class Style {
+        NORMAL         = 0,
+        BOLD           = 1 << 0,
+        ITALIC         = 1 << 1,
+        UNDERLINE      = 1 << 2,
+        STRIKETHROUGH  = 1 << 3
+    };
+	
+    /// Horizontal text alignment options.
+    enum class Alignment {
+        INVALID = -1,
+        LEFT,
+        CENTER,
+        RIGHT
+    };
 
-		void loadFont(const std::string& path, const float& size);
+public:
+    /// Sets the text content.
+    /// @param txt New text string.
+    void setText(const std::string& txt);
 
-		void setFontSize(const float& size);
-		float getFontSize() const;
+    /// Gets the current text content.
+    /// @return Current text string.
+    std::string getText() const;
 
-		void setStyle(const Style& style, const bool& flag);
-		Style getStyle() const;
+    /// Appends text to the current content.
+    /// @param txt Text to append.
+    void appendText(const std::string& txt);
 
-		void setColor(const Color_RGBA& color);
-		Color_RGBA getColor() const;
+    /// Loads a font from file.
+    /// @param path Path to font file.
+    /// @param size Font size in pixels.
+    void loadFont(const std::string& path, const float& size);
 
-		void setSize(const Vector2D& size);
-		Vector2D getSize() const;
+    /// Sets the font size.
+    /// @param size New font size in pixels.
+    void setFontSize(const float& size);
 
-		void setAlignment(Text::Alignment align);
+    /// Gets the font size.
+    /// @return Font size in pixels.
+    float getFontSize() const;
 
-		Text(){}
-		Text(const std::string& text,
-			const std::string& fontPath, 
-			const float& size,
-			const Color_RGBA& color=egui::colors::White);
-		~Text();
-	private:
-		Vector2D _size{0, 0};
-		std::string _text{""};
-		Color_RGBA _color{egui::colors::White};
-		short _styles;
+    /// Enables or disables a specific text style.
+    /// @param style Style flag to modify.
+    /// @param flag True to enable, false to disable.
+    void setStyle(const Style& style, const bool& flag);
 
-		TTF_Text* _ttftext=nullptr;
-		TTF_Font* _ttffont=nullptr;
+    /// Gets the current text style bitmask.
+    /// @return Active style flags.
+    Style getStyle() const;
 
-		Alignment _alignment{Alignment::LEFT};
+    /// Sets the text color.
+    /// @param color New text color.
+    void setColor(const Color_RGBA& color);
 
-		friend class TextLabel;
-		friend class TextLabelInput;
-	};
+    /// Gets the text color.
+    /// @return Current text color.
+    Color_RGBA getColor() const;
 
-	class TextLabel : public Widget{
-	public:
-		enum class TextBoxAlignment{
-			TOP_LEFT,
-			TOP,
-			TOP_RIGHT,
-			LEFT,
-			CENTER,
-			RIGHT,
-			BOTTOM_LEFT,
-			BOTTOM,
-			BOTTOM_RIGHT
-		};
+    /// Sets the rendered text size.
+    /// @param size New size (width, height).
+    void setSize(const Vector2D& size);
 
-		virtual bool containsPoint(const Vector2D& point) const override;
+    /// Gets the rendered text size.
+    /// @return Text size.
+    Vector2D getSize() const;
 
-		void setPadding(const float& padding);
+    /// Sets horizontal alignment.
+    /// @param align Text alignment mode.
+    void setAlignment(Text::Alignment align);
 
-		void setTextboxAlignment(const TextBoxAlignment align);
-		TextBoxAlignment getTextboxAlignment() const;
+    /// Default constructor.
+    Text() {}
 
-		Text text;
+    /// Constructs a Text object.
+    /// @param text Initial text content.
+    /// @param fontPath Path to font file.
+    /// @param size Font size in pixels.
+    /// @param color Text color (default = white).
+    Text(const std::string& text,
+         const std::string& fontPath,
+         const float& size,
+         const Color_RGBA& color = egui::colors::White);
 
-		TextLabel();
-		TextLabel(
-			const Vector2D& position,
-			const Vector2D& size,
-			const std::string& textStr,
-			const std::string& fontPath,
-			const float& fontSize,
-			const Color_RGBA& textColor = egui::colors::White);
-	private:
-		void _draw(SDL_Renderer* __renderer) override;
+    /// Destructor.
+    ~Text();
 
-		float _padding{10};
-		TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};
-	};
+private:
+    Vector2D _size{0, 0};
+    std::string _text{""};
+    Color_RGBA _color{egui::colors::White};
+    short _styles;
+
+    TTF_Text* _ttftext = nullptr;
+    TTF_Font* _ttffont = nullptr;
+
+    Alignment _alignment{Alignment::LEFT};
+
+    friend class TextLabel;
+    friend class TextLabelInput;
+};
+
+	class TextLabel : public Widget {
+public:
+
+    /// Textbox alignment inside the label.
+    enum class TextBoxAlignment {
+        TOP_LEFT,
+        TOP,
+        TOP_RIGHT,
+        LEFT,
+        CENTER,
+        RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM,
+        BOTTOM_RIGHT
+    };
+
+public:
+    /// Checks if a point is inside the label.
+    /// @param point Point in world space.
+    /// @return True if point is inside.
+    virtual bool containsPoint(const Vector2D& point) const override;
+
+    /// Sets internal padding.
+    /// @param padding Padding in pixels.
+    void setPadding(const float& padding);
+
+    /// Sets text alignment inside the textbox.
+    /// @param align Alignment mode.
+    void setTextboxAlignment(const TextBoxAlignment align);
+
+    /// Gets current textbox alignment.
+    /// @return Alignment mode.
+    TextBoxAlignment getTextboxAlignment() const;
+
+    /// Text content of the label.
+    Text text;
+
+    /// Default constructor.
+    TextLabel();
+
+    /// Constructs a TextLabel.
+    /// @param position Position in world space.
+    /// @param size Size of the label.
+    /// @param textStr Initial text.
+    /// @param fontPath Font file path.
+    /// @param fontSize Font size in pixels.
+    /// @param textColor Text color (default = white).
+    TextLabel(const Vector2D& position,
+              const Vector2D& size,
+              const std::string& textStr,
+              const std::string& fontPath,
+              const float& fontSize,
+              const Color_RGBA& textColor = egui::colors::White);
+
+private:
+    /// Internal render function for the label.
+    /// @param __renderer SDL rendering context.
+    void _draw(SDL_Renderer* __renderer) override;
+
+    float _padding{10};
+    TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};
+};
 
 	/*class TextLabelInput : public Widget{
 	public:

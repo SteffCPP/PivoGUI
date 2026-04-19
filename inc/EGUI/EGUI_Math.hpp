@@ -26,8 +26,21 @@ copies or substantial portions of the Software.
 
 namespace egui{
 	namespace math{
+		/// Mathematical constant PI.
 		constexpr double PI = 3.1415926535897932384626;
-		constexpr double degToRad(const double __deg){ return __deg*(PI/180); }
-		constexpr double radToDeg(const double __rad){ return __rad*(180/PI); }
+
+		/// Converts degrees to radians.
+		/// @param __deg Angle in degrees.
+		/// @return Equivalent angle in radians.
+		constexpr double degToRad(const double __deg) {
+			return __deg * (PI / 180);
+		}
+
+		/// Converts radians to degrees.
+		/// @param __rad Angle in radians.
+		/// @return Equivalent angle in degrees.
+		constexpr double radToDeg(const double __rad) {
+			return __rad * (180 / PI);
+		}
 	}
 }

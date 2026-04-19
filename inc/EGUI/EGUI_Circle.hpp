@@ -31,9 +31,14 @@ copies or substantial portions of the Software.
 namespace egui{
 	class Circle : public Widget, public texturable{
 	public:
+		// Returns the radius of the circle. 
 		float getRadius() const;
+		// Set the radius of the circle. 
 		void setRadius(float radius);
 		
+		// @warning === FOR CIRCLE IT DOES NOT WORK! ===
+		//
+		// You must use setRadius() to set the size of the circle. This function will soon not be avaiable for Circle.
 		void setSize(const Vector2D& size) override;
 		Vector2D getSize() const override;
 

@@ -30,25 +30,55 @@ struct MIX_Track;
 struct MIX_Mixer;
 
 namespace egui{
+
+/// @struct Audio. 
+/// @brief Struct that represents an Audio. 
+///
+/// All the methods that it contains are non other than calls to the Audio_Manager.
 struct Audio {
 public:
+
+    /// State of an Audio.
     enum class State {
-        STOPPED,
-        PLAYING,
-        PAUSED
+        STOPPED,   ///< The track is currently stopped.
+        PLAYING,   ///< The track is currently playing.
+        PAUSED     ///< The track is currently paused and can be resumed.
     };
 
+    /// Constructs an Audio instance from a file path.
+    /// @param path Path of the audio file relative to the project root.
     Audio(const std::string& path);
 
+    /// Plays the audio.
     void play();
-    void pause();
-    void resume();
-    void stop(std::uint32_t fadeOutFrames=0);
 
+    /// Pauses the audio.
+    /// If the audio is not playing, this function does nothing.
+    void pause();
+
+    /// Resumes the audio.
+    /// If the audio is not paused, this function does nothing.
+    void resume();
+
+    /// Stops the audio.
+    /// If the audio is not playing or paused, this function does nothing.
+    /// @param fadeOutFrames Number of frames used for fade-out before stopping.
+    void stop(std::uint32_t fadeOutFrames = 0);
+
+    /// Gets the file path of the audio.
+    /// @return Path string of the audio file.
     std::string getPath() const;
 
+    /// Gets the current state of the audio.
+    /// @return Current Audio::State value.
     State getState() const;
+
+    /// Checks if the audio is currently paused.
+    /// @return True if paused, false otherwise.
     bool isPaused() const;
+
+    /// Checks if the audio is currently playing.
+    /// @return True if playing, false otherwise.
     bool isPlaying() const;
 
 private:
@@ -66,24 +96,70 @@ private:
 
 class Audio_Manager {
 public:
+
+    /// Play an Audio.
+    /// @param audio Audio that needs to be played.
     static void play(Audio& audio);
+
+    /// Pause an Audio.
+    /// If it's not being played it does nothing.
+    /// @param audio Audio that needs to be paused.
     static void pause(Audio& audio);
+
+    /// Resume an Audio.
+    /// If it's not paused it does nothing.
+    /// @param audio Audio that needs to be resumed.
     static void resume(Audio& audio);
+
+    /// Stop an Audio.
+    /// If it's not being played or paused it does nothing.
+    /// @param audio Audio that needs to be stopped.
+    /// @param fadeOutFrames Number of fade-out frames before stopping.
     static void stop(Audio& audio, std::uint32_t fadeOutFrames = 0);
 
+    /// Returns the current playback time of an Audio in milliseconds.
+    /// @param audio Audio to query.
     static std::size_t getTime(Audio& audio);
+
+    /// Sets the playback time of an Audio in milliseconds.
+    /// @param audio Audio to modify.
+    /// @param ms Time in milliseconds.
     static void setTime(Audio& audio, std::size_t ms);
 
+    /// Returns the volume of an Audio.
+    /// @param audio Audio to query.
     static float getVolume(const Audio& audio);
-    static void setVolume(Audio& audio, float volume);
-    static void increaseVolume(Audio& audio, float delta);
 
+    /// Sets the volume of an Audio.
+    /// @param audio Audio to modify.
+    /// @param volume Volume in range [0.0 - 1.0].
+    static void setVolume(Audio& audio, float volume);
+
+    /// Changes the volume of an Audio.
+    /// @param audio Audio to modify.
+    /// @param delta Volume delta in range [-1.0 - 1.0].
+    static void changeVolume(Audio& audio, float delta);
+
+    /// Returns the playback speed of an Audio.
+    /// @warning Not implemented yet.
+    /// @param audio Audio to query.
     static float getSpeed(const Audio& audio);
+
+    /// Sets the playback speed of an Audio.
+    /// @warning Not implemented yet.
+    /// @param audio Audio to modify.
+    /// @param speed Speed factor (0.0 - 5.0).
     static void setSpeed(Audio& audio, float speed);
 
 private:
+
+    /// Initializes SDL_mixer and the Audio Manager system.
     static void _init();
+
+    /// Updates global audio timing.
+    /// @param deltaT Time step in milliseconds.
     static void _update(const size_t deltaT);
+
     static inline MIX_Mixer* _mixmixer{nullptr};
     static inline std::size_t _globalTime{0};
 

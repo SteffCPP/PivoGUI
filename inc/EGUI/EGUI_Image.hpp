@@ -29,16 +29,26 @@ struct SDL_Texture;
 struct SDL_Surface;
 
 namespace egui{
-    class Image{
-    public:
-        std::string getPath() const;
-        void setPath(const std::string& path);
+class Image {
+public:
+    /// Gets the file path of the image.
+    /// @return Path string of the image file.
+    std::string getPath() const;
 
-        Image(const std::string& path);
-        Image();
-    private:
-        std::string _path{""};
-    };
+    /// Sets the file path of the image.
+    /// @param path New image file path.
+    void setPath(const std::string& path);
+
+    /// Constructs an Image with a given file path.
+    /// @param path Path to the image file.
+    Image(const std::string& path);
+
+    /// Default constructor.
+    /// Creates an empty Image with no path assigned.
+    Image();
+private:
+    std::string _path{""};
+};
 
     /*class Animation{
 

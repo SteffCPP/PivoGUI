@@ -24,26 +24,52 @@ copies or substantial portions of the Software.
 #pragma once 
 
 namespace egui{
-	struct Vector2D{
-        float x{0}, y{0};
+	/// Represents a 2D vector with float precision.
+/// Used for positions, sizes, directions and basic 2D math.
+struct Vector2D {
+    float x{0}; ///< X component.
+    float y{0}; ///< Y component.
 
-		constexpr Vector2D operator+(const Vector2D& v) const {
-            return { x + v.x, y + v.y };
-        }
-        constexpr Vector2D operator-(const Vector2D& v) const {
-            return { x - v.x, y - v.y };
-        }
-        constexpr Vector2D operator*(const Vector2D& v) const {
-            return { x * v.x, y * v.y };
-        }
-        constexpr Vector2D operator*(float s) const {
-            return { x * s, y * s };
-        }
-        constexpr Vector2D operator/(const Vector2D& v) const {
-            return { x / v.x, y / v.y };
-        }
-        constexpr Vector2D operator/(float s) const {
-            return { x / s, y / s };
-        }
-	};
+    /// Vector addition.
+    /// @param v Vector to add.
+    /// @return Resulting vector (x + v.x, y + v.y).
+    constexpr Vector2D operator+(const Vector2D& v) const {
+        return { x + v.x, y + v.y };
+    }
+
+    /// Vector subtraction.
+    /// @param v Vector to subtract.
+    /// @return Resulting vector (x - v.x, y - v.y).
+    constexpr Vector2D operator-(const Vector2D& v) const {
+        return { x - v.x, y - v.y };
+    }
+
+    /// Component-wise multiplication.
+    /// @param v Vector to multiply.
+    /// @return Resulting vector (x * v.x, y * v.y).
+    constexpr Vector2D operator*(const Vector2D& v) const {
+        return { x * v.x, y * v.y };
+    }
+
+    /// Scalar multiplication.
+    /// @param s Scalar value.
+    /// @return Scaled vector (x * s, y * s).
+    constexpr Vector2D operator*(float s) const {
+        return { x * s, y * s };
+    }
+
+    /// Component-wise division.
+    /// @param v Vector divisor.
+    /// @return Resulting vector (x / v.x, y / v.y).
+    constexpr Vector2D operator/(const Vector2D& v) const {
+        return { x / v.x, y / v.y };
+    }
+
+    /// Scalar division.
+    /// @param s Scalar divisor.
+    /// @return Scaled vector (x / s, y / s).
+    constexpr Vector2D operator/(float s) const {
+        return { x / s, y / s };
+    }
+};
 } 

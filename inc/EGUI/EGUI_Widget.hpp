@@ -28,16 +28,25 @@ copies or substantial portions of the Software.
 #include <cstddef>
 
 namespace egui{
-	class Widget : public drawable, public transformable, public interactable{
-	public:
-		virtual ~Widget() = default;
+/// Base class for all UI elements.
+/// Combines rendering, transformation and interaction capabilities.
+class Widget : public drawable, public transformable, public interactable {
+public:
+    virtual ~Widget() = default;
 
-		constexpr std::size_t getLayerNumber() const { return _layerN; }
-		void setLayerNumber(const std::size_t n) { _layerN = n; }
+    /// Gets the rendering layer of the widget.
+    /// Higher values are rendered on top of lower ones.
+    /// @return Layer index.
+    constexpr std::size_t getLayerNumber() const { return _layerN; }
 
-	protected:
-		std::size_t _layerN{0};
+    /// Sets the rendering layer of the widget.
+    /// Widgets with higher layer values are drawn above others.
+    /// @param n Layer index.
+    void setLayerNumber(const std::size_t n) { _layerN = n; }
 
-		friend class Window;
-	};
+protected:
+    std::size_t _layerN{0};
+
+    friend class Window;
+};
 }
