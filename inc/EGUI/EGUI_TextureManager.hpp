@@ -32,10 +32,6 @@ struct SDL_Texture;
 namespace egui{
 class Texture_Manager {
 public:
-
-    /// Initializes the texture system.
-    static void _init(SDL_Renderer* renderer);
-
     /// Loads a texture from file or returns cached version if already loaded.
     /// @param path Path of the image file.
     /// @return SDL_Texture pointer (cached).
@@ -54,9 +50,14 @@ public:
     static bool exists(const std::string& path);
 
 private:
+    /// Initializes the texture system.
+    static void _init(SDL_Renderer* renderer);
+
     static inline SDL_Renderer* _renderer{nullptr};
 
     static inline std::unordered_map<std::string, SDL_Texture*> _cache{};
     static inline std::unordered_map<std::string, int> _refCount{};
+
+    friend class Window;
 };
 }
