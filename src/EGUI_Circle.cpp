@@ -29,13 +29,20 @@ namespace egui{
 float Circle::getRadius() const { return _radius; }
 void Circle::setRadius(float radius){ 
 	_radius = radius;
-	setSize({radius*2, radius*2});
+	_size = {radius*2, radius*2};
 }
-bool Circle::containsPoint(const Vector2D& point) const {
-	auto c = getPosition();
+void Circle::setSize(const Vector2D& size){
+	std::cerr << "Cannot set size to Circle. Use setRadius() instead.\n"; 
+	return;
+}
+Vector2D Circle::getSize() const{
+	std::cerr << "Cannot get size of Circle. Use getRadius() instead.\n"; 
+	return {0,0};
+}
 
-	float dx = point.x - (c.x + _radius);
-	float dy = point.y - (c.y + _radius);
+bool Circle::containsPoint(const Vector2D& point) const {
+	float dx = point.x - (_pos.x + _radius);
+	float dy = point.y - (_pos.y + _radius);
 
 	return dx*dx + dy*dy <= _radius*_radius;
 }
@@ -49,26 +56,24 @@ Circle::Circle(	const float radius,
 	_backgroundColor = bgColor;
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
-	_type = WidgetType::CIRCLE;
+	_size = {_radius*2, _radius*2};
 }
 Circle::Circle(){}
 
 
 void Circle::_draw(SDL_Renderer* __renderer) {
-	if(_hide) return;
+	if (_hide) return;
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
-	Vector2D pivotOffset = _computePivotOffset();
-	Vector2D centerOffset = pivotOffset - Vector2D{_radius, _radius};
-	Vector2D finalCenter = _pos - centerOffset;
+	Vector2D topLeft = _pos + _computePivotOffset();
 
-	float cx = std::round(finalCenter.x);
-	float cy = std::round(finalCenter.y);
+	float cx = topLeft.x + _radius;
+	float cy = topLeft.y + _radius;
 
-	float rOuter = std::round(_radius);
-	float rInner = std::round(_radius - _borderWidth);
+	float rOuter = _radius;
+	float rInner = _radius - _borderWidth;
+	if (rInner < 0) rInner = 0;
 
-	// Background 
 	SDL_SetRenderDrawColor(
 		__renderer,
 		_backgroundColor.r,
@@ -76,9 +81,9 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 		_backgroundColor.b,
 		_backgroundColor.a
 	);
+
 	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
 
-	// Image
 	if (_hasImage) {
 		SDL_Surface* image = IMG_Load(_img.getPath().c_str());
 		if (!image) {
@@ -92,20 +97,31 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 		float innerRadius = _radius - _borderWidth;
 		if (innerRadius < 0) innerRadius = 0;
 
-		int size = (int)(innerRadius * 2.0f);
-
 		SDL_FRect dst{
 			cx - innerRadius,
 			cy - innerRadius,
-			(float)size,
-			(float)size
+			innerRadius * 2.0f,
+			innerRadius * 2.0f
 		};
 
-		SDL_RenderTexture(__renderer, tex, nullptr, &dst);
+		SDL_FPoint center{
+			dst.w / 2.0f,
+			dst.h / 2.0f
+		};
+
+		SDL_RenderTextureRotated(
+			__renderer,
+			tex,
+			nullptr,
+			&dst,
+			_rotation,
+			&center,
+			SDL_FLIP_NONE
+		);
 
 		SDL_DestroyTexture(tex);
 	}
-	
+
 	SDL_SetRenderDrawColor(
 		__renderer,
 		_borderColor.r,
@@ -114,22 +130,19 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 		_borderColor.a
 	);
 
-	// Border
 	for (int y = -rOuter; y <= rOuter; y++) {
 		int xOuter = (int)std::floor(std::sqrt(rOuter * rOuter - y * y));
-		int xInner = (rInner > 0 && abs(y) <= rInner)
+		int xInner = (rInner > 0 && std::abs(y) <= rInner)
 			? (int)std::floor(std::sqrt(rInner * rInner - y * y))
 			: 0;
 
 		int yPos = cy + y;
 
-		// Left side
 		SDL_RenderLine(__renderer,
 			cx - xOuter, yPos,
 			cx - xInner, yPos
 		);
 
-		// Right side
 		SDL_RenderLine(__renderer,
 			cx + xInner, yPos,
 			cx + xOuter, yPos
@@ -137,7 +150,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	}
 }
 
-inline void Circle::_drawFilledCircle(
+void Circle::_drawFilledCircle(
 	SDL_Renderer* __renderer,
 	const float __cx,
 	const float __cy,
@@ -154,16 +167,12 @@ inline void Circle::_drawFilledCircle(
 		__color.a
 	);
 
-	int cx = (int)std::round(__cx);
-	int cy = (int)std::round(__cy);
-	int r  = (int)std::round(__radius);
+	for (int y=-__radius; y<=__radius; y++) {
+		int xSpan = (int)std::floor(std::sqrt(__radius*__radius-y*y));
 
-	for (int y = -r; y <= r; y++) {
-		int xSpan = (int)std::floor(std::sqrt(r * r - y * y));
-
-		int x1 = cx - xSpan;
-		int x2 = cx + xSpan;
-		int yy = cy + y;
+		int x1 = __cx - xSpan;
+		int x2 = __cx + xSpan;
+		int yy = __cy + y;
 
 		SDL_RenderLine(__renderer, x1, yy, x2, yy);
 	}

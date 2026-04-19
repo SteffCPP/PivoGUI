@@ -46,7 +46,6 @@ Rectangle::Rectangle(	const Vector2D& size,
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
 	_rotation = rotDeg;
-	_type = WidgetType::RECTANGLE;
 }
 Rectangle::Rectangle(){}
 
@@ -54,8 +53,7 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 	if(_hide) return;
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
-	Vector2D offset = _computePivotOffset();
-	Vector2D finalPos = _pos - offset;
+	Vector2D finalPos = _pos + _computePivotOffset();
 
 	// Faster rendering without rotation
 	if(!_hasRotation()){
@@ -184,13 +182,11 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
         SDL_DestroyTexture(tex);
         SDL_DestroySurface(image);
-        
     }
 
     SDL_SetRenderTarget(__renderer, NULL);
 
     SDL_FRect dst{finalPos.x, finalPos.y, _size.x, _size.y};
-
     SDL_FPoint center{
         _size.x / 2.0f,
         _size.y / 2.0f
@@ -201,7 +197,7 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
         target,
         NULL,
         &dst,
-        getRotation(),
+        _rotation,
         &center,
         SDL_FLIP_NONE
     );

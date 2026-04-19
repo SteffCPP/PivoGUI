@@ -33,6 +33,9 @@ namespace egui{
 	public:
 		float getRadius() const;
 		void setRadius(float radius);
+		
+		void setSize(const Vector2D& size) override;
+		Vector2D getSize() const override;
 
 		virtual bool containsPoint(const Vector2D& point) const override;
 

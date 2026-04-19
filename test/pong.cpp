@@ -1,7 +1,7 @@
 #include <iostream>
 #include "EGUI/EGUI.hpp"
 
-constexpr size_t WIN_H = 800;
+constexpr size_t WIN_H = 1000;
 constexpr size_t WIN_W = 900;
 
 void checkPadelPos(egui::Widget& pad){
@@ -37,11 +37,11 @@ int main(){
 	while(win.isOpen()){
 		win.update();
 
-		if(egui::defInputSys.keyboard.isDown(egui::Key::W)) pad1.move({0, -5});
-		if(egui::defInputSys.keyboard.isDown(egui::Key::S)) pad1.move({0, 5});
+		if(egui::Keyboard::isDown(egui::Key::W)) pad1.move({0, -5});
+		if(egui::Keyboard::isDown(egui::Key::S)) pad1.move({0, 5});
 
-		if(egui::defInputSys.keyboard.isDown(egui::Key::UP)) pad2.move({0, -5});
-		if(egui::defInputSys.keyboard.isDown(egui::Key::DOWN)) pad2.move({0, 5});
+		if(egui::Keyboard::isDown(egui::Key::UP)) pad2.move({0, -5});
+		if(egui::Keyboard::isDown(egui::Key::DOWN)) pad2.move({0, 5});
 
 		checkPadelPos(pad1);
 		checkPadelPos(pad2);

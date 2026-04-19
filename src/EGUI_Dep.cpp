@@ -23,7 +23,7 @@ void drawable::setBorderColor(const Color_RGBA& color) { _borderColor = color; }
 void drawable::setBorderWidth(const float width){ _borderWidth = width; }
 float drawable::getBorderWidth() const { return _borderWidth; }
 
-void drawable::setHide(const bool flag){ _hide = flag; }
+void drawable::toggleHide(const bool flag){ _hide = flag; }
 
 // === interactable ===
 
@@ -57,16 +57,16 @@ void transformable::move(const Vector2D& delta) { _pos = _pos + delta; }
 Vector2D transformable::_computePivotOffset() const {
 	switch(_pivot){
 		case Pivot::TOP_LEFT:     return {0, 0};
-		case Pivot::TOP:          return {_size.x / 2, 0};
-		case Pivot::TOP_RIGHT:    return {_size.x, 0};
+		case Pivot::TOP:          return {-_size.x / 2, 0};
+		case Pivot::TOP_RIGHT:    return {-_size.x, 0};
 
-		case Pivot::LEFT:         return {0, _size.y / 2};
-		case Pivot::CENTER:       return {_size.x / 2, _size.y / 2};
-		case Pivot::RIGHT:        return {_size.x, _size.y / 2};
+		case Pivot::LEFT:         return {0, -_size.y / 2};
+		case Pivot::CENTER:       return {-_size.x / 2, -_size.y / 2};
+		case Pivot::RIGHT:        return {-_size.x, -_size.y / 2};
 
-		case Pivot::BOTTOM_LEFT:  return {0, _size.y};
-		case Pivot::BOTTOM:       return {_size.x / 2, _size.y};
-		case Pivot::BOTTOM_RIGHT: return {_size.x, _size.y};
+		case Pivot::BOTTOM_LEFT:  return {0, -_size.y};
+		case Pivot::BOTTOM:       return {-_size.x / 2, -_size.y};
+		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
 	}
 	return {0, 0};
 }

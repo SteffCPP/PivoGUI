@@ -67,6 +67,7 @@ void Window::create(const std::string& title,
             std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
             abort(); 
         }
+        egui::Audio_Manager::_init();
 
         std::atexit([](){
             SDL_Quit();
@@ -102,8 +103,7 @@ void Window::update(){
     _lastTime = frameStart;
 
     Input_Manager::_update();
-    defAudioSys._globalTime += (size_t)delta;
-    std::cout << "Delta: " << delta << "\n";
+    Audio_Manager::_update(delta);
 
     if(Input_Manager::_hasRequestedQuit()) { destroy(); return; }
     if(Input_Manager::_hasRequestedWindowQuit().first && 

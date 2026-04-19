@@ -28,24 +28,14 @@ copies or substantial portions of the Software.
 #include <cstddef>
 
 namespace egui{
-	class Widget : public drawable, public transformable, public interactable{		
-	protected:
-		enum class WidgetType{
-			WIDGET,
-			SHAPE,
-			RECTANGLE,
-			CIRCLE
-		};
+	class Widget : public drawable, public transformable, public interactable{
 	public:
 		virtual ~Widget() = default;
 
 		constexpr std::size_t getLayerNumber() const { return _layerN; }
-		inline void setLayerNumber(const std::size_t n) { _layerN = n; }
+		void setLayerNumber(const std::size_t n) { _layerN = n; }
 
 	protected:
-		WidgetType _getType() const { return _type; }
-		
-		WidgetType _type{WidgetType::WIDGET};
 		std::size_t _layerN{0};
 
 		friend class Window;

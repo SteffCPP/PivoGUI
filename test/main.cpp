@@ -2,17 +2,19 @@
 #include "EGUI/EGUI.hpp"
 
 int main(){
-	egui::Window win("Finestra", {800, 900});
+	egui::Window win("Finestra", {1080, 980});
 
-	egui::Rectangle rect{{300, 300}, {50, 50}, egui::colors::Transparent, 20.0f, egui::colors::Green};
-	rect.setRotation(180.0);
-	rect.assignImage("test/imgs/emoji.jpeg");
-	egui::Circle circle{100.0f, {500, 500}, egui::colors::Transparent, 10.0f, egui::colors::Red};
-	egui::Audio chopinFMinor("test/audio/chopinNocturneFMinor.mp3");
-	chopinFMinor.play();
-	win.assign(rect);
-	win.assign(circle);
-	egui::Keyboard::isDown(egui::Key::A);
+	egui::TextLabel label;
+	label.setSize({600, 600});
+	label.setPosition({200, 50});
+	label.setRotation(40.0);
+	label.setBackgroundColor(egui::colors::Gray);
+
+	label.text.loadFont("test/fonts/retro_gaming.ttf", 30);
+	label.text.setText("Ciao Mondo!");
+	label.text.setColor(egui::colors::Cyan);
+	
+	win.assign(label);
 	while(win.isOpen()){
 		
 		

@@ -68,7 +68,7 @@ namespace egui{
 		void setBorderWidth(const float width);
 		float getBorderWidth() const;
 
-		void setHide(const bool flag);
+		void toggleHide(const bool flag);
 
 	protected:
 		virtual void _draw(SDL_Renderer* __renderer) = 0;
@@ -175,7 +175,7 @@ namespace egui{
 	};
 
 	class transformable: public sizeable, public rotatable{
-	protected:
+	public:
 		enum class Pivot{
 			TOP,
 			TOP_LEFT,
@@ -187,7 +187,6 @@ namespace egui{
 			BOTTOM_RIGHT,
 			CENTER
 		};
-	public:
 		virtual ~transformable() = default;
 
 		Vector2D getPosition() const;

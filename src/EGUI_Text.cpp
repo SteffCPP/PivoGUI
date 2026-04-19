@@ -132,104 +132,161 @@ TextLabel::TextLabel(
 
 void TextLabel::_draw(SDL_Renderer* __renderer){
     if(_hide) return;
+
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
-    // Rectangle of Label
-    Vector2D offset = _computePivotOffset();
-	Vector2D finalPos = _pos - offset;
+    // =========================
+    // PIVOT + LABEL POSITION
+    // =========================
+    Vector2D topLeft = _pos + _computePivotOffset();
 
-	SDL_FRect drawRect{finalPos.x, finalPos.y, _size.x, _size.y};
-	SDL_SetRenderDrawColor(__renderer, _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
-	SDL_RenderFillRect(__renderer, &drawRect);
+    SDL_FRect labelRect{
+        topLeft.x,
+        topLeft.y,
+        _size.x,
+        _size.y
+    };
 
-	drawRect.x+=_borderWidth;
-	drawRect.y+=_borderWidth;
-	drawRect.w-=_borderWidth*2;
-	drawRect.h-=_borderWidth*2;
-	SDL_SetRenderDrawColor(__renderer, _backgroundColor.r, _backgroundColor.g, _backgroundColor.b, _backgroundColor.a);
-	SDL_RenderFillRect(__renderer, &drawRect);
+    SDL_FPoint rotationCenter{
+        _pos.x - topLeft.x,
+        _pos.y - topLeft.y
+    };
 
-    // Text
-    if(!text._ttffont){
-        std::cerr << "Font not loaded.\n";
-        return;
-    }
-    
-    SDL_Color txtColor = {(std::uint8_t)text._color.r, (std::uint8_t)text._color.g, (std::uint8_t)text._color.b, (std::uint8_t)text._color.a};
-    
-    TTF_SetFontWrapAlignment(text._ttffont, (TTF_HorizontalAlignment)text._alignment);
-    SDL_Surface* surfaceMessage = TTF_RenderText_Solid_Wrapped(text._ttffont, text._text.c_str(), text._text.size(), txtColor, text._size.x);
-    if(!surfaceMessage){
-        std::cerr << "TTF_RenderText_Solid error: " << SDL_GetError() << "\n";
-        return;
-    }
-    
-    SDL_Texture* message = SDL_CreateTextureFromSurface(__renderer, surfaceMessage);
-    
-    int w = surfaceMessage->w;
-    int h = surfaceMessage->h;
+    // =========================
+    // LABEL TEXTURE
+    // =========================
+    SDL_Texture* labelTexture = SDL_CreateTexture(
+        __renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TEXTUREACCESS_TARGET,
+        (int)_size.x,
+        (int)_size.y
+    );
+
+    SDL_SetTextureBlendMode(labelTexture, SDL_BLENDMODE_BLEND);
+
+    SDL_SetRenderTarget(__renderer, labelTexture);
+    SDL_SetRenderDrawColor(__renderer, 0,0,0,0);
+    SDL_RenderClear(__renderer);
+
+    SDL_SetRenderDrawColor(__renderer,
+        _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
+    SDL_RenderFillRect(__renderer, nullptr);
+
+    SDL_FRect innerRect{
+        (float)_borderWidth,
+        (float)_borderWidth,
+        _size.x - _borderWidth * 2,
+        _size.y - _borderWidth * 2
+    };
+
+    SDL_SetRenderDrawColor(__renderer,
+        _backgroundColor.r, _backgroundColor.g, _backgroundColor.b, _backgroundColor.a);
+    SDL_RenderFillRect(__renderer, &innerRect);
+
+    SDL_SetRenderTarget(__renderer, nullptr);
+
+    SDL_RenderTextureRotated(
+        __renderer,
+        labelTexture,
+        nullptr,
+        &labelRect,
+        _rotation,
+        &rotationCenter,
+        SDL_FLIP_NONE
+    );
+
+    SDL_DestroyTexture(labelTexture);
+
+    // =========================
+    // TEXT (LOCAL SPACE FIRST)
+    // =========================
+    if(!text._ttffont) return;
+
+    SDL_Color textColor{
+        (Uint8)text._color.r,
+        (Uint8)text._color.g,
+        (Uint8)text._color.b,
+        (Uint8)text._color.a
+    };
+
+    SDL_Surface* textSurface = TTF_RenderText_Solid_Wrapped(
+        text._ttffont,
+        text._text.c_str(),
+        text._text.size(),
+        textColor,
+        text._size.x
+    );
+
+    if(!textSurface) return;
+
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(__renderer, textSurface);
+
+    float textX = _borderWidth + _padding;
+    float textY = _borderWidth + _padding;
 
     float availableWidth  = _size.x - (_borderWidth * 2) - (_padding * 2);
     float availableHeight = _size.y - (_borderWidth * 2) - (_padding * 2);
 
-    float rectX = finalPos.x + _borderWidth + _padding;
-    float rectY = finalPos.y + _borderWidth + _padding;
-
-    float offsetX = 0.0f;
-    float offsetY = 0.0f;
-
     switch(_textboxAlignment){
-        case TextBoxAlignment::TOP_LEFT:
-            break;
-
         case TextBoxAlignment::TOP:
-            offsetX = (availableWidth - w) / 2.0f;
+            textX += (availableWidth - textSurface->w) / 2.0f;
             break;
 
         case TextBoxAlignment::TOP_RIGHT:
-            offsetX = (availableWidth - w);
+            textX += (availableWidth - textSurface->w);
             break;
 
         case TextBoxAlignment::LEFT:
-            offsetY = (availableHeight - h) / 2.0f;
+            textY += (availableHeight - textSurface->h) / 2.0f;
             break;
 
         case TextBoxAlignment::CENTER:
-            offsetX = (availableWidth - w) / 2.0f;
-            offsetY = (availableHeight - h) / 2.0f;
+            textX += (availableWidth - textSurface->w) / 2.0f;
+            textY += (availableHeight - textSurface->h) / 2.0f;
             break;
 
         case TextBoxAlignment::RIGHT:
-            offsetX = (availableWidth - w);
-            offsetY = (availableHeight - h) / 2.0f;
+            textX += (availableWidth - textSurface->w);
+            textY += (availableHeight - textSurface->h) / 2.0f;
             break;
 
         case TextBoxAlignment::BOTTOM_LEFT:
-            offsetY = (availableHeight - h);
+            textY += (availableHeight - textSurface->h);
             break;
 
         case TextBoxAlignment::BOTTOM:
-            offsetX = (availableWidth - w) / 2.0f;
-            offsetY = (availableHeight - h);
+            textX += (availableWidth - textSurface->w) / 2.0f;
+            textY += (availableHeight - textSurface->h);
             break;
 
         case TextBoxAlignment::BOTTOM_RIGHT:
-            offsetX = (availableWidth - w);
-            offsetY = (availableHeight - h);
+            textX += (availableWidth - textSurface->w);
+            textY += (availableHeight - textSurface->h);
             break;
+
+        default: break;
     }
 
-    rectX += offsetX;
-    rectY += offsetY;
+    SDL_FRect textRect{
+        topLeft.x + textX,
+        topLeft.y + textY,
+        (float)textSurface->w,
+        (float)textSurface->h
+    };
 
-    SDL_FRect rect = {rectX, rectY, (float)w, (float)h};
-    if(!SDL_RenderTexture(__renderer, message, NULL, &rect)){
-        std::cerr << "Error rendering texture of Text of TextLabel: " << SDL_GetError() << "\n";
-        abort();
-    }
-    
-    SDL_DestroySurface(surfaceMessage);
-    SDL_DestroyTexture(message);
+    SDL_RenderTextureRotated(
+        __renderer,
+        textTexture,
+        nullptr,
+        &textRect,
+        _rotation,
+        &rotationCenter,
+        SDL_FLIP_NONE
+    );
+
+    SDL_DestroySurface(textSurface);
+    SDL_DestroyTexture(textTexture);
 
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }

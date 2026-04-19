@@ -30,62 +30,63 @@ struct MIX_Track;
 struct MIX_Mixer;
 
 namespace egui{
-    struct Audio{
-    public:
-        enum class State {
-            STOPPED,
-            PLAYING,
-            PAUSED
-        };
-        void play();
-        void pause();
-        void stop(const std::uint16_t nFadeOutFrames=0);
-        void resume();
-
-        std::string getPath() const;
-
-        State getState() const;
-        bool isPaused() const;
-        bool isPlaying() const;
-
-        Audio(const std::string& path);
-    private:
-        MIX_Track* _track{nullptr};
-
-        float _volume{1.0f};
-        std::size_t _startTime{0};
-	    std::size_t _pauseTime{0};
-        float _speed{1.0f};
-        std::string _path{""};
-        State _state{State::STOPPED};
-
-        friend class Audio_System;
+struct Audio {
+public:
+    enum class State {
+        STOPPED,
+        PLAYING,
+        PAUSED
     };
 
-    class Audio_System{
-    public:
-        void play(Audio& audio);
-        void pause(Audio& audio);
-        void stop(Audio& audio, const unsigned int nFadeOutFrames=0);
-        void resume(Audio& audio);
+    Audio(const std::string& path);
 
-        std::size_t getTime(Audio& audio);
-        void setTime(Audio& audio, const std::size_t ms);
+    void play();
+    void pause();
+    void resume();
+    void stop(std::uint32_t fadeOutFrames=0);
 
-        float getVolume(Audio& audio);
-        void setVolume(Audio& audio, float volume);
-        void increaseVolume(Audio& audio, const int volumeDelta);
+    std::string getPath() const;
 
-        float getSpeed(Audio& audio);
-        void setSpeed(Audio& audio, const float speed);
+    State getState() const;
+    bool isPaused() const;
+    bool isPlaying() const;
 
-        Audio_System();
-    private:
-        std::size_t _globalTime=0;
-        MIX_Mixer* _mixmixer{nullptr};
+private:
+    MIX_Track* _track{nullptr};
 
-        friend class Window;
-    };
+    float _volume{1.0f};
+    std::size_t _startTime{0};
+    std::size_t _pauseTime{0};
+    float _speed{1.0f};
+    std::string _path;
+    State _state{State::STOPPED};
 
-    extern Audio_System defAudioSys;
-} 
+    friend class Audio_Manager;
+};
+
+class Audio_Manager {
+public:
+    static void play(Audio& audio);
+    static void pause(Audio& audio);
+    static void resume(Audio& audio);
+    static void stop(Audio& audio, std::uint32_t fadeOutFrames = 0);
+
+    static std::size_t getTime(Audio& audio);
+    static void setTime(Audio& audio, std::size_t ms);
+
+    static float getVolume(const Audio& audio);
+    static void setVolume(Audio& audio, float volume);
+    static void increaseVolume(Audio& audio, float delta);
+
+    static float getSpeed(const Audio& audio);
+    static void setSpeed(Audio& audio, float speed);
+
+private:
+    static void _init();
+    static void _update(const size_t deltaT);
+    static inline MIX_Mixer* _mixmixer{nullptr};
+    static inline std::size_t _globalTime{0};
+
+    friend class Window;
+};
+}
