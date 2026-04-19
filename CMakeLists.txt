@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.10)
 
 project(EGUI VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 
 find_package(SDL3 REQUIRED)
@@ -16,6 +17,7 @@ find_package(SDL3_image REQUIRED)
 file(GLOB_RECURSE EGUI_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
 add_library(EGUI SHARED ${EGUI_SOURCES})
+set_target_properties(EGUI PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
 
 target_include_directories(EGUI PUBLIC ${PROJECT_SOURCE_DIR}/inc/EGUI)
 
@@ -24,4 +26,11 @@ target_link_libraries(EGUI PRIVATE
     SDL3_image::SDL3_image
     SDL3_ttf::SDL3_ttf
     SDL3_mixer::SDL3_mixer
+)
+
+install(
+    TARGETS EGUI
+    ARCHIVE DESTINATION ${destination}/lib
+    LIBRARY DESTINATION ${destination}/lib
+    RUNTIME DESTINATION ${destination}/bin
 )
