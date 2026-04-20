@@ -4,13 +4,13 @@
 
 all: main
 
-main:
+compile_main:
 	g++ test/main.cpp -Iinc -Llib -lEGUI -Wl,-rpath=lib -o test/bin/main -std=c++23
 
-pong:
+compile_pong:
 	g++ test/pong.cpp -Iinc -Llib -lEGUI -Wl,-rpath=lib -o test/bin/pong -std=c++23
 
-runMain: 
+main: compile_main
 	test/bin/main
-runPong:
+pong: compile_pong
 	test/bin/pong

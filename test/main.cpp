@@ -10,8 +10,6 @@ int main(){
 	while(win.isOpen()){
 		egui::Input_Manager::update();
 		win.update();
-
-
 	}
 
 	return 0;
