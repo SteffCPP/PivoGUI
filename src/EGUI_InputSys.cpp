@@ -171,21 +171,15 @@ Key Keyboard::_sdlkToKey(int sdlKey){
 }
 
 // === Input_Manager ===
-
-Input_Manager::Input_Manager() {
-    _requestQuit = false;
-    _requestWindowQuit = {false, nullptr};
-
-    Keyboard::_initKeys();
-}
 void Input_Manager::_update() {
     Keyboard::_update();
 
+	_requestQuit = false;
+    _requestWindowQuit = {false, 0};
+
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
-
         switch (event.type) {
-
             case SDL_EVENT_QUIT:
                 _requestQuit = true;
                 break;
@@ -193,7 +187,7 @@ void Input_Manager::_update() {
             case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
                 _requestWindowQuit = {
                     true,
-                    SDL_GetWindowFromID(event.window.windowID)
+                    event.window.windowID
                 };
                 break;
 
@@ -234,7 +228,7 @@ void Input_Manager::_update() {
 bool Input_Manager::_hasRequestedQuit() {
     return _requestQuit;
 }
-std::pair<bool, SDL_Window*> Input_Manager::_hasRequestedWindowQuit() {
+std::pair<bool, std::uint32_t> Input_Manager::_hasRequestedWindowQuit() {
     return _requestWindowQuit;
 }
 }

@@ -85,6 +85,7 @@ void Window::create(const std::string& title,
         return;
     }
 
+	Keyboard::_initKeys();
     _lastTime = SDL_GetPerformanceCounter();
     _backgroundColor = bgColor;
     _isOpen = true;
@@ -111,9 +112,9 @@ void Window::update(){
     Input_Manager::_update();
     Audio_Manager::_update(delta);
 
-    if(Input_Manager::_hasRequestedQuit()) { destroy(); return; }
+    if(Input_Manager::_hasRequestedQuit()) { std::cout << "Destroy"; destroy(); return; }
     if(Input_Manager::_hasRequestedWindowQuit().first && 
-        Input_Manager::_hasRequestedWindowQuit().second == _sdlwin){ destroy(); return; }
+        Input_Manager::_hasRequestedWindowQuit().second == SDL_GetWindowID(_sdlwin)){ destroy(); return; }
 
     const Mouse& mouse = Mouse();
     const Keyboard& keyboard = Keyboard();

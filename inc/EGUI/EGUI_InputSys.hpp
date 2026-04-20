@@ -180,12 +180,10 @@ private:
     static void _initKeys();
 
     friend class Input_Manager;
+	friend class Window;
 };
 
 class Input_Manager {
-public:
-    /// Constructs the input system.
-    Input_Manager();
 private:
 
     /// Updates all input states (keyboard + mouse).
@@ -197,10 +195,10 @@ private:
 
     /// Checks if a specific window requested quit.
     /// @return Pair (requested, window pointer).
-    static std::pair<bool, SDL_Window*> _hasRequestedWindowQuit();
+    static std::pair<bool, std::uint32_t> _hasRequestedWindowQuit();
 
     static inline bool _requestQuit{false};
-    static inline std::pair<bool, SDL_Window*> _requestWindowQuit{false, nullptr};
+    static inline std::pair<bool, std::uint32_t> _requestWindowQuit{false, 0};
 
     friend class Window;
 };
