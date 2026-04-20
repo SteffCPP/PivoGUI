@@ -45,7 +45,7 @@ public:
                 const Color_RGBA& bgColor = egui::colors::White);
 
     /// Main update loop.
-    /// Handles rendering, input processing and widget updates.
+    /// Handles rendering and widget updates.
     void update();
 
     /// Destroys the window and frees all resources.

@@ -184,11 +184,10 @@ private:
 };
 
 class Input_Manager {
+public:
+    // Updates all input states (keyboard + mouse).
+    static void update();
 private:
-
-    /// Updates all input states (keyboard + mouse).
-    static void _update();
-
     /// Checks if the application requested global quit.
     /// @return True if quit was requested.
     static bool _hasRequestedQuit();

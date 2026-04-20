@@ -66,12 +66,6 @@ void Window::create(const std::string& title,
             abort(); 
         }
         egui::Audio_Manager::_init();
-
-        std::atexit([](){
-            SDL_Quit();
-            TTF_Quit();
-            MIX_Quit();
-        });
     }
 
     if (!SDL_CreateWindowAndRenderer(
@@ -96,12 +90,12 @@ Vector2D Window::getSize() const { return _size; }
 void Window::update(){
     if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
+
     int w, h;
     if(SDL_GetWindowSize(_sdlwin, &w, &h) && (w!=_size.x || h!=_size.y)){
         _size.x = w;
         _size.y = h;
     }
-
 
     const double targetFrameTime = 1000.0 / 60.0;
     Uint64 freq = SDL_GetPerformanceFrequency();
@@ -109,12 +103,7 @@ void Window::update(){
     double delta = (frameStart - _lastTime) * 1000.0 / freq;
     _lastTime = frameStart;
 
-    Input_Manager::_update();
     Audio_Manager::_update(delta);
-
-    if(Input_Manager::_hasRequestedQuit()) { std::cout << "Destroy"; destroy(); return; }
-    if(Input_Manager::_hasRequestedWindowQuit().first && 
-        Input_Manager::_hasRequestedWindowQuit().second == SDL_GetWindowID(_sdlwin)){ destroy(); return; }
 
     const Mouse& mouse = Mouse();
     const Keyboard& keyboard = Keyboard();
@@ -172,9 +161,12 @@ void Window::update(){
 
     SDL_RenderPresent(_sdlrenderer);
 
-
     Uint64 frameEnd = SDL_GetPerformanceCounter();
     double frameTime = (frameEnd - frameStart) * 1000.0 / freq;
+
+    if(Input_Manager::_hasRequestedQuit()) { destroy(); return; }
+    else if(Input_Manager::_hasRequestedWindowQuit().first && 
+        Input_Manager::_hasRequestedWindowQuit().second == SDL_GetWindowID(_sdlwin)){ std::cout << "destroy"; destroy(); return; }
 
     if(frameTime < targetFrameTime){
         SDL_Delay(static_cast<Uint32>(targetFrameTime - frameTime));

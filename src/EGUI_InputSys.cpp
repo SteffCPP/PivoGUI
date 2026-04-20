@@ -171,7 +171,8 @@ Key Keyboard::_sdlkToKey(int sdlKey){
 }
 
 // === Input_Manager ===
-void Input_Manager::_update() {
+
+void Input_Manager::update(){
     Keyboard::_update();
 
 	_requestQuit = false;
