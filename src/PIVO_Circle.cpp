@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,13 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Circle.hpp"
-#include "EGUI_SDL.cpp"
-#include "EGUI_TextureManager.hpp"
+#include "PIVO_Circle.hpp"
+#include "PIVO_SDL.cpp"
+#include "PIVO_TextureManager.hpp"
 
 #include <iostream>
 
-namespace egui{
+namespace pivo{
 float Circle::getRadius() const { return _radius; }
 void Circle::setRadius(float radius){ 
 	_radius = radius;

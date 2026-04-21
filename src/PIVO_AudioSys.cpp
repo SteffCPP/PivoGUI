@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,12 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_AudioSys.hpp"
-#include "EGUI_SDL.cpp"
+#include "PIVO_AudioSys.hpp"
+#include "PIVO_SDL.cpp"
 
 #include <iostream>
 
-namespace egui {
+namespace pivo {
 #define CHECK_TRACK_EXISTS_AND_CREATE if(!audio._track){ \
     if(audio._track = MIX_CreateTrack(_mixmixer); !audio._track) \
         std::cerr << "Error while creating track: " << SDL_GetError() << "\n"; \

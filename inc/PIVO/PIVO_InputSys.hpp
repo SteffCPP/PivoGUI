@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,13 +23,13 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Dep.hpp"
+#include "PIVO_Dep.hpp"
 #include <utility>
 #include <unordered_map>
 
 struct SDL_Window;
 
-namespace egui {
+namespace pivo {
 	
 /// Represents keyboard keys used by the input system.
 enum class Key {

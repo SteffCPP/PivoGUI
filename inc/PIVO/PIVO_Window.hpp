@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,8 +22,8 @@ copies or substantial portions of the Software.
 */
 
 #pragma once
-#include "EGUI_Widget.hpp"
-#include "EGUI_InputSys.hpp"
+#include "PIVO_Widget.hpp"
+#include "PIVO_InputSys.hpp"
 
 #include <vector>
 #include <string>
@@ -31,7 +31,7 @@ copies or substantial portions of the Software.
 struct SDL_Window;
 struct SDL_Renderer;
 
-namespace egui{
+namespace pivo{
 	/// Core window system of the engine.
 /// Manages SDL window, renderer and all registered widgets.
 class Window {
@@ -42,7 +42,7 @@ public:
     /// @param bgColor Background color (default = white).
     void create(const std::string& title,
                 const Vector2D& size,
-                const Color_RGBA& bgColor = egui::colors::White);
+                const Color_RGBA& bgColor = colors::White);
 
     /// Main update loop.
     /// Handles rendering and widget updates.
@@ -77,7 +77,7 @@ public:
     /// @param bgColor Background color (default = white).
     Window(const std::string title,
            const Vector2D size,
-           const Color_RGBA bgColor = egui::colors::White);
+           const Color_RGBA bgColor = colors::White);
 
     /// Default constructor.
     Window();
@@ -98,7 +98,7 @@ private:
 
     std::vector<Widget*> _widgets;
 
-    Color_RGBA _backgroundColor{egui::colors::White};
+    Color_RGBA _backgroundColor{colors::White};
 
     bool _isOpen{false};
 

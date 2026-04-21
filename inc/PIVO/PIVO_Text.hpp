@@ -1,5 +1,5 @@
 /*
-EGUI - Easy Graphical User Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Widget.hpp"
+#include "PIVO_Widget.hpp"
 #include <string>
 #include <vector>
 
@@ -31,7 +31,7 @@ struct TTF_Font;
 struct TTF_Text;
 struct SDL_Renderer;
 
-namespace egui{
+namespace pivo{
 	class Text {
 public:
     /// Text style flags (bitmask).
@@ -117,7 +117,7 @@ public:
     Text(const std::string& text,
          const std::string& fontPath,
          const float& size,
-         const Color_RGBA& color = egui::colors::White);
+         const Color_RGBA& color = colors::White);
 
     /// Destructor.
     ~Text();
@@ -125,7 +125,7 @@ public:
 private:
     Vector2D _size{0, 0};
     std::string _text{""};
-    Color_RGBA _color{egui::colors::White};
+    Color_RGBA _color{colors::White};
     short _styles;
 
     TTF_Text* _ttftext = nullptr;
@@ -189,7 +189,7 @@ public:
               const std::string& textStr,
               const std::string& fontPath,
               const float& fontSize,
-              const Color_RGBA& textColor = egui::colors::White);
+              const Color_RGBA& textColor = colors::White);
 
 private:
     /// Internal render function for the label.

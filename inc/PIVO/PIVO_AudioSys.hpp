@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,7 +29,7 @@ copies or substantial portions of the Software.
 struct MIX_Track;
 struct MIX_Mixer;
 
-namespace egui{
+namespace pivo{
 
 /// @struct Audio. 
 /// @brief Struct that represents an Audio. 

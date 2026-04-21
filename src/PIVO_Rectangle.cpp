@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,13 +21,13 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Rectangle.hpp"
-#include "EGUI_TextureManager.hpp"
-#include "EGUI_SDL.cpp"
+#include "PIVO_Rectangle.hpp"
+#include "PIVO_TextureManager.hpp"
+#include "PIVO_SDL.cpp"
 
 #include <iostream>
 
-namespace egui{
+namespace pivo{
 bool Rectangle::containsPoint(const Vector2D& point) const {
 	return point.x >= _pos.x &&
 		point.x <= _pos.x + _size.x &&

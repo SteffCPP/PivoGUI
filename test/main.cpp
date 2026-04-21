@@ -1,14 +1,13 @@
 #include <iostream>
-#include "EGUI/EGUI.hpp"
+#include "PIVO/PIVO.hpp"
 
 int main(){
-	egui::Window win("Finestra", {1080, 980});
+	pivo::Window win("Finestra", {1080, 980});
 
-	egui::Rectangle rect{{300, 300}, {60, 60}, egui::colors::Red};
+	pivo::Rectangle rect{{300, 300}, {60, 60}, pivo::colors::Red};
 	
 	win.assign(rect);
 	while(win.isOpen()){
-		egui::Input_Manager::update();
 		win.update();
 	}
 

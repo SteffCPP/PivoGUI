@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -29,7 +29,7 @@ copies or substantial portions of the Software.
 struct SDL_Renderer;
 struct SDL_Texture;
 
-namespace egui{
+namespace pivo{
 class Texture_Manager {
 public:
     /// Loads a texture from file or returns cached version if already loaded.

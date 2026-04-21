@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,11 +25,8 @@ copies or substantial portions of the Software.
 #include <cstdint>
 #include <algorithm>
 
-namespace egui{
+namespace pivo{
 	struct Color_RGBA {
-
-    /// Red, Green, Blue, Alpha color representation (RGBA).
-	
     std::uint8_t r{0};
     std::uint8_t g{0};
     std::uint8_t b{0};

@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,20 +21,27 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#pragma once
+#include "PIVO_Color.hpp"
 
-#include "EGUI_Dep.hpp"
-#include "EGUI_Widget.hpp"
+namespace pivo{
+Color_RGBA::Color_RGBA(const std::uint8_t R, const std::uint8_t G, const std::uint8_t B, const std::uint8_t A){
+	r = R;
+	g = G; 
+	b = B; 
+	a = A;
+}
 
-#include <vector>
 
-namespace egui{
-	class Panel : public Widget{
-	public:
-		
-	private:
-		virtual void _draw(SDL_Renderer* __renderer) override{}
-
-		float _nextPosForShape{0};
-	};
+namespace colors{
+	Color_RGBA Red{255, 0, 0};
+	Color_RGBA Green{0, 128, 0};
+	Color_RGBA Blue{0, 0, 255};
+	Color_RGBA Black{0, 0, 0};
+	Color_RGBA White{255, 255, 255};
+	Color_RGBA Yellow{255, 255, 0};
+	Color_RGBA Cyan{0, 255, 255};
+	Color_RGBA Magenta{255, 0, 255};
+	Color_RGBA Gray{34, 34, 34};
+	Color_RGBA Transparent{0, 0, 0, 0};
+}
 }

@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,15 +21,15 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Window.hpp"
-#include "EGUI_InputSys.hpp"
-#include "EGUI_SDL.cpp"
-#include "EGUI_AudioSys.hpp"
+#include "PIVO_Window.hpp"
+#include "PIVO_InputSys.hpp"
+#include "PIVO_SDL.cpp"
+#include "PIVO_AudioSys.hpp"
 
 #include <iostream>
 #include <utility>
 
-namespace egui {
+namespace pivo {
 inline bool Window::_checkWidgetsOrder() const {
 	if (_widgets.size() <= 1) return true;
     if (_widgets.size() == 2){
@@ -65,7 +65,7 @@ void Window::create(const std::string& title,
             std::cerr << "Couldn't initialize SDL3_ttf " << SDL_GetError() << "\n"; 
             abort(); 
         }
-        egui::Audio_Manager::_init();
+        Audio_Manager::_init();
     }
 
     if (!SDL_CreateWindowAndRenderer(
@@ -104,6 +104,7 @@ void Window::update(){
     _lastTime = frameStart;
 
     Audio_Manager::_update(delta);
+    Input_Manager::update();
 
     const Mouse& mouse = Mouse();
     const Keyboard& keyboard = Keyboard();

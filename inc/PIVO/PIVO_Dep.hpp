@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,17 +23,17 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Vector.hpp"
-#include "EGUI_Math.hpp"
-#include "EGUI_Color.hpp"
-#include "EGUI_Image.hpp"
+#include "PIVO_Vector.hpp"
+#include "PIVO_Math.hpp"
+#include "PIVO_Color.hpp"
+#include "PIVO_Image.hpp"
 
 #include <functional>
 
 struct SDL_Renderer;
 struct SDL_Texture;
 
-namespace egui{
+namespace pivo{
 	class sizeable {
 public:
     virtual ~sizeable() = default;
@@ -107,8 +107,8 @@ protected:
     /// @param __renderer SDL renderer context.
     virtual void _draw(SDL_Renderer* __renderer) = 0;
 
-    Color_RGBA _backgroundColor{egui::colors::Black};
-    Color_RGBA _borderColor{egui::colors::Transparent};
+    Color_RGBA _backgroundColor{colors::Black};
+    Color_RGBA _borderColor{colors::Transparent};
     float _borderWidth{0};
 
     bool _hide{false};

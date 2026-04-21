@@ -1,5 +1,5 @@
 /*
-EGUI - Easy Graphical User Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #pragma once 
 
-namespace egui{
+namespace pivo{
 	/// Represents a 2D vector with float precision.
 /// Used for positions, sizes, directions and basic 2D math.
 struct Vector2D {

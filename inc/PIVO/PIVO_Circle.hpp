@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,12 +23,12 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Dep.hpp"
-#include "EGUI_Widget.hpp"
+#include "PIVO_Dep.hpp"
+#include "PIVO_Widget.hpp"
 
 #include <vector>
 
-namespace egui{
+namespace pivo{
 	class Circle : public Widget, public texturable{
 	public:
 		// Returns the radius of the circle. 

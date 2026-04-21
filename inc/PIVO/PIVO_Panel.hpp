@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,25 +22,19 @@ copies or substantial portions of the Software.
 */
 
 #pragma once
-#include <cmath>
 
-namespace egui{
-	namespace math{
-		/// Mathematical constant PI.
-		constexpr double PI = 3.1415926535897932384626;
+#include "PIVO_Dep.hpp"
+#include "PIVO_Widget.hpp"
 
-		/// Converts degrees to radians.
-		/// @param __deg Angle in degrees.
-		/// @return Equivalent angle in radians.
-		constexpr double degToRad(const double __deg) {
-			return __deg * (PI / 180);
-		}
+#include <vector>
 
-		/// Converts radians to degrees.
-		/// @param __rad Angle in radians.
-		/// @return Equivalent angle in degrees.
-		constexpr double radToDeg(const double __rad) {
-			return __rad * (180 / PI);
-		}
-	}
+namespace pivo{
+	class Panel : public Widget{
+	public:
+		
+	private:
+		virtual void _draw(SDL_Renderer* __renderer) override{}
+
+		float _nextPosForShape{0};
+	};
 }

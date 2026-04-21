@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,17 +23,30 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Color.hpp"
-#include "EGUI_AudioSys.hpp"
-//#include "EGUI_Grid.hpp"
-#include "EGUI_Math.hpp"
-#include "EGUI_Panel.hpp"
-#include "EGUI_Rectangle.hpp"
-#include "EGUI_Circle.hpp"
-//#include "EGUI_Slider.hpp"
-#include "EGUI_Text.hpp"
-#include "EGUI_Vector.hpp"
-#include "EGUI_Window.hpp"
-#include "EGUI_Image.hpp"
-#include "EGUI_InputSys.hpp"
-#include "EGUI_TextureManager.hpp"
+#include "PIVO_Dep.hpp"
+
+#include <cstddef>
+
+namespace pivo{
+/// Base class for all UI elements.
+/// Combines rendering, transformation and interaction capabilities.
+class Widget : public drawable, public transformable, public interactable {
+public:
+    virtual ~Widget() = default;
+
+    /// Gets the rendering layer of the widget.
+    /// Higher values are rendered on top of lower ones.
+    /// @return Layer index.
+    constexpr std::size_t getLayerNumber() const { return _layerN; }
+
+    /// Sets the rendering layer of the widget.
+    /// Widgets with higher layer values are drawn above others.
+    /// @param n Layer index.
+    void setLayerNumber(const std::size_t n) { _layerN = n; }
+
+protected:
+    std::size_t _layerN{0};
+
+    friend class Window;
+};
+}

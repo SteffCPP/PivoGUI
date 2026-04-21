@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,27 +21,19 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Color.hpp"
+#pragma once
 
-namespace egui{
-Color_RGBA::Color_RGBA(const std::uint8_t R, const std::uint8_t G, const std::uint8_t B, const std::uint8_t A){
-	r = R;
-	g = G; 
-	b = B; 
-	a = A;
-}
-
-
-namespace colors{
-	Color_RGBA Red{255, 0, 0};
-	Color_RGBA Green{0, 128, 0};
-	Color_RGBA Blue{0, 0, 255};
-	Color_RGBA Black{0, 0, 0};
-	Color_RGBA White{255, 255, 255};
-	Color_RGBA Yellow{255, 255, 0};
-	Color_RGBA Cyan{0, 255, 255};
-	Color_RGBA Magenta{255, 0, 255};
-	Color_RGBA Gray{34, 34, 34};
-	Color_RGBA Transparent{0, 0, 0, 0};
-}
-}
+#include "PIVO_Color.hpp"
+#include "PIVO_AudioSys.hpp"
+//#include "PIVO_Grid.hpp"
+#include "PIVO_Math.hpp"
+#include "PIVO_Panel.hpp"
+#include "PIVO_Rectangle.hpp"
+#include "PIVO_Circle.hpp"
+//#include "PIVO_Slider.hpp"
+#include "PIVO_Text.hpp"
+#include "PIVO_Vector.hpp"
+#include "PIVO_Window.hpp"
+#include "PIVO_Image.hpp"
+#include "PIVO_InputSys.hpp"
+#include "PIVO_TextureManager.hpp"

@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,11 +23,11 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "EGUI_Widget.hpp"
+#include "PIVO_Widget.hpp"
 
 struct SDL_Rect;
 
-namespace egui{
+namespace pivo{
 	class Rectangle : public Widget, public texturable {
 public:
     /// Checks if a point is inside the rectangle.
@@ -44,9 +44,9 @@ public:
     /// @param rotRad Rotation in radians (default = 0).
     Rectangle(const Vector2D& size,
               const Vector2D& pos,
-              const Color_RGBA& bgColor = egui::colors::Red,
+              const Color_RGBA& bgColor = colors::Red,
               const float bdWidth = 0,
-              const Color_RGBA& bdColor = egui::colors::Transparent,
+              const Color_RGBA& bdColor = colors::Transparent,
               const float rotRad = 0);
 
     /// Default constructor.

@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,7 +21,36 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Panel.hpp"
-#include "EGUI_SDL.cpp"
+#pragma once
 
+#include <string>
 
+struct SDL_Texture;
+struct SDL_Surface;
+
+namespace pivo{
+class Image {
+public:
+    /// Gets the file path of the image.
+    /// @return Path string of the image file.
+    std::string getPath() const;
+
+    /// Sets the file path of the image.
+    /// @param path New image file path.
+    void setPath(const std::string& path);
+
+    /// Constructs an Image with a given file path.
+    /// @param path Path to the image file.
+    Image(const std::string& path);
+
+    /// Default constructor.
+    /// Creates an empty Image with no path assigned.
+    Image();
+private:
+    std::string _path{""};
+};
+
+    /*class Animation{
+
+    };*/
+}

@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,10 +21,10 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_InputSys.hpp"
-#include "EGUI_SDL.cpp"
+#include "PIVO_InputSys.hpp"
+#include "PIVO_SDL.cpp"
 
-namespace egui {
+namespace pivo {
 
 // === Mouse === 
 
@@ -100,7 +100,7 @@ void Keyboard::_initKeys() {
     }
 }
 Key Keyboard::_sdlkToKey(int sdlKey){ 
-    using namespace egui; 
+    using namespace pivo;
     switch (sdlKey) { 
         case SDLK_A: return Key::A; 
         case SDLK_B: return Key::B; 

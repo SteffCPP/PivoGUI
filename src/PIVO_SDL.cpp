@@ -1,5 +1,5 @@
 /*
-EGUI - Embedded Graphics Utility Interface
+PivoGUI
 Copyright (c) 2026 Stefano Rando (randostefano39@proton.me)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,12 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "EGUI_Image.hpp"
-
-namespace egui{
-std::string Image::getPath() const { return _path; }
-void Image::setPath(const std::string& path){ _path = path; }
-
-Image::Image(const std::string& path){ _path = path; }
-Image::Image(){}
-}
+#include "SDL3/SDL.h"
+#include "SDL3_image/SDL_image.h"
+#include "SDL3_mixer/SDL_mixer.h"
+#include "SDL3_ttf/SDL_ttf.h"
