@@ -8,6 +8,7 @@ int main(){
 	
 	win.assign(rect);
 	while(win.isOpen()){
+		pivo::Input_Manager::update();
 		win.update();
 	}
 

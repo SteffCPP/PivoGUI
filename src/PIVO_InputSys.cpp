@@ -177,6 +177,7 @@ void Input_Manager::update(){
 
 	_requestQuit = false;
     _requestWindowQuit = {false, 0};
+    _windowResized = {false, 0, 0, 0};
 
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -220,6 +221,9 @@ void Input_Manager::update(){
                 );
                 break;
 
+            case SDL_EVENT_WINDOW_RESIZED:
+                _windowResized = {true, event.window.windowID, event.window.data1, event.window.data2};
+                break;
             default:
                 break;
         }
@@ -231,5 +235,8 @@ bool Input_Manager::_hasRequestedQuit() {
 }
 std::pair<bool, std::uint32_t> Input_Manager::_hasRequestedWindowQuit() {
     return _requestWindowQuit;
+}
+std::tuple<bool, std::uint32_t, int ,int> Input_Manager::_hasChangedWindowSize(){
+    return _windowResized;
 }
 }

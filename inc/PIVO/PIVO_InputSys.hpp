@@ -24,6 +24,8 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include "PIVO_Dep.hpp"
+
+#include <tuple>
 #include <utility>
 #include <unordered_map>
 
@@ -192,12 +194,19 @@ private:
     /// @return True if quit was requested.
     static bool _hasRequestedQuit();
 
+    /// Checks if the size of the window has been changed.
+    /// @return Touple made of: 
+    /// 
+    /// bool=Condition, uint32_t=ID, int=W, int=H
+    static std::tuple<bool, std::uint32_t, int ,int> _hasChangedWindowSize();
+
     /// Checks if a specific window requested quit.
     /// @return Pair (requested, window pointer).
     static std::pair<bool, std::uint32_t> _hasRequestedWindowQuit();
 
     static inline bool _requestQuit{false};
     static inline std::pair<bool, std::uint32_t> _requestWindowQuit{false, 0};
+    static inline std::tuple<bool, std::uint32_t, int ,int> _windowResized{false, 0, 0, 0};
 
     friend class Window;
 };

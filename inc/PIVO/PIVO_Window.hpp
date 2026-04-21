@@ -78,6 +78,14 @@ public:
     Window(const std::string title,
            const Vector2D size,
            const Color_RGBA bgColor = colors::White);
+    
+    /// Constructs a Window with parameters.
+    /// @param title Window title.
+    /// @param size Window size in pixels. Peing a pointer means that the size will automatically update in your .cpp file.
+    /// @param bgColor Background color (default = white).
+    Window(const std::string title,
+           Vector2D* size,
+           const Color_RGBA bgColor = colors::White);
 
     /// Default constructor.
     Window();
@@ -105,5 +113,6 @@ private:
     size_t _lastTime{0};
 
     Vector2D _size{0, 0};
+    Vector2D* _connectedSize{nullptr};
 };
 }

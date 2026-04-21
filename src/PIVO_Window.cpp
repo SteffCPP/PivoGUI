@@ -91,12 +91,6 @@ void Window::update(){
     if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
     if(!_checkWidgetsOrder()) _sortWidgets();
 
-    int w, h;
-    if(SDL_GetWindowSize(_sdlwin, &w, &h) && (w!=_size.x || h!=_size.y)){
-        _size.x = w;
-        _size.y = h;
-    }
-
     const double targetFrameTime = 1000.0 / 60.0;
     Uint64 freq = SDL_GetPerformanceFrequency();
     Uint64 frameStart = SDL_GetPerformanceCounter();
@@ -104,12 +98,17 @@ void Window::update(){
     _lastTime = frameStart;
 
     Audio_Manager::_update(delta);
-    Input_Manager::update();
 
     const Mouse& mouse = Mouse();
     const Keyboard& keyboard = Keyboard();
 
     Vector2D mousePos = mouse.getPosition();
+
+    auto [checkChange, id, w, h] = Input_Manager::_hasChangedWindowSize();
+    if(checkChange && id==SDL_GetWindowID(_sdlwin)){
+        _size = {(float)w, (float)h};
+        if(_connectedSize) *_connectedSize = _size;
+    }
 
     for (auto& w : _widgets) {
         bool inside = w->containsPoint(mousePos);
@@ -229,7 +228,16 @@ Window::Window(){}
 Window::Window(const std::string title,
                const Vector2D size,
                const Color_RGBA bgColor) {
+            
     create(title, size, bgColor);
+}
+
+Window::Window(const std::string title,
+               Vector2D* size,
+               const Color_RGBA bgColor) {
+    
+    create(title, *size, bgColor);
+    _connectedSize = size;
 }
 
 Window::~Window() {
