@@ -1,10 +1,5 @@
 /objs
 
-.ninja_deps
-.ninja_log
-build.ninja
-cmake_install.cmake
-CMakeCache.txt
 build/
 CMakeFiles
 .vscode
