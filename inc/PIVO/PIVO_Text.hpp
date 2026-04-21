@@ -24,6 +24,7 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include "PIVO_Widget.hpp"
+
 #include <string>
 #include <vector>
 
@@ -137,7 +138,7 @@ private:
     friend class TextLabelInput;
 };
 
-	class TextLabel : public Widget {
+class TextLabel : public Widget {
 public:
 
     /// Textbox alignment inside the label.
