@@ -29,6 +29,7 @@ copies or substantial portions of the Software.
 //#include "PIVO_Panel.hpp"
 #include "PIVO_Rectangle.hpp"
 #include "PIVO_Circle.hpp"
+#include "PIVO_Line.hpp"
 //#include "PIVO_Slider.hpp"
 #include "PIVO_Text.hpp"
 #include "PIVO_Vector.hpp"

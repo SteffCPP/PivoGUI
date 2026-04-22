@@ -14,6 +14,10 @@ int main(){
 	
 	pivo::Rectangle ground{{1080, 300}, {0, 980-300}, pivo::colors::Green};
 	win.assign(ground);
+	
+	pivo::Audio chopinNocturne("test/audio/chopinNocturneFMinor.mp3");
+	pivo::Audio_Manager::load(chopinNocturne);
+	pivo::Audio_Manager::play(chopinNocturne);
 
 	int accel=0;
 	bool canJump=true;

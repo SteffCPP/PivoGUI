@@ -29,6 +29,7 @@ copies or substantial portions of the Software.
 
 struct MIX_Track;
 struct MIX_Mixer;
+struct MIX_Audio;
 
 namespace pivo{
 
@@ -84,6 +85,7 @@ public:
 
 private:
     MIX_Track* _mixtrack{nullptr};
+    MIX_Audio* _mixaudio{nullptr};
 
     float _volume{1.0f};
     std::size_t _startTime{0};
@@ -91,7 +93,6 @@ private:
     float _speed{1.0f};
     std::string _path{""};
     State _state{State::STOPPED};
-    std::uint32_t _id{0};
 
     friend class Audio_Manager;
 };
@@ -166,9 +167,6 @@ private:
 
     static inline MIX_Mixer* _mixmixer{nullptr};
     static inline std::size_t _globalTime{0};
-    
-    //                                     ID,   Audio Object
-    static inline std::unordered_map<std::uint32_t, Audio> _cache{};
 
     friend class Window;
 };

@@ -34,7 +34,7 @@ struct SDL_Renderer;
 struct SDL_Texture;
 
 namespace pivo{
-	class sizeable {
+class sizeable {
 public:
     virtual ~sizeable() = default;
 
@@ -56,11 +56,11 @@ public:
 
     /// Sets the rotation angle in degrees.
     /// @param deg Rotation angle (degrees).
-    void setRotation(double deg);
+    virtual void setRotation(double deg);
 
     /// Gets the current rotation angle.
     /// @return Rotation in degrees.
-    double getRotation() const;
+    virtual double getRotation() const;
 
 protected:
     /// Checks if rotation is enabled/meaningful for this object.
@@ -76,27 +76,27 @@ public:
 
     /// Gets the background color.
     /// @return Current background color.
-    Color_RGBA getBackgroundColor() const;
+    virtual Color_RGBA getBackgroundColor() const;
 
     /// Gets the border color.
     /// @return Current border color.
-    Color_RGBA getBorderColor() const;
+    virtual Color_RGBA getBorderColor() const;
 
     /// Sets the background color.
     /// @param color New background color.
-    void setBackgroundColor(const Color_RGBA& color);
+    virtual void setBackgroundColor(const Color_RGBA& color);
 
     /// Sets the border color.
     /// @param color New border color.
-    void setBorderColor(const Color_RGBA& color);
+    virtual void setBorderColor(const Color_RGBA& color);
 
     /// Sets the border width.
     /// @param width Border thickness in pixels.
-    void setBorderWidth(const float width);
+    virtual void setBorderWidth(const float width);
 
     /// Gets the border width.
     /// @return Border thickness in pixels.
-    float getBorderWidth() const;
+    virtual float getBorderWidth() const;
 
     /// Hides or shows the object.
     /// @param flag True to hide, false to show.
@@ -212,14 +212,14 @@ class texturable {
 public:
     /// Assigns an image to the object.
     /// @param img Image resource to assign.
-    void assignImage(const Image img);
+    virtual void assignImage(const Image img);
 
     /// Assigns an image from file path.
     /// @param path Path to image file.
-    void assignImage(const std::string& path);
+    virtual void assignImage(const std::string& path);
 
     /// Removes the current image.
-    void removeImage();
+    virtual void removeImage();
 
     texturable();
 
@@ -247,23 +247,23 @@ public:
 
     /// Gets the position of the object.
     /// @return Position in world space.
-    Vector2D getPosition() const;
+    virtual Vector2D getPosition() const;
 
     /// Sets the position of the object.
     /// @param pos New position.
-    void setPosition(const Vector2D& pos);
+    virtual void setPosition(const Vector2D& pos);
 
     /// Gets the current pivot type.
     /// @return Pivot mode.
-    Pivot getPivot() const;
+    virtual Pivot getPivot() const;
 
     /// Sets the pivot type.
     /// @param pivot New pivot mode.
-    void setPivot(const Pivot& pivot);
+    virtual void setPivot(const Pivot& pivot);
 
     /// Moves the object by delta.
     /// @param delta Movement offset.
-    void move(const Vector2D& delta);
+    virtual void move(const Vector2D& delta);
 
 protected:
     /// Computes pivot offset based on size and pivot mode.
