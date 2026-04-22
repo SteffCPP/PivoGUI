@@ -22,6 +22,8 @@ copies or substantial portions of the Software.
 */
 
 #pragma once
+
+#include <random>
 #include <cmath>
 
 namespace pivo{
@@ -41,6 +43,14 @@ namespace pivo{
 		/// @return Equivalent angle in degrees.
 		constexpr double radToDeg(const double __rad) {
 			return __rad * (180 / PI);
+		}
+
+		template<std::integral T>
+		const T generateRandNum(const T a,const T b){
+			static std::random_device rd;
+			static std::mt19937 gen(rd());
+			static std::uniform_int_distribution<T> dis(a, b);
+			return dis(gen);
 		}
 	}
 }

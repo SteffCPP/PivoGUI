@@ -23,10 +23,12 @@ copies or substantial portions of the Software.
 
 #pragma once
 
+#include <unordered_map>
 #include <string>
+#include <cinttypes>
 
+struct SDL_Renderer;
 struct SDL_Texture;
-struct SDL_Surface;
 
 namespace pivo{
 class Image {
@@ -48,9 +50,47 @@ public:
     Image();
 private:
     std::string _path{""};
+    std::uint32_t _id{0};
+    SDL_Texture* _sdltexture{nullptr};
+
+    friend class Texture_Manager;
 };
 
-    /*class Animation{
+/*class Animation{
 
-    };*/
+};*/
+
+class Texture_Manager {
+public:
+    /// Loads a texture from file or returns cached version if already loaded.
+    /// @param path Path of the image file.
+    /// @return SDL_Texture pointer (cached).
+    static bool load(Image& img);
+
+    /// Removes a texture from cache and destroys it.
+    /// @param path Path of the texture to remove.
+    static bool unload(Image& img);
+
+    /// Clears all cached textures.
+    static void clear();
+
+    /// Checks if a texture is already cached.
+    /// @param path Texture path.
+    /// @return True if texture exists in cache.
+    static bool exists(const Image& img);
+
+    static SDL_Texture* const getSDLTexture(const Image& img);
+private:
+    /// Initializes the texture system.
+    static void _init(SDL_Renderer* renderer);
+
+    static inline SDL_Renderer* _renderer{nullptr};
+
+    //                                     ID,   Audio Object
+    static inline std::unordered_map<std::uint32_t, Image> _cache{};
+    //                                     ID,    References Nunmber
+    static inline std::unordered_map<std::uint32_t, std::uint32_t> _refCount{};
+
+    friend class Window;
+};
 }

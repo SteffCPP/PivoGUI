@@ -26,7 +26,7 @@ copies or substantial portions of the Software.
 #include "PIVO_Vector.hpp"
 #include "PIVO_Math.hpp"
 #include "PIVO_Color.hpp"
-#include "PIVO_Image.hpp"
+#include "PIVO_TextureSys.hpp"
 
 #include <functional>
 

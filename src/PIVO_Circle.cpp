@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #include "PIVO_Circle.hpp"
 #include "PIVO_SDL.cpp"
-#include "PIVO_TextureManager.hpp"
+#include "PIVO_TextureSys.hpp"
 
 #include <iostream>
 
@@ -87,7 +87,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
 
 	if (_hasImage) {
-		SDL_Texture* tex = Texture_Manager::load(_img.getPath());
+		Texture_Manager::load(_img);
 
 		float innerRadius = _radius - _borderWidth;
 		if (innerRadius < 0) innerRadius = 0;
@@ -106,15 +106,13 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 
 		SDL_RenderTextureRotated(
 			__renderer,
-			tex,
+			Texture_Manager::getSDLTexture(_img),
 			nullptr,
 			&dst,
 			_rotation,
 			&center,
 			SDL_FLIP_NONE
 		);
-
-		SDL_DestroyTexture(tex);
 	}
 
 	SDL_SetRenderDrawColor(

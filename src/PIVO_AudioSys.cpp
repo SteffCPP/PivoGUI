@@ -23,19 +23,12 @@ copies or substantial portions of the Software.
 
 #include "PIVO_AudioSys.hpp"
 #include "PIVO_SDL.cpp"
+#include "PIVO_Math.hpp"
 
 #include <iostream>
 
+
 namespace pivo {
-#define CHECK_TRACK_EXISTS_AND_CREATE if(!audio._track){ \
-    if(audio._track = MIX_CreateTrack(_mixmixer); !audio._track) \
-        std::cerr << "Error while creating track: " << SDL_GetError() << "\n"; \
-    if(MIX_Audio* music = MIX_LoadAudio(_mixmixer, audio._path.c_str(), true); !MIX_SetTrackAudio(audio._track, music)) \
-        std::cerr << "Error while setting track audio: " << SDL_GetError() << "\n"; \
-}
-#define CHECK_TRACK_EXISTS(returnValue) if(audio._track == nullptr) return returnValue;
-
-
 // === Audio ===
 
 Audio::Audio(const std::string& path)
@@ -52,22 +45,22 @@ bool Audio::isPaused() const {
 bool Audio::isPlaying() const {
     return _state == State::PLAYING;
 }
-void Audio::play() {
+void Audio::play(){
     Audio_Manager::play(*this);
 }
-void Audio::pause() {
+void Audio::pause(){
     Audio_Manager::pause(*this);
 }
-void Audio::resume() {
+void Audio::resume(){
     Audio_Manager::resume(*this);
 }
-void Audio::stop(std::uint32_t fadeOutFrames) {
+void Audio::stop(std::uint32_t fadeOutFrames){
     Audio_Manager::stop(*this, fadeOutFrames);
 }
 
 // === Audio_Manager ===
 
-void Audio_Manager::_init() {
+void Audio_Manager::_init(){
     if (!MIX_Init()) {
         std::cerr << "Failed to init SDL_mixer: " << SDL_GetError() << "\n";
         std::abort();
@@ -81,54 +74,101 @@ void Audio_Manager::_init() {
 
     _globalTime = 0;
 }
-void Audio_Manager::_update(const size_t deltaT) {
+void Audio_Manager::_update(const size_t deltaT){
     _globalTime += deltaT;
 }
 
-void Audio_Manager::play(Audio& audio) {
-    CHECK_TRACK_EXISTS_AND_CREATE
+bool Audio_Manager::load(Audio& audio){
+    if(auto it=_cache.find(audio._id); it!=_cache.end()){
+        return false;
+    }
 
-    MIX_SetTrackGain(audio._track, audio._volume);
-    MIX_PlayTrack(audio._track, 0);
+    std::uint32_t randID = math::generateRandNum<std::uint32_t>(1, 0x90000000);
+    auto it=_cache.find(audio._id);
+    while(it!=_cache.end()){
+        randID = math::generateRandNum<std::uint32_t>(1, 0x90000000);
+        it=_cache.find(audio._id);
+    }
+
+    audio._id = randID;
+    audio._mixtrack = MIX_CreateTrack(_mixmixer);
+    if(!audio._mixtrack){
+        std::cerr << "Error while creating track: " << SDL_GetError() << "\n";
+        return false;
+    }
+
+    _cache.emplace(audio._id, audio);
+
+    return true;
+}
+
+bool Audio_Manager::unload(Audio& audio){
+    auto it=_cache.find(audio._id);
+    if(it==_cache.end()) return false;
+
+    MIX_DestroyTrack(audio._mixtrack);
+    _cache.erase(it);
+    audio._id = 0;
+    audio._mixtrack = nullptr;
+
+    return true;
+}
+
+
+void Audio_Manager::clear(){
+    for(auto& [_, audio] : _cache){
+        MIX_DestroyTrack(audio._mixtrack);
+        audio._mixtrack = nullptr;
+        audio._id = 0;
+    }
+    _cache.clear();
+}
+
+bool Audio_Manager::exists(const Audio& audio){
+    return _cache.contains(audio._id);
+}
+
+void Audio_Manager::play(Audio& audio) {
+    if(!exists(audio)) load(audio);
+
+    MIX_SetTrackGain(audio._mixtrack, audio._volume);
+    MIX_PlayTrack(audio._mixtrack, 0);
 
     audio._startTime = _globalTime;
     audio._state = Audio::State::PLAYING;
 }
 void Audio_Manager::pause(Audio& audio) {
-    CHECK_TRACK_EXISTS()
-    if (!MIX_TrackPlaying(audio._track)) return;
+    if(!exists(audio)) return;
+    if(!MIX_TrackPlaying(audio._mixtrack)) return;
 
-    MIX_PauseTrack(audio._track);
+    MIX_PauseTrack(audio._mixtrack);
 
     audio._pauseTime = _globalTime;
     audio._state = Audio::State::PAUSED;
 }
 void Audio_Manager::resume(Audio& audio) {
-    CHECK_TRACK_EXISTS()
-    if (!MIX_TrackPaused(audio._track)) return;
+    if(!exists(audio)) return;
+    if(!MIX_TrackPaused(audio._mixtrack)) return;
 
-    MIX_ResumeTrack(audio._track);
+    MIX_ResumeTrack(audio._mixtrack);
 
     audio._pauseTime = 0;
     audio._state = Audio::State::PLAYING;
 }
 void Audio_Manager::stop(Audio& audio, std::uint32_t fadeOutFrames) {
-    CHECK_TRACK_EXISTS()
+    if(!exists(audio)) return;
 
-    if (MIX_TrackPlaying(audio._track)) {
-        MIX_StopTrack(audio._track, fadeOutFrames);
+    if (MIX_TrackPlaying(audio._mixtrack)) {
+        MIX_StopTrack(audio._mixtrack, fadeOutFrames);
     }
-
-    MIX_DestroyTrack(audio._track);
-    audio._track = nullptr;
-
+    
     audio._startTime = 0;
     audio._pauseTime = 0;
     audio._state = Audio::State::STOPPED;
 }
 
 std::size_t Audio_Manager::getTime(Audio& audio) {
-    CHECK_TRACK_EXISTS(0)
+    if(!exists(audio)) return 0;
 
     if (audio._state == Audio::State::PLAYING)
         return _globalTime - audio._startTime;
@@ -140,12 +180,12 @@ std::size_t Audio_Manager::getTime(Audio& audio) {
 }
 
 void Audio_Manager::setTime(Audio& audio, std::size_t ms) {
-    CHECK_TRACK_EXISTS()
+    if(!exists(audio)) return;
 
     SDL_PropertiesID props = SDL_CreateProperties();
     SDL_SetNumberProperty(props, MIX_PROP_PLAY_START_MILLISECOND_NUMBER, ms);
 
-    MIX_PlayTrack(audio._track, props);
+    MIX_PlayTrack(audio._mixtrack, props);
     SDL_DestroyProperties(props);
 
     audio._startTime = _globalTime - ms;
@@ -160,8 +200,8 @@ void Audio_Manager::setVolume(Audio& audio, float volume) {
 
     audio._volume = volume;
 
-    if (audio._track)
-        MIX_SetTrackGain(audio._track, volume);
+    if (audio._mixtrack)
+        MIX_SetTrackGain(audio._mixtrack, volume);
 }
 void Audio_Manager::changeVolume(Audio& audio, float delta) {
     setVolume(audio, audio._volume + delta);

@@ -29,12 +29,12 @@ copies or substantial portions of the Software.
 #include <vector>
 
 namespace pivo{
-	class Panel : public Widget{
-	public:
+class Panel : public Widget{
+public:
 		
-	private:
-		virtual void _draw(SDL_Renderer* __renderer) override{}
+private:
+	virtual void _draw(SDL_Renderer* __renderer) override{}
 
-		float _nextPosForShape{0};
-	};
+	float _nextPosForShape{0};
+};
 }

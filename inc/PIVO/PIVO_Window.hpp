@@ -22,6 +22,7 @@ copies or substantial portions of the Software.
 */
 
 #pragma once
+
 #include "PIVO_Widget.hpp"
 #include "PIVO_InputSys.hpp"
 
@@ -32,7 +33,7 @@ struct SDL_Window;
 struct SDL_Renderer;
 
 namespace pivo{
-	/// Core window system of the engine.
+/// Core window system of the engine.
 /// Manages SDL window, renderer and all registered widgets.
 class Window {
 public:
@@ -87,18 +88,12 @@ public:
            Vector2D* size,
            const Color_RGBA bgColor = colors::White);
 
-    /// Default constructor.
     Window();
-
-    /// Destructor.
     ~Window();
 
 private:
-    /// Checks if widget ordering is valid.
-    /// @return True if widgets are correctly ordered.
     inline bool _checkWidgetsOrder() const;
 
-    /// Sorts widgets based on layer and rendering priority.
     inline void _sortWidgets();
 
     SDL_Window* _sdlwin{nullptr};

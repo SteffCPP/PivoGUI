@@ -24,6 +24,7 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include <string>
+#include <unordered_map>
 #include <cinttypes>
 
 struct MIX_Track;
@@ -82,20 +83,25 @@ public:
     bool isPlaying() const;
 
 private:
-    MIX_Track* _track{nullptr};
+    MIX_Track* _mixtrack{nullptr};
 
     float _volume{1.0f};
     std::size_t _startTime{0};
     std::size_t _pauseTime{0};
     float _speed{1.0f};
-    std::string _path;
+    std::string _path{""};
     State _state{State::STOPPED};
+    std::uint32_t _id{0};
 
     friend class Audio_Manager;
 };
 
 class Audio_Manager {
 public:
+    static bool load(Audio& audio);
+    static bool unload(Audio& audio);
+    static void clear();
+    static bool exists(const Audio& audio);
 
     /// Play an Audio.
     /// @param audio Audio that needs to be played.
@@ -156,12 +162,13 @@ private:
     /// Initializes SDL_mixer and the Audio Manager system.
     static void _init();
 
-    /// Updates global audio timing.
-    /// @param deltaT Time step in milliseconds.
     static void _update(const size_t deltaT);
 
     static inline MIX_Mixer* _mixmixer{nullptr};
     static inline std::size_t _globalTime{0};
+    
+    //                                     ID,   Audio Object
+    static inline std::unordered_map<std::uint32_t, Audio> _cache{};
 
     friend class Window;
 };

@@ -22,7 +22,7 @@ copies or substantial portions of the Software.
 */
 
 #include "PIVO_Rectangle.hpp"
-#include "PIVO_TextureManager.hpp"
+#include "PIVO_TextureSys.hpp"
 #include "PIVO_SDL.cpp"
 
 #include <iostream>
@@ -103,11 +103,9 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 		SDL_RenderFillRect(__renderer, &innerRect);
 
 		if (_hasImage) {
-			SDL_Texture* tex = Texture_Manager::load(_img.getPath());
+			Texture_Manager::load(_img);
 
-			SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
-
-			SDL_DestroyTexture(tex);
+			SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_img), NULL, &innerRect);
 		}
 
 		SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
