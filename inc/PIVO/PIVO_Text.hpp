@@ -33,7 +33,7 @@ struct TTF_Text;
 struct SDL_Renderer;
 
 namespace pivo{
-	class Text {
+class Text {
 public:
     /// Text style flags (bitmask).
     enum class Style {
@@ -138,7 +138,7 @@ private:
     friend class TextLabelInput;
 };
 
-class TextLabel : public Widget {
+class TextLabel : public Widget, public sizeable, public rotatable{
 public:
 
     /// Textbox alignment inside the label.
@@ -155,11 +155,6 @@ public:
     };
 
 public:
-    /// Checks if a point is inside the label.
-    /// @param point Point in world space.
-    /// @return True if point is inside.
-    virtual bool containsPoint(const Vector2D& point) const override;
-
     /// Sets internal padding.
     /// @param padding Padding in pixels.
     void setPadding(const float& padding);
@@ -192,10 +187,16 @@ public:
               const float& fontSize,
               const Color_RGBA& textColor = colors::White);
 
+    /// Checks if a point is inside the label.
+    /// @param point Point in world space.
+    /// @return True if point is inside.
+    virtual bool containsPoint(const Vector2D& point) const override;
 private:
     /// Internal render function for the label.
     /// @param __renderer SDL rendering context.
     void _draw(SDL_Renderer* __renderer) override;
+
+    virtual Vector2D _computePivotOffset() const override;
 
     float _padding{10};
     TextBoxAlignment _textboxAlignment{TextBoxAlignment::CENTER};

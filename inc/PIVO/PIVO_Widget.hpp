@@ -30,7 +30,7 @@ copies or substantial portions of the Software.
 namespace pivo{
 /// Base class for all UI elements.
 /// Combines rendering, transformation and interaction capabilities.
-class Widget : public drawable, public transformable, public interactable {
+class Widget : public drawable, public interactable, public positionable {
 public:
     virtual ~Widget() = default;
 

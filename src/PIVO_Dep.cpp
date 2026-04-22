@@ -68,17 +68,17 @@ void texturable::removeImage(){ _hasImage = false; }
 
 texturable::texturable(){}
 
-// === transformable ===
+// === positionable ===
 
-Vector2D transformable::getPosition() const { return _pos; }
-void transformable::setPosition(const Vector2D& pos) { _pos = pos; }
+Vector2D positionable::getPosition() const { return _pos; }
+void positionable::setPosition(const Vector2D& pos) { _pos = pos; }
 
-transformable::Pivot transformable::getPivot() const { return _pivot; }
-void transformable::setPivot(const Pivot& pivot){ _pivot = pivot; }
+positionable::Pivot positionable::getPivot() const { return _pivot; }
+void positionable::setPivot(const Pivot& pivot){ _pivot = pivot; }
 
-void transformable::move(const Vector2D& delta) { _pos = _pos + delta; }
+void positionable::move(const Vector2D& delta) { _pos = _pos + delta; }
 
-Vector2D transformable::_computePivotOffset() const {
+/*Vector2D positionable::_computePivotOffset() const {
 	switch(_pivot){
 		case Pivot::TOP_LEFT:     return {0, 0};
 		case Pivot::TOP:          return {-_size.x / 2, 0};
@@ -93,5 +93,5 @@ Vector2D transformable::_computePivotOffset() const {
 		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
 	}
 	return {0, 0};
-}
+}*/
 }

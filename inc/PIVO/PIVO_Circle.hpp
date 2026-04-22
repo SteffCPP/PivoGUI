@@ -29,20 +29,12 @@ copies or substantial portions of the Software.
 #include <vector>
 
 namespace pivo{
-	class Circle : public Widget, public texturable{
+	class Circle : public Widget, public texturable, public rotatable{
 	public:
 		// Returns the radius of the circle. 
 		float getRadius() const;
 		// Set the radius of the circle. 
 		void setRadius(float radius);
-		
-		// @warning === FOR CIRCLE IT DOES NOT WORK! ===
-		//
-		// You must use setRadius() to set the size of the circle. This function will soon not be avaiable for Circle.
-		void setSize(const Vector2D& size) override;
-		Vector2D getSize() const override;
-
-		virtual bool containsPoint(const Vector2D& point) const override;
 
 		Circle(	const float radius, 
 				const Vector2D& pos,
@@ -50,8 +42,12 @@ namespace pivo{
 				const float bdWidth=0, 
 				const Color_RGBA& bdColor=colors::Transparent);
 		Circle();
+
+		virtual bool containsPoint(const Vector2D& point) const override;
 	private:
-		void _draw(SDL_Renderer* __renderer) override;
+		virtual void _draw(SDL_Renderer* __renderer) override;
+		virtual Vector2D _computePivotOffset() const override;
+
 
 		inline void _drawFilledCircle(	SDL_Renderer* __renderer, 
 										const float __cx,

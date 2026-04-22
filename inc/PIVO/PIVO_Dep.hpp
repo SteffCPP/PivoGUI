@@ -228,7 +228,7 @@ protected:
     Image _img;
 };
 
-class transformable : public sizeable, public rotatable {
+class positionable {
 public:
     /// Pivot point for transformations.
     enum class Pivot {
@@ -243,7 +243,7 @@ public:
         CENTER
     };
 
-    virtual ~transformable() = default;
+    virtual ~positionable() = default;
 
     /// Gets the position of the object.
     /// @return Position in world space.
@@ -268,7 +268,7 @@ public:
 protected:
     /// Computes pivot offset based on size and pivot mode.
     /// @return Offset vector.
-    Vector2D _computePivotOffset() const;
+    virtual Vector2D _computePivotOffset() const = 0;
 
     Pivot _pivot{Pivot::TOP_LEFT};
 

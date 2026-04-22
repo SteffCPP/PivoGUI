@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(PIVO VERSION 0.1.1 LANGUAGES CXX)
+project(PIVO VERSION 0.1.3 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -24,11 +24,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     SDL3_image::SDL3_image
     SDL3_ttf::SDL3_ttf
     SDL3_mixer::SDL3_mixer
-)
-
-install(
-    TARGETS ${PROJECT_NAME}
-    ARCHIVE DESTINATION ${destination}/lib
-    LIBRARY DESTINATION ${destination}/lib
-    RUNTIME DESTINATION ${destination}/bin
 )

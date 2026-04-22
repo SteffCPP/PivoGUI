@@ -29,18 +29,7 @@ copies or substantial portions of the Software.
 
 namespace pivo{
 float Circle::getRadius() const { return _radius; }
-void Circle::setRadius(float radius){ 
-	_radius = radius;
-	_size = {radius*2, radius*2};
-}
-void Circle::setSize(const Vector2D& size){
-	std::cerr << "Cannot set size to Circle. Use setRadius() instead.\n"; 
-	return;
-}
-Vector2D Circle::getSize() const{
-	std::cerr << "Cannot get size of Circle. Use getRadius() instead.\n"; 
-	return {0,0};
-}
+void Circle::setRadius(float radius){ _radius = radius; }
 
 bool Circle::containsPoint(const Vector2D& point) const {
 	float dx = point.x - (_pos.x + _radius);
@@ -58,9 +47,26 @@ Circle::Circle(	const float radius,
 	_backgroundColor = bgColor;
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
-	_size = {_radius*2, _radius*2};
 }
 Circle::Circle(){}
+
+Vector2D Circle::_computePivotOffset() const {
+	Vector2D _size = {_radius*2, _radius*2};
+	switch(_pivot){
+		case Pivot::TOP_LEFT:     return {0, 0};
+		case Pivot::TOP:          return {-_size.x / 2, 0};
+		case Pivot::TOP_RIGHT:    return {-_size.x, 0};
+
+		case Pivot::LEFT:         return {0, -_size.y / 2};
+		case Pivot::CENTER:       return {-_size.x / 2, -_size.y / 2};
+		case Pivot::RIGHT:        return {-_size.x, -_size.y / 2};
+
+		case Pivot::BOTTOM_LEFT:  return {0, -_size.y};
+		case Pivot::BOTTOM:       return {-_size.x / 2, -_size.y};
+		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
+	}
+	return {0, 0};
+}
 
 
 void Circle::_draw(SDL_Renderer* __renderer) {

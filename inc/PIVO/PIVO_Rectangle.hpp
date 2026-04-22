@@ -28,13 +28,8 @@ copies or substantial portions of the Software.
 struct SDL_Rect;
 
 namespace pivo{
-	class Rectangle : public Widget, public texturable {
+	class Rectangle : public Widget, public texturable, public sizeable, public rotatable {
 public:
-    /// Checks if a point is inside the rectangle.
-    /// @param point Point in world coordinates.
-    /// @return True if the point is inside the rectangle.
-    virtual bool containsPoint(const Vector2D& point) const override;
-
     /// Constructs a Rectangle with size, position, colors and rotation.
     /// @param size Size of the rectangle (width, height).
     /// @param pos Position of the rectangle in world space.
@@ -52,9 +47,15 @@ public:
     /// Default constructor.
     Rectangle();
 
+    /// Checks if a point is inside the rectangle.
+    /// @param point Point in world coordinates.
+    /// @return True if the point is inside the rectangle.
+    virtual bool containsPoint(const Vector2D& point) const override;
 private:
     /// Internal render function for the rectangle.
     /// @param __renderer SDL rendering context.
-    void _draw(SDL_Renderer* __renderer) override;
+    virtual void _draw(SDL_Renderer* __renderer) override;
+
+    virtual Vector2D _computePivotOffset() const override;
 };
 }

@@ -51,6 +51,23 @@ Rectangle::Rectangle(	const Vector2D& size,
 }
 Rectangle::Rectangle(){}
 
+Vector2D Rectangle::_computePivotOffset() const {
+    switch(_pivot){
+		case Pivot::TOP_LEFT:     return {0, 0};
+		case Pivot::TOP:          return {-_size.x / 2, 0};
+		case Pivot::TOP_RIGHT:    return {-_size.x, 0};
+
+		case Pivot::LEFT:         return {0, -_size.y / 2};
+		case Pivot::CENTER:       return {-_size.x / 2, -_size.y / 2};
+		case Pivot::RIGHT:        return {-_size.x, -_size.y / 2};
+
+		case Pivot::BOTTOM_LEFT:  return {0, -_size.y};
+		case Pivot::BOTTOM:       return {-_size.x / 2, -_size.y};
+		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
+	}
+	return {0, 0};
+}
+
 void Rectangle::_draw(SDL_Renderer* __renderer) {
 	if(_hide) return;
 	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
