@@ -94,10 +94,10 @@ void Window::update(){
     const double targetFrameTime = 1000.0 / 60.0;
     Uint64 freq = SDL_GetPerformanceFrequency();
     Uint64 frameStart = SDL_GetPerformanceCounter();
-    double delta = (frameStart - _lastTime) * 1000.0 / freq;
+    _delta = (frameStart - _lastTime) * 1000.0 / freq;
     _lastTime = frameStart;
 
-    Audio_Manager::_update(delta);
+    Audio_Manager::_update(_delta);
 
     const Mouse& mouse = Mouse();
     const Keyboard& keyboard = Keyboard();
@@ -120,7 +120,7 @@ void Window::update(){
         w->_hoverContext.hovering = inside;
 
         if (inside) {
-            w->_hoverContext.timeHovered += delta;
+            w->_hoverContext.timeHovered += _delta;
 
             if (!w->_hovered) {
                 w->_hovered = true;
@@ -223,6 +223,7 @@ void Window::remove(Widget& widget){
 
 void Window::setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
 bool Window::isOpen() const { return _isOpen; }
+double Window::getDeltaT() const{ return _delta; }
 
 Window::Window(){}
 Window::Window(const std::string title,

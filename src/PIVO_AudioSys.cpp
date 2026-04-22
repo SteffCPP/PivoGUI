@@ -32,7 +32,9 @@ namespace pivo {
 // === Audio ===
 
 Audio::Audio(const std::string& path)
-    : _path(path) {}
+    : _path(path) {
+    Audio_Manager::load(*this);
+}
 std::string Audio::getPath() const {
     return _path;
 }

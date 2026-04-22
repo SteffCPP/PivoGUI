@@ -18,6 +18,8 @@ find_package(SDL3_mixer REQUIRED)
 find_package(SDL3_ttf REQUIRED)
 find_package(SDL3_image REQUIRED)
 
+set_target_properties(${PROJECT_NAME} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/inc/PIVO)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     SDL3::SDL3

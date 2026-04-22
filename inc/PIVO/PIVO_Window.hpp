@@ -72,6 +72,8 @@ public:
     /// @return Vector2D.x = width; Vector2D.y = height
     Vector2D getSize() const;
 
+    double getDeltaT() const;
+
     /// Constructs a Window with parameters.
     /// @param title Window title.
     /// @param size Window size in pixels.
@@ -106,6 +108,7 @@ private:
     bool _isOpen{false};
 
     size_t _lastTime{0};
+    double _delta{0};
 
     Vector2D _size{0, 0};
     Vector2D* _connectedSize{nullptr};
