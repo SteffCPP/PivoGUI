@@ -4,9 +4,12 @@
 int main(){
 	pivo::Window win("Finestra", {1080, 980});
 
+	pivo::Circle circle(50.0f, {500 ,500}, pivo::colors::Green);
+	win.assign(circle);
+
 	pivo::Rectangle rect{{300, 300}, {60, 60}, pivo::colors::Red};
-	
 	win.assign(rect);
+
 	while(win.isOpen()){
 		pivo::Input_Manager::update();
 		win.update();

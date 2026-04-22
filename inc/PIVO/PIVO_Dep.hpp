@@ -136,24 +136,49 @@ public:
 
     /// Sets callback for click event.
     template<typename Func, typename... Args>
-    void setOnClick(Func&& func, Args&&... args);
-
+    void setOnClick(Func&& func, Args&&... args){
+        _onClick = [func = std::forward<Func>(func),
+                    ... args = std::forward<Args>(args)](){
+                    
+            func(args...);
+        };
+    }
     /// Sets callback for hover event.
     template<typename Func, typename... Args>
-    void setOnHover(Func&& func, Args&&... args);
-
+    void setOnHover(Func&& func, Args&&... args){
+        _onHover = [func = std::forward<Func>(func),
+                    ... args = std::forward<Args>(args)](){
+                    
+            func(args...);
+        };
+    }
     /// Sets callback for enter event.
     template<typename Func, typename... Args>
-    void setOnEnter(Func&& func, Args&&... args);
-
+    void setOnEnter(Func&& func, Args&&... args){
+        _onEnter = [func = std::forward<Func>(func),
+                    ... args = std::forward<Args>(args)](){
+                    
+            func(args...);
+        };
+    }
     /// Sets callback for leave event.
     template<typename Func, typename... Args>
-    void setOnLeave(Func&& func, Args&&... args);
-
+    void setOnLeave(Func&& func, Args&&... args){
+        _onLeave = [func = std::forward<Func>(func),
+                    ... args = std::forward<Args>(args)](){
+                    
+            func(args...);
+        };
+    }
     /// Sets callback for release event.
     template<typename Func, typename... Args>
-    void setOnRelease(Func&& func, Args&&... args);
-
+    void setOnRelease(Func&& func, Args&&... args){
+        _onRelease = [func = std::forward<Func>(func),
+                    ... args = std::forward<Args>(args)](){
+                    
+            func(args...);
+        };
+    }
     /// Gets current hover context.
     /// @return Hover interaction state.
     const HoverContext& getHoverContext() const;
