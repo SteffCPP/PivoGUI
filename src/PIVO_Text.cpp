@@ -111,7 +111,7 @@ void TextLabel::setTextboxAlignment(const TextBoxAlignment align){
 }
 TextLabel::TextBoxAlignment TextLabel::getTextboxAlignment() const { return _textboxAlignment; }
 
-TextLabel::TextLabel(){}
+TextLabel::TextLabel(){ _size = {1, 1}; }
 TextLabel::TextLabel(
 	const Vector2D& position,
 	const Vector2D& size,
