@@ -28,7 +28,14 @@ copies or substantial portions of the Software.
 struct SDL_Rect;
 
 namespace pivo{
-	class Rectangle : public Widget, public texturable, public sizeable, public rotatable, public borderable, public pivotable, public positionable {
+	class Rectangle : 
+        public Widget, 
+        public texturable,
+        public sizeable,
+        public rotatable,
+        public borderable,
+        public pivotable,
+        public positionable {
 public:
     /// Constructs a Rectangle with size, position, colors and rotation.
     /// @param size Size of the rectangle (width, height).

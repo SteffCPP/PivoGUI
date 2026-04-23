@@ -2,15 +2,15 @@
 #   THIS FILE IS FOR TESTING PURPOSES ONLY
 # ==========================================
 
-all: main
+all: shapes
 
-compile_main:
-	g++ test/main.cpp -Iinc -Llib -lPIVO -Wl,-rpath=lib -o test/bin/main -std=c++23
+compile_shapes:
+	g++ test/shapes.cpp -Iinc -Llib -lPIVO -Wl,-rpath=lib -o test/bin/shapes -std=c++23
 
 compile_pong:
 	g++ test/pong.cpp -Iinc -Llib -lPIVO -Wl,-rpath=lib -o test/bin/pong -std=c++23
 
-main: compile_main
-	test/bin/main
+shapes: compile_shapes
+	test/bin/shapes
 pong: compile_pong
 	test/bin/pong

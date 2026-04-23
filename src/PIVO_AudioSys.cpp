@@ -65,6 +65,9 @@ void Audio::resume(){
 void Audio::stop(std::uint32_t fadeOutFrames){
     Audio_Manager::stop(*this, fadeOutFrames);
 }
+float Audio::getVolume(){ return _volume; }
+void Audio::setVolume(float volume){ Audio_Manager::setVolume(*this, volume); }
+void Audio::changeVolume(float delta){ Audio_Manager::changeVolume(*this, delta); }
 
 // === Audio_Manager ===
 

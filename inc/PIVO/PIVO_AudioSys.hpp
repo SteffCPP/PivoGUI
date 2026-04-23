@@ -58,6 +58,17 @@ public:
     /// If the audio is not paused, this function does nothing.
     void resume();
 
+    /// Returns the volume of the Audio.
+    float getVolume();
+
+    /// Sets the volume of the Audio.
+    /// @param volume Volume in range [0.0 - 1.0].
+    void setVolume(float volume);
+
+    /// Changes the volume of an Audio.
+    /// @param delta Volume delta in range [-1.0 - 1.0].
+    void changeVolume(float delta);
+
     /// Stops the audio.
     /// If the audio is not playing or paused, this function does nothing.
     /// @param fadeOutFrames Number of frames used for fade-out before stopping.
