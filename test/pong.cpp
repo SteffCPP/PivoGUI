@@ -1,61 +1,71 @@
 #include <iostream>
-#include "EGUI/EGUI.hpp"
-
-constexpr size_t WIN_H = 1000;
-constexpr size_t WIN_W = 900;
-
-void checkPadelPos(egui::Widget& pad){
-	if(pad.getPosition().y + pad.getSize().y>=WIN_H) pad.setPosition({pad.getPosition().x, WIN_H - pad.getSize().y});
-	if(pad.getPosition().y<=0) pad.setPosition({pad.getPosition().x, 0});
-}
-
-bool collisionPadBall(egui::Rectangle& pad, egui::Circle& ball){
-	float cx = ball.getPosition().x + ball.getRadius();
-	float cy = ball.getPosition().y + ball.getRadius();
-	
-	float closestX = std::clamp(cx, pad.getPosition().x, pad.getPosition().x + pad.getSize().x);
-	float closestY = std::clamp(cy, pad.getPosition().y, pad.getPosition().y + pad.getSize().y);
-
-	float dx = cx - closestX;
-	float dy = cy - closestY;
-
-	return (dx*dx + dy*dy) <= (ball.getRadius() * ball.getRadius());
-}
+#include "PIVO/PIVO.hpp"
 
 int main(){
-	egui::Window win("Finestra", {WIN_W, WIN_H}, egui::colors::Black);
+	pivo::Vector2D* winSize = new pivo::Vector2D(900, 800);
+	pivo::Window win{"Pong!", winSize, pivo::colors::Gray};
 
-	egui::Circle ball(5.0f, {400, 400}, egui::colors::White);
-	egui::Rectangle pad1({10, 90}, {100, 400}, egui::colors::White);
-	egui::Rectangle pad2({10, 90}, {800, 400}, egui::colors::White);
-
-	win.assign(ball);
+	pivo::Rectangle pad1{{10, 100}, {100, winSize->y/2}, pivo::colors::White};
+	pivo::Rectangle pad2{{10, 100}, {winSize->x-100, winSize->y/2}, pivo::colors::White};
 	win.assign(pad1);
 	win.assign(pad2);
 
-	float ballDeltaX=4.0f, ballDeltaY=4.0f;
+	pivo::Circle ball{5.0f, {winSize->x/2, winSize->y/2}, pivo::colors::White};
+	ball.setPivot(pivo::Circle::Pivot::CENTER);
+	win.assign(ball);
+
+	float ballDeltaX = 5;
+	float ballDeltaY = 5;
+
+	std::uint16_t score1=0, score2=0;
+
+	auto reset = [&ball, &pad1, &pad2, winSize](){
+		pad1.setPosition({100, winSize->y/2});
+		pad2.setPosition({winSize->x-100, winSize->y/2});
+		ball.setPosition({winSize->x/2, winSize->y/2});
+	};
+
 	while(win.isOpen()){
-		win.update();
+		pivo::Input_Manager::update();
 
-		if(egui::Keyboard::isDown(egui::Key::W)) pad1.move({0, -5});
-		if(egui::Keyboard::isDown(egui::Key::S)) pad1.move({0, 5});
-
-		if(egui::Keyboard::isDown(egui::Key::UP)) pad2.move({0, -5});
-		if(egui::Keyboard::isDown(egui::Key::DOWN)) pad2.move({0, 5});
-
-		checkPadelPos(pad1);
-		checkPadelPos(pad2);
-
-		if(ball.getPosition().y>=WIN_H) ballDeltaY*=-1;
-		if(ball.getPosition().y<=0) ballDeltaY*=-1;
-
-		if(ball.getPosition().x>=WIN_W) ballDeltaX*=-1;
-		if(ball.getPosition().x<=0) ballDeltaX*=-1;
-
-		if(collisionPadBall(pad1, ball)) ballDeltaX*=-1;
-		if(collisionPadBall(pad2, ball)) ballDeltaX*=-1;
+		// Manage ball collision
+		if(pad1.containsPoint(ball.getPosition())){
+			ballDeltaX*=-1;
+			if(ball.getPosition().y<=pad1.getPosition().y) ballDeltaY*=-1;
+		}else if(pad2.containsPoint(ball.getPosition())){
+			ballDeltaX*=-1;
+			if(ball.getPosition().y<=pad2.getPosition().y) ballDeltaY*=-1;
+		}else if(ball.getPosition().y<=0) ballDeltaY*=-1;
+		else if(ball.getPosition().y>=winSize->y) ballDeltaY*=-1;
 
 		ball.move({ballDeltaX, ballDeltaY});
+		
+		// Manage pads inputs
+		// Pad1
+		if(pivo::Keyboard::isDown(pivo::Key::W))
+			if(pad1.getPosition().y>0) pad1.move({0, -7});
+		if(pivo::Keyboard::isDown(pivo::Key::S))
+			if(pad1.getPosition().y+pad1.getSize().y<winSize->y) pad1.move({0, 7});
+		
+		// Pad2
+		if(pivo::Keyboard::isDown(pivo::Key::UP))
+			if(pad2.getPosition().y>0) pad2.move({0, -7});
+		if(pivo::Keyboard::isDown(pivo::Key::DOWN))
+			if(pad2.getPosition().y+pad2.getSize().y<winSize->y) pad2.move({0, 7});
+
+		// Check if point
+		if(ball.getPosition().x<=0){
+			score2++;
+			reset();
+		}else if(ball.getPosition().x>=winSize->x){
+			score1++;
+			reset();
+		}
+		
+		
+		win.update();
 	}
+
+	delete winSize;
 	return 0;
 }

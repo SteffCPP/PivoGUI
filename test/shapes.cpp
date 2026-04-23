@@ -22,8 +22,8 @@ int main(){
 	win.assign(circle);
 
 	pivo::TextLabel label;
-	label.text.loadFont("test/fonts/retro_gaming.ttf", 30);
-	label.text.setText("Hello World!");
+	label.text.loadFont("test/fonts/retro_gaming.ttf", 50);
+	label.text.setText("Chopin!!!");
 	label.text.setColor(pivo::colors::Gray);
 	label.setPosition({700, 40});
 	label.setSize({300, 100});
