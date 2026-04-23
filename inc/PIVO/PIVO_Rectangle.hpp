@@ -28,18 +28,18 @@ copies or substantial portions of the Software.
 struct SDL_Rect;
 
 namespace pivo{
-	class Rectangle : public Widget, public texturable, public sizeable, public rotatable {
+	class Rectangle : public Widget, public texturable, public sizeable, public rotatable, public borderable, public pivotable, public positionable {
 public:
     /// Constructs a Rectangle with size, position, colors and rotation.
     /// @param size Size of the rectangle (width, height).
     /// @param pos Position of the rectangle in world space.
-    /// @param bgColor Background color (default = red).
+    /// @param color Background color (default = red).
     /// @param bdWidth Border thickness in pixels (default = 0).
     /// @param bdColor Border color (default = transparent).
     /// @param rotRad Rotation in radians (default = 0).
     Rectangle(const Vector2D& size,
               const Vector2D& pos,
-              const Color_RGBA& bgColor = colors::Red,
+              const Color_RGBA& color = colors::Red,
               const float bdWidth = 0,
               const Color_RGBA& bdColor = colors::Transparent,
               const float rotRad = 0);

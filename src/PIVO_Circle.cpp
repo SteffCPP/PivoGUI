@@ -39,31 +39,30 @@ bool Circle::containsPoint(const Vector2D& point) const {
 }
 Circle::Circle(	const float radius, 
 				const Vector2D& pos,
-				const Color_RGBA& bgColor, 
+				const Color_RGBA& color, 
 				const float bdWidth, 
 				const Color_RGBA& bdColor){
 	_radius = radius;
 	_pos = pos;
-	_backgroundColor = bgColor;
+	_color = color;
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
 }
 Circle::Circle(){}
 
 Vector2D Circle::_computePivotOffset() const {
-	Vector2D _size = {_radius*2, _radius*2};
 	switch(_pivot){
 		case Pivot::TOP_LEFT:     return {0, 0};
-		case Pivot::TOP:          return {-_size.x / 2, 0};
-		case Pivot::TOP_RIGHT:    return {-_size.x, 0};
+		case Pivot::TOP:          return {-_radius*2 / 2, 0};
+		case Pivot::TOP_RIGHT:    return {-_radius*2, 0};
 
-		case Pivot::LEFT:         return {0, -_size.y / 2};
-		case Pivot::CENTER:       return {-_size.x / 2, -_size.y / 2};
-		case Pivot::RIGHT:        return {-_size.x, -_size.y / 2};
+		case Pivot::LEFT:         return {0, -_radius*2 / 2};
+		case Pivot::CENTER:       return {-_radius*2 / 2, -_radius*2 / 2};
+		case Pivot::RIGHT:        return {-_radius*2, -_radius*2 / 2};
 
-		case Pivot::BOTTOM_LEFT:  return {0, -_size.y};
-		case Pivot::BOTTOM:       return {-_size.x / 2, -_size.y};
-		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
+		case Pivot::BOTTOM_LEFT:  return {0, -_radius*2};
+		case Pivot::BOTTOM:       return {-_radius*2 / 2, -_radius*2};
+		case Pivot::BOTTOM_RIGHT: return {-_radius*2, -_radius*2};
 	}
 	return {0, 0};
 }
@@ -84,13 +83,13 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 
 	SDL_SetRenderDrawColor(
 		__renderer,
-		_backgroundColor.r,
-		_backgroundColor.g,
-		_backgroundColor.b,
-		_backgroundColor.a
+		_color.r,
+		_color.g,
+		_color.b,
+		_color.a
 	);
 
-	_drawFilledCircle(__renderer, cx, cy, rInner, _backgroundColor);
+	_drawFilledCircle(__renderer, cx, cy, rInner, _color);
 
 	if (_hasImage) {
 		Texture_Manager::load(_img);

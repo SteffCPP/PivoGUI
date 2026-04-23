@@ -42,11 +42,12 @@ public:
     Points getPoints() const;
 
     virtual bool containsPoint(const Vector2D& point) const override;
+
+    Line();
+    Line(const Vector2D pointA, const Vector2D pointB, Color_RGBA color=pivo::colors::Red);
 private:
     Points _points;
 
     virtual void _draw(SDL_Renderer* __renderer) override;
-
-    virtual Vector2D _computePivotOffset() const override;
 };
 }

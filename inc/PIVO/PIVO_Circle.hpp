@@ -29,32 +29,31 @@ copies or substantial portions of the Software.
 #include <vector>
 
 namespace pivo{
-	class Circle : public Widget, public texturable, public rotatable{
-	public:
-		// Returns the radius of the circle. 
-		float getRadius() const;
-		// Set the radius of the circle. 
-		void setRadius(float radius);
+class Circle : public Widget, public texturable, public rotatable, public borderable, public pivotable, public positionable{
+public:
+	// Returns the radius of the circle. 
+	float getRadius() const;
+	// Set the radius of the circle. 
+	void setRadius(float radius);
 
-		Circle(	const float radius, 
-				const Vector2D& pos,
-				const Color_RGBA& bgColor=colors::Red, 
-				const float bdWidth=0, 
-				const Color_RGBA& bdColor=colors::Transparent);
-		Circle();
+	Circle(	const float radius, 
+			const Vector2D& pos,
+			const Color_RGBA& color=colors::Red, 
+			const float bdWidth=0, 
+			const Color_RGBA& bdColor=colors::Transparent);
+	Circle();
 
-		virtual bool containsPoint(const Vector2D& point) const override;
-	private:
-		virtual void _draw(SDL_Renderer* __renderer) override;
-		virtual Vector2D _computePivotOffset() const override;
+	virtual bool containsPoint(const Vector2D& point) const override;
+private:
+	virtual void _draw(SDL_Renderer* __renderer) override;
+	virtual Vector2D _computePivotOffset() const override;
 
+	inline void _drawFilledCircle(	SDL_Renderer* __renderer, 
+									const float __cx,
+									const float __cy,
+									const float __radius,
+									const Color_RGBA& __color);
 
-		inline void _drawFilledCircle(	SDL_Renderer* __renderer, 
-										const float __cx,
-										const float __cy,
-										const float __radius,
-										const Color_RGBA& __color);
-
-		float _radius{0};
-	};
+	float _radius{0};
+};
 }

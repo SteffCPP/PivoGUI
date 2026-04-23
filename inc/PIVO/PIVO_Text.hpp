@@ -138,9 +138,8 @@ private:
     friend class TextLabelInput;
 };
 
-class TextLabel : public Widget, public sizeable, public rotatable{
+class TextLabel : public Widget, public sizeable, public rotatable, public borderable, public pivotable, public positionable{
 public:
-
     /// Textbox alignment inside the label.
     enum class TextBoxAlignment {
         TOP_LEFT,

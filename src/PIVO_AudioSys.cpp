@@ -35,6 +35,12 @@ Audio::Audio(const std::string& path)
     : _path(path) {
     Audio_Manager::load(*this);
 }
+Audio::~Audio(){
+    MIX_DestroyTrack(_mixtrack);
+    MIX_DestroyAudio(_mixaudio);
+    _mixtrack = nullptr;
+    _mixaudio = nullptr;
+}
 std::string Audio::getPath() const {
     return _path;
 }

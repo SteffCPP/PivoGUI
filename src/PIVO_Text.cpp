@@ -181,7 +181,11 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
     SDL_RenderClear(__renderer);
 
     SDL_SetRenderDrawColor(__renderer,
-        _borderColor.r, _borderColor.g, _borderColor.b, _borderColor.a);
+        _color.r, 
+        _color.g, 
+        _color.b, 
+        _color.a
+    );
     SDL_RenderFillRect(__renderer, nullptr);
 
     SDL_FRect innerRect{
@@ -192,7 +196,11 @@ void TextLabel::_draw(SDL_Renderer* __renderer){
     };
 
     SDL_SetRenderDrawColor(__renderer,
-        _backgroundColor.r, _backgroundColor.g, _backgroundColor.b, _backgroundColor.a);
+        _color.r, 
+        _color.g, 
+        _color.b, 
+        _color.a
+    );
     SDL_RenderFillRect(__renderer, &innerRect);
 
     SDL_SetRenderTarget(__renderer, nullptr);

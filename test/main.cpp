@@ -15,9 +15,13 @@ int main(){
 	
 	pivo::Rectangle ground{{winSize.x, 500}, {0, winSize.y-300}, pivo::colors::Green};
 	win.assign(ground);
-	
+
 	//pivo::Audio chopinNocturne("test/audio/chopinNocturneFMinor.mp3");
 	//chopinNocturne.play();
+
+	pivo::Line line{{30, 40}, {600, 600}};
+	win.assign(line);
+	
 
 	int accel=0;
 	bool canJump=true;

@@ -47,10 +47,6 @@ public:
         PAUSED     ///< The track is currently paused and can be resumed.
     };
 
-    /// Constructs an Audio instance from a file path.
-    /// @param path Path of the audio file relative to the project root.
-    Audio(const std::string& path);
-
     /// Plays the audio.
     void play();
 
@@ -83,6 +79,10 @@ public:
     /// @return True if playing, false otherwise.
     bool isPlaying() const;
 
+    /// Constructs an Audio instance from a file path.
+    /// @param path Path of the audio file relative to the project root.
+    Audio(const std::string& path);
+    ~Audio();
 private:
     MIX_Track* _mixtrack{nullptr};
     MIX_Audio* _mixaudio{nullptr};

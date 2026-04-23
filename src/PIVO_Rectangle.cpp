@@ -37,14 +37,14 @@ bool Rectangle::containsPoint(const Vector2D& point) const {
 
 Rectangle::Rectangle(	const Vector2D& size, 
 						const Vector2D& pos, 
-						const Color_RGBA& bgColor, 
+						const Color_RGBA& color,
 						const float bdWidth, 
 						const Color_RGBA& bdColor, 
 						const float rotDeg){
 			
 	_size = size;
 	_pos = pos;
-	_backgroundColor = bgColor;
+	_color = color;
 	_borderWidth = bdWidth;
 	_borderColor = bdColor;
 	_rotation = rotDeg;
@@ -112,10 +112,10 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
 		SDL_SetRenderDrawColor(
 			__renderer,
-			_backgroundColor.r,
-			_backgroundColor.g,
-			_backgroundColor.b,
-			_backgroundColor.a
+			_color.r,
+			_color.g,
+			_color.b,
+			_color.a
 		);
 		SDL_RenderFillRect(__renderer, &innerRect);
 
@@ -173,10 +173,10 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 
     SDL_SetRenderDrawColor(
         __renderer,
-        _backgroundColor.r,
-        _backgroundColor.g,
-        _backgroundColor.b,
-        _backgroundColor.a
+        _color.r,
+        _color.g,
+        _color.b,
+        _color.a
     );
     SDL_RenderFillRect(__renderer, &innerRect);
 

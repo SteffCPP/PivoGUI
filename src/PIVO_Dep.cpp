@@ -36,16 +36,18 @@ void rotatable::setRotation(double deg){ _rotation = deg; }
 double rotatable::getRotation() const{ return _rotation; }
 bool rotatable::_hasRotation() const { return _rotation != 0.0; }
 
+// === borderable ===
+
+Color_RGBA borderable::getBorderColor() const { return _borderColor; }
+void borderable::setBorderColor(const Color_RGBA& color) { _borderColor = color; }
+		
+void borderable::setBorderWidth(const float width){ _borderWidth = width; }
+float borderable::getBorderWidth() const { return _borderWidth; }
+
 // === drawable ===
 
-Color_RGBA drawable::getBackgroundColor() const { return _backgroundColor; }
-Color_RGBA drawable::getBorderColor() const { return _borderColor; }
-
-void drawable::setBackgroundColor(const Color_RGBA& color) { _backgroundColor = color; }
-void drawable::setBorderColor(const Color_RGBA& color) { _borderColor = color; }
-		
-void drawable::setBorderWidth(const float width){ _borderWidth = width; }
-float drawable::getBorderWidth() const { return _borderWidth; }
+Color_RGBA drawable::getColor() const { return _color; }
+void drawable::setColor(const Color_RGBA& color) { _color = color; }
 
 void drawable::toggleHide(const bool flag){ _hide = flag; }
 
@@ -66,32 +68,15 @@ void texturable::assignImage(const Image img){ _img = img; _hasImage = true; }
 void texturable::assignImage(const std::string& path){ _img.setPath(path); _hasImage = true; }
 void texturable::removeImage(){ _hasImage = false; }
 
-texturable::texturable(){}
+// === pivotable ===
+
+pivotable::Pivot pivotable::getPivot() const { return _pivot; }
+void pivotable::setPivot(const Pivot& pivot){ _pivot = pivot; }
 
 // === positionable ===
 
 Vector2D positionable::getPosition() const { return _pos; }
 void positionable::setPosition(const Vector2D& pos) { _pos = pos; }
 
-positionable::Pivot positionable::getPivot() const { return _pivot; }
-void positionable::setPivot(const Pivot& pivot){ _pivot = pivot; }
-
 void positionable::move(const Vector2D& delta) { _pos = _pos + delta; }
-
-/*Vector2D positionable::_computePivotOffset() const {
-	switch(_pivot){
-		case Pivot::TOP_LEFT:     return {0, 0};
-		case Pivot::TOP:          return {-_size.x / 2, 0};
-		case Pivot::TOP_RIGHT:    return {-_size.x, 0};
-
-		case Pivot::LEFT:         return {0, -_size.y / 2};
-		case Pivot::CENTER:       return {-_size.x / 2, -_size.y / 2};
-		case Pivot::RIGHT:        return {-_size.x, -_size.y / 2};
-
-		case Pivot::BOTTOM_LEFT:  return {0, -_size.y};
-		case Pivot::BOTTOM:       return {-_size.x / 2, -_size.y};
-		case Pivot::BOTTOM_RIGHT: return {-_size.x, -_size.y};
-	}
-	return {0, 0};
-}*/
 }

@@ -28,16 +28,39 @@ namespace pivo{
 void Line::setPoints(Vector2D& a, Vector2D& b){ _points = {a, b}; }
 Line::Points Line::getPoints() const { return _points; }
 bool Line::containsPoint(const Vector2D& point) const {
+    int x1 = _points.a.x;
+    int y1 = _points.a.y;
 
+    int x2 = _points.b.x;
+    int y2 = _points.b.y;
+
+    int x0 = point.x;
+    int y0 = point.y;
+
+    int distance = std::abs((y2-y1)*x0 - (x2-x1)*y0 + x2*y1 - y2*x1)/std::sqrt((y2-y1)*(y2-y1) + (x2-x1)*(x2-x1));
+    return distance == 0;
 }
+
+Line::Line(){}
+Line::Line(const Vector2D pointA, const Vector2D pointB, Color_RGBA color){
+    _points.a = pointA;
+    _points.b = pointB;
+    _color = color;
+}
+
 void Line::_draw(SDL_Renderer* __renderer){
     if(_hide) return;
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
 
-    
+    SDL_SetRenderDrawColor(
+		__renderer,
+		_color.r,
+		_color.g,
+		_color.b,
+		_color.a
+    );
+    SDL_RenderLine(__renderer, _points.a.x, _points.a.y, _points.b.x, _points.b.y);
 
-}
-Vector2D Line::_computePivotOffset() const { 
-    return {0, 0};
+    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
 }

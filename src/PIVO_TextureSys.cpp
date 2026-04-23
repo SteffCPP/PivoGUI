@@ -37,6 +37,11 @@ void Image::setPath(const std::string& path){ _path = path; }
 Image::Image(const std::string& path){ _path = path; }
 Image::Image(){}
 
+Image::~Image(){
+    SDL_DestroyTexture(_sdltexture);
+    _sdltexture = nullptr;
+}
+
 // === Texture_Manager ===
 
 void Texture_Manager::_init(SDL_Renderer* renderer) {
@@ -48,15 +53,9 @@ SDL_Texture* const Texture_Manager::getSDLTexture(const Image& img){
 }
 
 bool Texture_Manager::load(Image& img) {
-    if(auto it=_cache.find(img._id); it!=_cache.end()){
-        return false;
-    }
-
-    std::uint32_t randID = math::generateRandNum<std::uint32_t>(1, 0x90000000);
-    auto it=_cache.find(img._id);
-    while(it!=_cache.end()){
-        randID = math::generateRandNum<std::uint32_t>(1, 0x90000000);
-        it=_cache.find(img._id);
+    if(img._sdltexture!=nullptr){
+        img._refCount++;
+        return true;
     }
 
     SDL_Surface* surface = IMG_Load(img._path.c_str());
@@ -72,39 +71,19 @@ bool Texture_Manager::load(Image& img) {
         return false;
     }
 
-    _cache.emplace(img._id, img);
-    _refCount[img._id] = 1;
+    img._refCount=1;
 
     return true;
 }
 
 bool Texture_Manager::unload(Image& img) {
-    auto it = _cache.find(img._id);
-    if (it==_cache.end()) return false;
+    if (img._sdltexture==nullptr) return true;
 
-    if (--_refCount[img._id] <= 0) {
-        SDL_DestroyTexture(it->second._sdltexture);
-        _cache.erase(it);
-        _refCount.erase(it->second._id);
-
+    if (--img._refCount <= 0) {
+        SDL_DestroyTexture(img._sdltexture);
         img._sdltexture = nullptr;
-        img._id = 0;
     }
     
     return true;
-}
-
-void Texture_Manager::clear() {
-    for (auto& [id, img] : _cache) {
-        SDL_DestroyTexture(img._sdltexture);
-        img._sdltexture = nullptr;
-        img._id = 0;
-    }
-    _cache.clear();
-    _refCount.clear();
-}
-
-bool Texture_Manager::exists(const Image& img) {
-    return _cache.contains(img._id);
 }
 }

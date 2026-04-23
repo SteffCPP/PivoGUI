@@ -41,16 +41,14 @@ public:
     /// @param path New image file path.
     void setPath(const std::string& path);
 
-    /// Constructs an Image with a given file path.
     /// @param path Path to the image file.
     Image(const std::string& path);
 
-    /// Default constructor.
-    /// Creates an empty Image with no path assigned.
     Image();
+    ~Image();
 private:
     std::string _path{""};
-    std::uint32_t _id{0};
+    std::uint32_t _refCount{0};
     SDL_Texture* _sdltexture{nullptr};
 
     friend class Texture_Manager;
@@ -64,20 +62,12 @@ class Texture_Manager {
 public:
     /// Loads a texture from file or returns cached version if already loaded.
     /// @param path Path of the image file.
-    /// @return SDL_Texture pointer (cached).
+    /// @return bool if operation succeded. If it returns true it doesn't mean the texture is not loaded already.
     static bool load(Image& img);
 
     /// Removes a texture from cache and destroys it.
     /// @param path Path of the texture to remove.
     static bool unload(Image& img);
-
-    /// Clears all cached textures.
-    static void clear();
-
-    /// Checks if a texture is already cached.
-    /// @param path Texture path.
-    /// @return True if texture exists in cache.
-    static bool exists(const Image& img);
 
     static SDL_Texture* const getSDLTexture(const Image& img);
 private:
@@ -85,11 +75,6 @@ private:
     static void _init(SDL_Renderer* renderer);
 
     static inline SDL_Renderer* _renderer{nullptr};
-
-    //                                     ID,   Audio Object
-    static inline std::unordered_map<std::uint32_t, Image> _cache{};
-    //                                     ID,    References Nunmber
-    static inline std::unordered_map<std::uint32_t, std::uint32_t> _refCount{};
 
     friend class Window;
 };

@@ -70,21 +70,13 @@ protected:
     double _rotation{0};
 };
 
-class drawable {
+class borderable{
 public:
-    virtual ~drawable() = default;
-
-    /// Gets the background color.
-    /// @return Current background color.
-    virtual Color_RGBA getBackgroundColor() const;
+    virtual ~borderable() = default;
 
     /// Gets the border color.
     /// @return Current border color.
     virtual Color_RGBA getBorderColor() const;
-
-    /// Sets the background color.
-    /// @param color New background color.
-    virtual void setBackgroundColor(const Color_RGBA& color);
 
     /// Sets the border color.
     /// @param color New border color.
@@ -97,6 +89,22 @@ public:
     /// Gets the border width.
     /// @return Border thickness in pixels.
     virtual float getBorderWidth() const;
+protected:
+    Color_RGBA _borderColor{colors::Transparent};
+    float _borderWidth{0};
+};
+
+class drawable {
+public:
+    virtual ~drawable() = default;
+
+    /// Gets the background color.
+    /// @return Current color.
+    virtual Color_RGBA getColor() const;
+
+    /// Sets the background color.
+    /// @param color New background color.
+    virtual void setColor(const Color_RGBA& color);
 
     /// Hides or shows the object.
     /// @param flag True to hide, false to show.
@@ -107,9 +115,7 @@ protected:
     /// @param __renderer SDL renderer context.
     virtual void _draw(SDL_Renderer* __renderer) = 0;
 
-    Color_RGBA _backgroundColor{colors::Black};
-    Color_RGBA _borderColor{colors::Transparent};
-    float _borderWidth{0};
+    Color_RGBA _color{colors::Black};
 
     bool _hide{false};
 };
@@ -210,6 +216,8 @@ private:
 
 class texturable {
 public:
+    virtual ~texturable() = default;
+
     /// Assigns an image to the object.
     /// @param img Image resource to assign.
     virtual void assignImage(const Image img);
@@ -220,17 +228,15 @@ public:
 
     /// Removes the current image.
     virtual void removeImage();
-
-    texturable();
-
 protected:
     bool _hasImage{false};
     Image _img;
 };
 
-class positionable {
+class pivotable{
 public:
-    /// Pivot point for transformations.
+    virtual ~pivotable() = default;
+
     enum class Pivot {
         TOP,
         TOP_LEFT,
@@ -243,6 +249,24 @@ public:
         CENTER
     };
 
+    /// Gets the current pivot type.
+    /// @return Pivot mode.
+    virtual Pivot getPivot() const;
+
+    /// Sets the pivot type.
+    /// @param pivot New pivot mode.
+    virtual void setPivot(const Pivot& pivot);
+
+protected:
+    /// Computes pivot offset based on size and pivot mode.
+    /// @return Offset vector.
+    virtual Vector2D _computePivotOffset() const = 0;
+
+    Pivot _pivot{Pivot::TOP_LEFT};
+};
+
+class positionable {
+public:
     virtual ~positionable() = default;
 
     /// Gets the position of the object.
@@ -253,25 +277,11 @@ public:
     /// @param pos New position.
     virtual void setPosition(const Vector2D& pos);
 
-    /// Gets the current pivot type.
-    /// @return Pivot mode.
-    virtual Pivot getPivot() const;
-
-    /// Sets the pivot type.
-    /// @param pivot New pivot mode.
-    virtual void setPivot(const Pivot& pivot);
-
     /// Moves the object by delta.
     /// @param delta Movement offset.
     virtual void move(const Vector2D& delta);
 
 protected:
-    /// Computes pivot offset based on size and pivot mode.
-    /// @return Offset vector.
-    virtual Vector2D _computePivotOffset() const = 0;
-
-    Pivot _pivot{Pivot::TOP_LEFT};
-
     Vector2D _pos{0, 0};
 };
 }
