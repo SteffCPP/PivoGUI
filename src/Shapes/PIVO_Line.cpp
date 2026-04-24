@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Shapes/PIVO_Line.hpp"
+#include "PIVO/Shapes/PIVO_Line.hpp"
 #include "../PIVO_SDL.cpp"
 
 namespace pivo{

@@ -21,8 +21,8 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Dep.hpp"
-#include "Systems/PIVO_TextureSys.hpp"
+#include "PIVO/PIVO_Dep.hpp"
+#include "PIVO/Systems/PIVO_TextureSys.hpp"
 
 namespace pivo{
 // === sizeable ===
@@ -64,9 +64,9 @@ void interactable::_triggerRelease() const { if(_onRelease) _onRelease(); }
 
 // === texturable ===
 
-void texturable::assignImage(const Image img){ _img = img; _hasImage = true; }
-void texturable::assignImage(const std::string& path){ _img.setPath(path); _hasImage = true; }
-void texturable::removeImage(){ _hasImage = false; }
+void texturable::assignTexture(const Texture& t){ _texture = t; _hasTexture = true; }
+void texturable::assignTexture(const std::string& path){ _texture.setPath(path); _hasTexture = true; }
+void texturable::removeTexture(){ _hasTexture = false; }
 
 // === pivotable ===
 

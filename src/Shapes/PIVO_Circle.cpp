@@ -21,9 +21,10 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Shapes/PIVO_Circle.hpp"
+#include "PIVO/Shapes/PIVO_Circle.hpp"
+#include "PIVO/Systems/PIVO_TextureSys.hpp"
 #include "../PIVO_SDL.cpp"
-#include "Systems/PIVO_TextureSys.hpp"
+
 
 #include <iostream>
 
@@ -91,8 +92,8 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 
 	_drawFilledCircle(__renderer, cx, cy, rInner, _color);
 
-	if (_hasImage) {
-		Texture_Manager::load(_img);
+	if (_hasTexture) {
+		Texture_Manager::load(_texture);
 
 		float innerRadius = _radius - _borderWidth;
 		if (innerRadius < 0) innerRadius = 0;
@@ -111,7 +112,7 @@ void Circle::_draw(SDL_Renderer* __renderer) {
 
 		SDL_RenderTextureRotated(
 			__renderer,
-			Texture_Manager::getSDLTexture(_img),
+			Texture_Manager::getSDLTexture(_texture),
 			nullptr,
 			&dst,
 			_rotation,

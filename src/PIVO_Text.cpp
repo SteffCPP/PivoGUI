@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Text.hpp"
+#include "PIVO/PIVO_Text.hpp"
 #include "PIVO_SDL.cpp"
 
 #include <iostream>

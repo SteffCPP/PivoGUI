@@ -21,9 +21,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Systems/PIVO_AudioSys.hpp"
+#include "PIVO/Systems/PIVO_AudioSys.hpp"
+#include "PIVO/PIVO_Math.hpp"
 #include "../PIVO_SDL.cpp"
-#include "PIVO_Math.hpp"
 
 #include <iostream>
 

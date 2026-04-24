@@ -21,38 +21,34 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Systems/PIVO_TextureSys.hpp"
-#include "PIVO_Math.hpp"
+#include "PIVO/Systems/PIVO_TextureSys.hpp"
+#include "PIVO/PIVO_Math.hpp"
 #include "../PIVO_SDL.cpp"
 
 #include <iostream>
 #include <cinttypes>
 
 namespace pivo{
-// === Image ===
+// === Texture ===
 
-std::string Image::getPath() const { return _path; }
-void Image::setPath(const std::string& path){ _path = path; }
+std::string Texture::getPath() const { return _path; }
+void Texture::setPath(const std::string& path){ _path = path; }
 
-Image::Image(const std::string& path){ _path = path; }
-Image::Image(){}
+Texture::Texture(const std::string& path){ _path = path; }
+Texture::Texture(){}
 
-Image::~Image(){
+Texture::~Texture(){
     SDL_DestroyTexture(_sdltexture);
     _sdltexture = nullptr;
 }
 
 // === Texture_Manager ===
 
-void Texture_Manager::_init(SDL_Renderer* renderer) {
-    _renderer = renderer;
-}
+void Texture_Manager::_init(SDL_Renderer* renderer) { _renderer = renderer; }
 
-SDL_Texture* const Texture_Manager::getSDLTexture(const Image& img){
-    return img._sdltexture;
-}
+SDL_Texture* const Texture_Manager::getSDLTexture(const Texture& img){ return img._sdltexture; }
 
-bool Texture_Manager::load(Image& img) {
+bool Texture_Manager::load(Texture& img) {
     if(img._sdltexture!=nullptr){
         img._refCount++;
         return true;
@@ -76,7 +72,7 @@ bool Texture_Manager::load(Image& img) {
     return true;
 }
 
-bool Texture_Manager::unload(Image& img) {
+bool Texture_Manager::unload(Texture& img) {
     if (img._sdltexture==nullptr) return true;
 
     if (--img._refCount <= 0) {

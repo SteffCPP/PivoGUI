@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Primitives/PIVO_Color.hpp"
+#include "PIVO/Primitives/PIVO_Color.hpp"
 
 namespace pivo{
 Color_RGBA::Color_RGBA(const std::uint8_t R, const std::uint8_t G, const std::uint8_t B, const std::uint8_t A){

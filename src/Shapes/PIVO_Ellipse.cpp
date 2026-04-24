@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Shapes/PIVO_Ellipse.hpp"
+#include "PIVO/Shapes/PIVO_Ellipse.hpp"
 #include "../PIVO_SDL.cpp"
 
 #include <vector>
@@ -103,8 +103,8 @@ void Ellipse::_draw(SDL_Renderer* __renderer){
     }
 
     SDL_Texture* tex = nullptr;
-    if(_hasImage){
-        tex = Texture_Manager::getSDLTexture(_img);
+    if(_hasTexture){
+        tex = Texture_Manager::getSDLTexture(_texture);
         SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
     }
 

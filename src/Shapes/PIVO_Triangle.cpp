@@ -21,7 +21,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Shapes/PIVO_Triangle.hpp"
+#include "PIVO/Shapes/PIVO_Triangle.hpp"
 #include "../PIVO_SDL.cpp"
 
 namespace pivo{
@@ -89,9 +89,10 @@ void Triangle::_draw(SDL_Renderer* __renderer){
 
     SDL_Texture* tex = nullptr;
 
-    if(_hasImage)
-        tex = Texture_Manager::getSDLTexture(_img);
-    
+    if(_hasTexture){
+        Texture_Manager::load(_texture);
+        tex = Texture_Manager::getSDLTexture(_texture);
+    }
 
     SDL_RenderGeometry(__renderer, tex, v, 3, nullptr, 0);
 

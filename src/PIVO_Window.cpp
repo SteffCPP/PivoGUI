@@ -21,10 +21,10 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Window.hpp"
+#include "PIVO/PIVO_Window.hpp"
+#include "PIVO/Systems/PIVO_InputSys.hpp"
+#include "PIVO/Systems/PIVO_AudioSys.hpp"
 #include "PIVO_SDL.cpp"
-#include "Systems/PIVO_InputSys.hpp"
-#include "Systems/PIVO_AudioSys.hpp"
 
 #include <iostream>
 #include <utility>

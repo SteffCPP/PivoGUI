@@ -218,19 +218,19 @@ class texturable {
 public:
     virtual ~texturable() = default;
 
-    /// Assigns an image to the object.
-    /// @param img Image resource to assign.
-    virtual void assignImage(const Image img);
+    /// Assigns an Texture to the object.
+    /// @param texture Texture resource to assign.
+    virtual void assignTexture(const Texture& texture);
 
-    /// Assigns an image from file path.
-    /// @param path Path to image file.
-    virtual void assignImage(const std::string& path);
+    /// Assigns an Texture from file path.
+    /// @param path Path to Texture file.
+    virtual void assignTexture(const std::string& path);
 
-    /// Removes the current image.
-    virtual void removeImage();
+    /// Removes the current Texture.
+    virtual void removeTexture();
 protected:
-    bool _hasImage{false};
-    Image _img;
+    bool _hasTexture{false};
+    Texture _texture;
 };
 
 class pivotable{

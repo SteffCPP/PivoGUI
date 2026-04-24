@@ -31,21 +31,20 @@ struct SDL_Renderer;
 struct SDL_Texture;
 
 namespace pivo{
-class Image {
+class Texture {
 public:
-    /// Gets the file path of the image.
-    /// @return Path string of the image file.
+    /// Gets the file path of the texture.
     std::string getPath() const;
 
-    /// Sets the file path of the image.
-    /// @param path New image file path.
+    /// Sets the file path of the texture.
+    /// @param path New texture file path.
     void setPath(const std::string& path);
 
-    /// @param path Path to the image file.
-    Image(const std::string& path);
+    /// @param path Path to the texture file.
+    Texture(const std::string& path);
 
-    Image();
-    ~Image();
+    Texture();
+    ~Texture();
 private:
     std::string _path{""};
     std::uint32_t _refCount{0};
@@ -61,15 +60,15 @@ private:
 class Texture_Manager {
 public:
     /// Loads a texture from file or returns cached version if already loaded.
-    /// @param path Path of the image file.
+    /// @param path Path of the Texture file.
     /// @return bool if operation succeded. If it returns true it doesn't mean the texture is not loaded already.
-    static bool load(Image& img);
+    static bool load(Texture& img);
 
     /// Removes a texture from cache and destroys it.
     /// @param path Path of the texture to remove.
-    static bool unload(Image& img);
+    static bool unload(Texture& img);
 
-    static SDL_Texture* const getSDLTexture(const Image& img);
+    static SDL_Texture* const getSDLTexture(const Texture& img);
 private:
     /// Initializes the texture system.
     static void _init(SDL_Renderer* renderer);

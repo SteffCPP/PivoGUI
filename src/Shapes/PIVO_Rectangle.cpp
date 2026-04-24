@@ -21,8 +21,8 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "Shapes/PIVO_Rectangle.hpp"
-#include "Systems/PIVO_TextureSys.hpp"
+#include "PIVO/Shapes/PIVO_Rectangle.hpp"
+#include "PIVO/Systems/PIVO_TextureSys.hpp"
 #include "../PIVO_SDL.cpp"
 
 #include <iostream>
@@ -119,10 +119,9 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 		);
 		SDL_RenderFillRect(__renderer, &innerRect);
 
-		if (_hasImage) {
-			Texture_Manager::load(_img);
-
-			SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_img), NULL, &innerRect);
+		if (_hasTexture) {
+			Texture_Manager::load(_texture);
+			SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_texture), NULL, &innerRect);
 		}
 
 		SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
@@ -180,18 +179,9 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
     );
     SDL_RenderFillRect(__renderer, &innerRect);
 
-    if (_hasImage){
-        SDL_Surface* image = IMG_Load(_img.getPath().c_str());
-        if (!image){
-            std::cerr << "IMG_Load() error: " << SDL_GetError() << "\n";
-			return;
-        }
-        SDL_Texture* tex = SDL_CreateTextureFromSurface(__renderer, image);
-        SDL_RenderTexture(__renderer, tex, NULL, &innerRect);
-
-        SDL_DestroyTexture(tex);
-        SDL_DestroySurface(image);
-    }
+    if (_hasTexture)
+        SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_texture), NULL, &innerRect);
+    
 
     SDL_SetRenderTarget(__renderer, NULL);
 
@@ -212,7 +202,6 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
     );
 
     SDL_DestroyTexture(target);
-
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
 }
