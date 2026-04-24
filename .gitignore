@@ -3,5 +3,4 @@
 *.tar
 *.zip
 build/
-CMakeFiles
 .vscode
