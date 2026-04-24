@@ -68,9 +68,10 @@ void texturable::assignTexture(const Texture& t){ _texture = t; _hasTexture = tr
 void texturable::assignTexture(const std::string& path){ _texture.setPath(path); _hasTexture = true; }
 void texturable::removeTexture(){ _hasTexture = false; }
 
-void texturable::addAnimation(const std::string& name, SpriteAnimation anim){
+void texturable::addAnimation(const std::string& name, SpriteAnimation&& anim){
    if(name == "") return;
-   _anims.emplace(name, std::make_unique<SpriteAnimation>(std::move(anim)));
+   _anims.emplace(name, std::make_shared<SpriteAnimation>(std::move(anim)));
+   _hasAnim=true;
 }
 void texturable::playAnimation(const std::string& name){
    stopAnimation();
@@ -94,7 +95,10 @@ void texturable::resetAnimation(){
    _currAnim->reset();
 }
 
-void texturable::removeAnimation(std::string& name){ _anims.erase(name); }
+void texturable::removeAnimation(std::string& name){ 
+   _anims.erase(name); 
+   if(_anims.size()==0) _hasAnim=false;
+}
 
 // === pivotable ===
 

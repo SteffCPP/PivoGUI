@@ -4,8 +4,8 @@
 int main(){
 	pivo::Window win("Finestra", {1080, 900}, pivo::colors::Gray);
 
-	pivo::Audio chopinNocturne("test/audio/chopinNocturneFMinor.mp3");
-	chopinNocturne.play();
+	//pivo::Audio chopinNocturne("test/audio/chopinNocturneFMinor.mp3");
+	//chopinNocturne.play();
 
 	// === Shapes ===
 
@@ -41,9 +41,8 @@ int main(){
 
 	while(win.isOpen()){
 		pivo::Input_Manager::update();
-
-		if(pivo::Keyboard::isPressed(pivo::Key::UP)) chopinNocturne.changeVolume(0.1);
-		else if(pivo::Keyboard::isPressed(pivo::Key::DOWN)) chopinNocturne.changeVolume(-0.1);
+		//if(pivo::Keyboard::isPressed(pivo::Key::UP)) chopinNocturne.changeVolume(0.1);
+		//else if(pivo::Keyboard::isPressed(pivo::Key::DOWN)) chopinNocturne.changeVolume(-0.1);
 
 		win.update();
 	}

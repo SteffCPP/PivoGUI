@@ -236,7 +236,7 @@ public:
     /// Assigns an animation to the object.
     /// @param name Name to give to the animation.
     /// @param anim Animation resource to assign.
-    virtual void addAnimation(const std::string& name, SpriteAnimation anim);
+    virtual void addAnimation(const std::string& name, SpriteAnimation&& anim);
 
     /// PLay an animation. If an animation is currently playing it stops it.
     /// @param name Name of the animation.
@@ -260,7 +260,7 @@ protected:
     Texture _texture;
 
     SpriteAnimation* _currAnim{nullptr};
-    std::unordered_map<std::string, std::unique_ptr<SpriteAnimation>> _anims;
+    std::unordered_map<std::string, std::shared_ptr<SpriteAnimation>> _anims;
 };
 
 class pivotable{

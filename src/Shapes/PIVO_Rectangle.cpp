@@ -119,7 +119,7 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 			_color.a
 		);
 		SDL_RenderFillRect(__renderer, &innerRect);
-
+		
 		if(_hasAnim){
 			_currAnim->update(Window::getDeltaT());
 
