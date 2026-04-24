@@ -22,6 +22,7 @@ copies or substantial portions of the Software.
 */
 
 #include "PIVO/Shapes/PIVO_Rectangle.hpp"
+#include "PIVO/PIVO_Window.hpp"
 #include "PIVO/Systems/PIVO_TextureSys.hpp"
 #include "../PIVO_SDL.cpp"
 
@@ -119,9 +120,26 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 		);
 		SDL_RenderFillRect(__renderer, &innerRect);
 
-		if (_hasTexture) {
-			Texture_Manager::load(_texture);
-			SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_texture), NULL, &innerRect);
+		if(_hasAnim){
+			_currAnim->update(Window::getDeltaT());
+
+			Texture* frame = _currAnim->getCurrentFrame();
+			if(frame){
+				SDL_RenderTexture(
+					__renderer,
+					Texture_Manager::getSDLTexture(*frame),
+					NULL,
+					&innerRect
+				);
+			}
+		}
+		else if(_hasTexture){
+			SDL_RenderTexture(
+				__renderer,
+				Texture_Manager::getSDLTexture(_texture),
+				NULL,
+				&innerRect
+			);
 		}
 
 		SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
@@ -179,9 +197,27 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
     );
     SDL_RenderFillRect(__renderer, &innerRect);
 
-    if (_hasTexture)
-        SDL_RenderTexture(__renderer, Texture_Manager::getSDLTexture(_texture), NULL, &innerRect);
-    
+    if(_hasAnim){
+		_currAnim->update(Window::getDeltaT());
+
+		Texture* frame = _currAnim->getCurrentFrame();
+		if(frame){
+			SDL_RenderTexture(
+				__renderer,
+				Texture_Manager::getSDLTexture(*frame),
+				NULL,
+				&innerRect
+			);
+		}
+	}
+	else if(_hasTexture){
+		SDL_RenderTexture(
+			__renderer,
+			Texture_Manager::getSDLTexture(_texture),
+			NULL,
+			&innerRect
+		);
+	}
 
     SDL_SetRenderTarget(__renderer, NULL);
 
@@ -204,4 +240,5 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
     SDL_DestroyTexture(target);
     SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
 }
+
 }

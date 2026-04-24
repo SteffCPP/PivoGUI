@@ -25,9 +25,13 @@ copies or substantial portions of the Software.
 
 #include "Primitives/PIVO_Vector.hpp"
 #include "Primitives/PIVO_Color.hpp"
-#include "PIVO_Math.hpp"
 #include "Systems/PIVO_TextureSys.hpp"
 
+#include "PIVO_Math.hpp"
+#include "PIVO_Animation.hpp"
+
+#include <unordered_map>
+#include <memory>
 #include <functional>
 
 struct SDL_Renderer;
@@ -218,19 +222,45 @@ class texturable {
 public:
     virtual ~texturable() = default;
 
-    /// Assigns an Texture to the object.
+    /// Assigns an texture to the object.
     /// @param texture Texture resource to assign.
     virtual void assignTexture(const Texture& texture);
 
-    /// Assigns an Texture from file path.
+    /// Assigns an texture from file path.
     /// @param path Path to Texture file.
     virtual void assignTexture(const std::string& path);
 
     /// Removes the current Texture.
     virtual void removeTexture();
+    
+    /// Assigns an animation to the object.
+    /// @param name Name to give to the animation.
+    /// @param anim Animation resource to assign.
+    virtual void addAnimation(const std::string& name, SpriteAnimation anim);
+
+    /// PLay an animation. If an animation is currently playing it stops it.
+    /// @param name Name of the animation.
+    virtual void playAnimation(const std::string& name);
+
+    /// Pause the current playing animation.
+    virtual void pauseAnimation();
+
+    /// Stop the current playing animation.
+    virtual void stopAnimation();
+
+    /// Reset the current palying animation.
+    virtual void resetAnimation();
+
+    /// Removes an Animation.
+    /// @param name Name of the animation.
+    virtual void removeAnimation(std::string& name);
 protected:
     bool _hasTexture{false};
+    bool _hasAnim{false};
     Texture _texture;
+
+    SpriteAnimation* _currAnim{nullptr};
+    std::unordered_map<std::string, std::unique_ptr<SpriteAnimation>> _anims;
 };
 
 class pivotable{

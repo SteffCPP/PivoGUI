@@ -34,21 +34,21 @@ namespace pivo{
 std::string Texture::getPath() const { return _path; }
 void Texture::setPath(const std::string& path){ _path = path; }
 
-Texture::Texture(const std::string& path){ _path = path; }
-Texture::Texture(){}
+Texture::Texture(const std::string& path) : _path(path){ Texture_Manager::load(*this); }
 
 Texture::~Texture(){
     SDL_DestroyTexture(_sdltexture);
     _sdltexture = nullptr;
 }
+Texture::Texture(){}
 
 // === Texture_Manager ===
 
-void Texture_Manager::_init(SDL_Renderer* renderer) { _renderer = renderer; }
+void Texture_Manager::_init(SDL_Renderer* __renderer) { _renderer = __renderer; }
 
 SDL_Texture* const Texture_Manager::getSDLTexture(const Texture& img){ return img._sdltexture; }
 
-bool Texture_Manager::load(Texture& img) {
+bool Texture_Manager::load(Texture& img){
     if(img._sdltexture!=nullptr){
         img._refCount++;
         return true;

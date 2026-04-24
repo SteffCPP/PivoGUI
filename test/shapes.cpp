@@ -11,6 +11,11 @@ int main(){
 
 	pivo::Rectangle rect{{50, 50}, {50, 50}, pivo::colors::White};
 	win.assign(rect);
+	pivo::Texture emoji1{"test/imgs/emoji.jpeg"};
+
+	std::vector<pivo::Texture*> frames = {&emoji1};
+	rect.addAnimation("idle", frames);
+	rect.playAnimation("idle");
 
 	pivo::Ellipse ell({300, 200}, {200, 110}, pivo::colors::White);
 	win.assign(ell);

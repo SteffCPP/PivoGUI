@@ -79,6 +79,7 @@ void Window::create(const std::string& title,
         return;
     }
 
+    Texture_Manager::_init(_sdlrenderer);
 	Keyboard::_initKeys();
     _lastTime = SDL_GetPerformanceCounter();
     _backgroundColor = bgColor;
@@ -223,7 +224,7 @@ void Window::remove(Widget& widget){
 
 void Window::setBackgroundColor(Color_RGBA color){ _backgroundColor = color; }
 bool Window::isOpen() const { return _isOpen; }
-double Window::getDeltaT() const{ return _delta; }
+double Window::getDeltaT(){ return _delta; }
 
 Window::Window(){}
 Window::Window(const std::string title,

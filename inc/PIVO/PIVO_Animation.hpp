@@ -23,53 +23,52 @@ copies or substantial portions of the Software.
 
 #pragma once
 
+#include <unordered_map>
 #include <string>
-#include <cinttypes>
+#include <memory>
+#include <vector>
 
-struct SDL_Renderer;
+#include "PIVO/Primitives/PIVO_Vector.hpp"
+#include "PIVO/Systems/PIVO_TextureSys.hpp"
+
 struct SDL_Texture;
+struct SDL_Rect;
 
 namespace pivo{
-class Texture {
+class SpriteAnimation{
 public:
-    /// Gets the file path of the texture.
-    std::string getPath() const;
+    SpriteAnimation(std::vector<Texture*> textures, float frameDuration=100.0f, bool loop=true);
+    SpriteAnimation(SpriteAnimation&& other);
+    ~SpriteAnimation();
 
-    /// Sets the file path of the texture.
-    /// @param path New texture file path.
-    void setPath(const std::string& path);
+    void addFrame(Texture* texture);
 
-    /// @param path Path to the texture file.
-    Texture(const std::string& path);
-    Texture();
+    void update(float delta);
 
-    ~Texture();
+    void play();
+    void pause();
+    void stop();
+    void reset();
+
+    Texture* getCurrentFrame() const;
+
+    void toggleLoop(const bool loop);
+    void setSpeed(const float speed);
+    bool isPlaying() const;
 private:
+    std::vector<Texture*> _frames;
+
+    float _frameDuration{100.0f}; 
+    float _time{0.0f};
+    std::size_t _currentFrame{0};
     std::string _path{""};
-    std::uint32_t _refCount{0};
-    SDL_Texture* _sdltexture{nullptr};
+    float _speed{1.0f};
+
+    bool _playing{true};
+    bool _loop{true};
 
     friend class Texture_Manager;
 };
 
-class Texture_Manager {
-public:
-    /// Loads a texture from file or returns cached version if already loaded.
-    /// @param path Path of the Texture file.
-    /// @return bool if operation succeded. If it returns true it doesn't mean the texture is not loaded already.
-    static bool load(Texture& img);
 
-    /// Removes a texture from cache and destroys it.
-    /// @param path Path of the texture to remove.
-    static bool unload(Texture& img);
-
-    static SDL_Texture* const getSDLTexture(const Texture& img);
-private:
-    /// Initializes the texture system.
-    static void _init(SDL_Renderer* __renderer);
-
-    static inline SDL_Renderer* _renderer{nullptr};
-
-    friend class Window;
-};
 }

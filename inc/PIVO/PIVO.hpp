@@ -40,6 +40,8 @@ copies or substantial portions of the Software.
 
 #include "PIVO_Text.hpp"
 
+#include "PIVO_Animation.hpp"
+
 #include "PIVO_Window.hpp"
 #include "PIVO_Widget.hpp"
 
