@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "PIVO_Dep.hpp"
+#include "PIVO/PIVO_Dep.hpp"
 
 #include <tuple>
 #include <utility>

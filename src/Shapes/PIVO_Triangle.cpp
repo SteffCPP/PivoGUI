@@ -21,8 +21,8 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Triangle.hpp"
-#include "PIVO_SDL.cpp"
+#include "Shapes/PIVO_Triangle.hpp"
+#include "../PIVO_SDL.cpp"
 
 namespace pivo{
 Triangle::Triangle(const Vector2D& a,

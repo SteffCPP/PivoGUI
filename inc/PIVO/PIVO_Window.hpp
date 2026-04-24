@@ -24,7 +24,7 @@ copies or substantial portions of the Software.
 #pragma once
 
 #include "PIVO_Widget.hpp"
-#include "PIVO_InputSys.hpp"
+#include "Systems/PIVO_InputSys.hpp"
 
 #include <vector>
 #include <string>

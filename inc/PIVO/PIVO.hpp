@@ -23,19 +23,26 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "PIVO_Color.hpp"
-//#include "PIVO_Grid.hpp"
+#include "Primitives/PIVO_Color.hpp"
+#include "Primitives/PIVO_Vector.hpp"
+
 #include "PIVO_Math.hpp"
+
+//#include "PIVO_Grid.hpp"
 //#include "PIVO_Panel.hpp"
-#include "PIVO_Rectangle.hpp"
-#include "PIVO_Circle.hpp"
-#include "PIVO_Triangle.hpp"
-#include "PIVO_Line.hpp"
-#include "PIVO_Ellipse.hpp"
+
+#include "Shapes/PIVO_Rectangle.hpp"
+#include "Shapes/PIVO_Circle.hpp"
+#include "Shapes/PIVO_Triangle.hpp"
+#include "Shapes/PIVO_Line.hpp"
+#include "Shapes/PIVO_Ellipse.hpp"
 //#include "PIVO_Slider.hpp"
+
 #include "PIVO_Text.hpp"
-#include "PIVO_Vector.hpp"
+
 #include "PIVO_Window.hpp"
-#include "PIVO_AudioSys.hpp"
-#include "PIVO_InputSys.hpp"
-#include "PIVO_TextureSys.hpp"
+#include "PIVO_Widget.hpp"
+
+#include "Systems/PIVO_AudioSys.hpp"
+#include "Systems/PIVO_InputSys.hpp"
+#include "Systems/PIVO_TextureSys.hpp"

@@ -23,31 +23,33 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "PIVO_Dep.hpp"
-#include "PIVO_Widget.hpp"
-#include "PIVO_Vector.hpp"
-#include "PIVO_Math.hpp"
-
-struct SDL_Renderer;
+#include "PIVO/PIVO_Dep.hpp"
+#include "PIVO/PIVO_Widget.hpp"
 
 namespace pivo{
-class Line : public Widget{
-struct Points{
-    Vector2D a{0, 0};
-    Vector2D b{0, 0};
-};
+class Triangle : 
+    public Widget,
+    public texturable,
+    public rotatable, 
+    public borderable, 
+    public pivotable, 
+    public positionable{
 public:
-    void setPoints(Vector2D& a, Vector2D& b);
+    Triangle(const Vector2D& a,
+             const Vector2D& b,
+             const Vector2D& c,
+             const Color_RGBA& color = colors::Red);
+    Triangle();
 
-    Points getPoints() const;
+    void setPoints(const Vector2D& a,
+                   const Vector2D& b,
+                   const Vector2D& c);
 
-    virtual bool containsPoint(const Vector2D& point) const override;
-
-    Line();
-    Line(const Vector2D pointA, const Vector2D pointB, Color_RGBA color=pivo::colors::Red);
+    bool containsPoint(const Vector2D& point) const override;
 private:
-    Points _points;
+    void _draw(SDL_Renderer* __renderer) override;
+    Vector2D _computePivotOffset() const override;
 
-    virtual void _draw(SDL_Renderer* __renderer) override;
+    Vector2D _a{0, 0}, _b{0, 0}, _c{0, 0};
 };
 }

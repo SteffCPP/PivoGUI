@@ -22,9 +22,9 @@ copies or substantial portions of the Software.
 */
 
 #include "PIVO_Window.hpp"
-#include "PIVO_InputSys.hpp"
 #include "PIVO_SDL.cpp"
-#include "PIVO_AudioSys.hpp"
+#include "Systems/PIVO_InputSys.hpp"
+#include "Systems/PIVO_AudioSys.hpp"
 
 #include <iostream>
 #include <utility>

@@ -23,10 +23,10 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "PIVO_Vector.hpp"
+#include "Primitives/PIVO_Vector.hpp"
+#include "Primitives/PIVO_Color.hpp"
 #include "PIVO_Math.hpp"
-#include "PIVO_Color.hpp"
-#include "PIVO_TextureSys.hpp"
+#include "Systems/PIVO_TextureSys.hpp"
 
 #include <functional>
 

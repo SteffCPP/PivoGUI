@@ -21,9 +21,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Rectangle.hpp"
-#include "PIVO_TextureSys.hpp"
-#include "PIVO_SDL.cpp"
+#include "Shapes/PIVO_Rectangle.hpp"
+#include "Systems/PIVO_TextureSys.hpp"
+#include "../PIVO_SDL.cpp"
 
 #include <iostream>
 

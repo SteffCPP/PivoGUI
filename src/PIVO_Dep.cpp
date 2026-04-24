@@ -22,7 +22,7 @@ copies or substantial portions of the Software.
 */
 
 #include "PIVO_Dep.hpp"
-#include "PIVO_TextureSys.hpp"
+#include "Systems/PIVO_TextureSys.hpp"
 
 namespace pivo{
 // === sizeable ===

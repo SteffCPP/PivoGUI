@@ -21,9 +21,9 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Circle.hpp"
-#include "PIVO_SDL.cpp"
-#include "PIVO_TextureSys.hpp"
+#include "Shapes/PIVO_Circle.hpp"
+#include "../PIVO_SDL.cpp"
+#include "Systems/PIVO_TextureSys.hpp"
 
 #include <iostream>
 

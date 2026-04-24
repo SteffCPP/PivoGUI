@@ -23,7 +23,7 @@ copies or substantial portions of the Software.
 
 #pragma once
 
-#include "PIVO_Widget.hpp"
+#include "PIVO/PIVO_Widget.hpp"
 
 struct SDL_Rect;
 

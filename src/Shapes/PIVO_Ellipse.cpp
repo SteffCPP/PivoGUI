@@ -21,8 +21,8 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 */
 
-#include "PIVO_Ellipse.hpp"
-#include "PIVO_SDL.cpp"
+#include "Shapes/PIVO_Ellipse.hpp"
+#include "../PIVO_SDL.cpp"
 
 #include <vector>
 
