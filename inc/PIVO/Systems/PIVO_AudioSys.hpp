@@ -157,20 +157,7 @@ public:
     /// @param audio Audio to modify.
     /// @param delta Volume delta in range [-1.0 - 1.0].
     static void changeVolume(Audio& audio, float delta);
-
-    /// Returns the playback speed of an Audio.
-    /// @warning Not implemented yet.
-    /// @param audio Audio to query.
-    static float getSpeed(const Audio& audio);
-
-    /// Sets the playback speed of an Audio.
-    /// @warning Not implemented yet.
-    /// @param audio Audio to modify.
-    /// @param speed Speed factor (0.0 - 5.0).
-    static void setSpeed(Audio& audio, float speed);
-
 private:
-
     /// Initializes SDL_mixer and the Audio Manager system.
     static void _init();
 

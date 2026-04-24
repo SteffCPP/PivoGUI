@@ -26,7 +26,7 @@ copies or substantial portions of the Software.
 #include "PIVO/PIVO_Dep.hpp"
 
 #include <tuple>
-#include <utility>
+#include <functional>
 #include <unordered_map>
 
 struct SDL_Window;
@@ -102,21 +102,12 @@ public:
     static bool middleDown();
 
 private:
-    /// Sets mouse position (internal use only).
-    /// @param pos New mouse position.
     static void _setPosition(const Vector2D& pos);
 
-    /// Marks a mouse button as pressed.
-    /// @param button Button to set as down.
     static void _setButtonDown(MouseButton button);
 
-    /// Marks a mouse button as released.
-    /// @param button Button to set as up.
     static void _setButtonUp(MouseButton button);
 
-    /// Converts SDL mouse button index to MouseButton enum.
-    /// @param button SDL button index.
-    /// @return Converted MouseButton.
     static MouseButton _sdlbToMouseButton(std::size_t button);
 
     static inline Vector2D _pos{};
@@ -153,33 +144,83 @@ public:
     /// @return True if key transitioned from down to up.
     static bool isReleased(Key key);
 
+    static void toggleBindActivation(const std::string& name, const bool flag);
+
+    /// Binds a key press directly to a function.
+    /// The function must have a name so that you can activate/deactevate later.
+    /// @param name Name of the function
+    /// @param key Key to bind
+    /// @param func Function to call
+    /// @param args Parameters of the function
+    template<typename Func, typename... Args>
+    static void bindKeyPress(const std::string& name, const Key key, Func&& func, Args&&... args){
+        Action newAction = {
+            .func = [func = std::forward<Func>(func), ... args = std::forward<Args>(args)](){ func(args...);},
+            .key = key,
+            .trigger = Action::Trigger::PRESS,
+        };
+        _bindedActions[name] = newAction;
+    }
+
+    /// Binds a key being held down directly to a function.
+    /// The function must have a name so that you can activate/deactevate later.
+    /// @param name Name of the function
+    /// @param key Key to bind
+    /// @param func Function to call
+    /// @param args Parameters of the function
+    template<typename Func, typename... Args>
+    static void bindKeyDown(const std::string& name, const Key key, Func&& func, Args&&... args){
+        Action newAction = {
+            .func = [func = std::forward<Func>(func), ... args = std::forward<Args>(args)](){ func(args...);},
+            .key = key,
+            .trigger = Action::Trigger::DOWN,
+        };
+        _bindedActions[name] = newAction;
+    }
+
+    /// Binds a key being released directly to a function.
+    /// The function must have a name so that you can activate/deactevate later.
+    /// @param name Name of the function
+    /// @param key Key to bind
+    /// @param func Function to call
+    /// @param args Parameters of the function
+    template<typename Func, typename... Args>
+    static void bindKeyRelease(const std::string& name, const Key key, Func&& func, Args&&... args){
+        Action newAction = {
+            .func = [func = std::forward<Func>(func), ... args = std::forward<Args>(args)](){ func(args...);},
+            .key = key,
+            .trigger = Action::Trigger::RELEASE
+        };
+        _bindedActions[name] = newAction;
+    }
+
 private:
-    /// Converts SDL keycode to internal Key enum.
-    /// @param sdlKey SDL keycode.
-    /// @return Converted Key enum.
+    struct Action{
+        enum class Trigger{
+            PRESS,
+            RELEASE,
+            DOWN
+        };
+        std::function<void()> func;
+        Key key;
+        Trigger trigger;
+        bool active=true;
+    };
+    static void _initKeys();
+
     static Key _sdlkToKey(int sdlKey);
 
-    /// Updates keyboard state (called each frame).
     static void _update();
 
-    /// Checks previous frame state of a key.
-    /// @param key Key to check.
-    /// @return True if key was previously down.
     static bool _wasDown(Key key);
 
-    /// Marks a key as pressed.
-    /// @param key Key to set.
     static void _setKeyDown(Key key);
 
-    /// Marks a key as released.
-    /// @param key Key to set.
     static void _setKeyUp(Key key);
 
     static inline std::unordered_map<Key, bool> _keys{};
     static inline std::unordered_map<Key, bool> _prevKeys{};
-
-    /// Initializes key map state.
-    static void _initKeys();
+    static inline std::unordered_map<std::string, Action> _bindedActions{};
 
     friend class Input_Manager;
 	friend class Window;
@@ -190,8 +231,6 @@ public:
     // Updates all input states (keyboard + mouse).
     static void update();
 private:
-    /// Checks if the application requested global quit.
-    /// @return True if quit was requested.
     static bool _hasRequestedQuit();
 
     /// Checks if the size of the window has been changed.
@@ -203,6 +242,8 @@ private:
     /// Checks if a specific window requested quit.
     /// @return Pair (requested, window pointer).
     static std::pair<bool, std::uint32_t> _hasRequestedWindowQuit();
+
+    static void _triggerAction();
 
     static inline bool _requestQuit{false};
     static inline std::pair<bool, std::uint32_t> _requestWindowQuit{false, 0};

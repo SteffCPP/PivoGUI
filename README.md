@@ -3,9 +3,8 @@
 # PivoGUI - An easy and modern graphics library
 
 PivoGUI is a modern graphics library entirely written in C++ that, for now, communicates with SDL3, SDL_image, SDL_ttf and SDL_mixer to provide the programmer an easy expirience working with them.<br>
-I'm planning on getting rid of SDL3 completiley develop the backend entirely from scratch.<br><br>
-
-The objective is to create a new standard for C++ software and game development, which is surely ambitious but not impossible. Any help on the project would also be so much appretiated.
+I'm planning on getting rid of SDL3 completiley develop the backend entirely from scratch.<br>
+Any help on the project would also be so much appretiated.
 
 ## Documentation
 You can check out the documentation here, in the [documentation folder (docs folder)](https://github.com/SteffCPP/PivoGUI/tree/main/docs).

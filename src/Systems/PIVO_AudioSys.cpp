@@ -193,10 +193,4 @@ void Audio_Manager::setVolume(Audio& audio, float volume) {
 void Audio_Manager::changeVolume(Audio& audio, float delta) {
     setVolume(audio, audio._volume + delta);
 }
-float Audio_Manager::getSpeed(const Audio& audio) {
-    return audio._speed;
-}
-void Audio_Manager::setSpeed(Audio& audio, float speed) {
-    audio._speed = speed;
-}
 }

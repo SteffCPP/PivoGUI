@@ -66,7 +66,12 @@ MouseButton Mouse::_sdlbToMouseButton(std::size_t button) {
 }
 
 // === Keyboard ===
+void Keyboard::toggleBindActivation(const std::string& name, const bool flag){
+    auto it = _bindedActions.find(name);
+    if(it == _bindedActions.end()) return;
 
+    it->second.active = flag;
+}
 bool Keyboard::isDown(Key key) {
     auto it = _keys.find(key);
     return it != _keys.end() && it->second;
@@ -226,6 +231,22 @@ void Input_Manager::update(){
                 break;
             default:
                 break;
+        }
+    }
+
+    
+    if(Keyboard::_bindedActions.size()==0) return;
+    for(auto& [_, action] : Keyboard::_bindedActions){
+        switch(action.trigger){
+            case Keyboard::Action::Trigger::RELEASE:
+                if(action.active && Keyboard::isReleased(action.key)) action.func();
+            break;
+            case Keyboard::Action::Trigger::DOWN:
+                if(action.active&& Keyboard::isDown(action.key)) action.func();
+            break;
+            case Keyboard::Action::Trigger::PRESS:
+                if(action.active&& Keyboard::isPressed(action.key)) action.func();
+            break;
         }
     }
 }
