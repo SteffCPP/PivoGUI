@@ -52,95 +52,136 @@ bool Ellipse::containsPoint(const Vector2D& point) const {
 }
 
 void Ellipse::_draw(SDL_Renderer* __renderer){
-    if(_hide) return;
-    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
+    if(_hide||!__renderer)return;
 
-    const int segments = std::max(32, (int)(_size.x+_size.y)/8);
+    SDL_SetRenderDrawBlendMode(__renderer,SDL_BLENDMODE_BLEND);
 
-    Vector2D topLeft = _pos + _computePivotOffset();
-    Vector2D center = topLeft + Vector2D{_size.x/2.0f, _size.y/2.0f};
+    const int segments=std::max(32,(int)(_size.x+_size.y)/8);
 
-    float a = _size.x / 2.0f;
-    float b = _size.y / 2.0f;
+    Vector2D topLeft=_pos+_computePivotOffset();
+    Vector2D center=topLeft+Vector2D{_size.x/2.0f,_size.y/2.0f};
+
+    float a=_size.x/2.0f;
+    float b=_size.y/2.0f;
+
+    SDL_Texture* tex=nullptr;
+
+    if(_hasAnim&&_currAnim){
+        Texture t=_currAnim->getCurrentFrame();
+        tex=Texture_Manager::getSDLTexture(t);
+    }else if(_hasTexture){
+        tex=Texture_Manager::getSDLTexture(_texture);
+    }
 
     std::vector<SDL_Vertex> vertices;
     std::vector<int> indices;
 
-    vertices.reserve(segments + 2);
-    indices.reserve(segments * 3);
+    SDL_Vertex centerV{};
+    centerV.position={center.x,center.y};
 
-    SDL_FColor col = {(float)_color.r, (float)_color.g, (float)_color.b, (float)_color.a};
-
-    SDL_Vertex centerV;
-    centerV.position = {center.x, center.y};
-    centerV.color = col;
-    centerV.tex_coord = {0.5f, 0.5f};
+    if(tex){
+        centerV.color={1.0f,1.0f,1.0f,1.0f};
+        centerV.tex_coord={0.5f,0.5f};
+    }else{
+        centerV.color={
+            _color.r/255.0f,
+            _color.g/255.0f,
+            _color.b/255.0f,
+            _color.a/255.0f
+        };
+        centerV.tex_coord={0,0};
+    }
 
     vertices.push_back(centerV);
 
-    for(int i = 0; i <= segments; i++){
-        float t = (float)i / segments * 2.0f * M_PI;
+    for(int i=0;i<=segments;i++){
+        float t=(float)i/segments*2.0f*M_PI;
 
-        float x = center.x + a * cos(t);
-        float y = center.y + b * sin(t);
+        float cosT=cos(t);
+        float sinT=sin(t);
 
-        SDL_Vertex v;
-        v.position = {x, y};
-        v.color = col;
+        float x=center.x+a*cosT;
+        float y=center.y+b*sinT;
 
-        v.tex_coord = {
-            0.5f + (float)cos(t) * 0.5f,
-            0.5f + (float)sin(t) * 0.5f
-        };
+        SDL_Vertex v{};
+        v.position={x,y};
+
+        if(tex){
+            v.color={1.0f,1.0f,1.0f,1.0f};
+            v.tex_coord={
+                0.5f+cosT*0.5f,
+                0.5f+sinT*0.5f
+            };
+        }else{
+            v.color={
+                _color.r/255.0f,
+                _color.g/255.0f,
+                _color.b/255.0f,
+                _color.a/255.0f
+            };
+            v.tex_coord={0,0};
+        }
 
         vertices.push_back(v);
     }
 
-    for(int i=1; i<=segments; i++){
+    for(int i=1;i<=segments;i++){
         indices.push_back(0);
         indices.push_back(i);
-        indices.push_back(i + 1);
+        indices.push_back(i+1);
     }
 
-    SDL_Texture* tex = nullptr;
-    if(_hasTexture){
-        tex = Texture_Manager::getSDLTexture(_texture);
-        SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
-    }
+    SDL_RenderGeometry(__renderer,tex,vertices.data(),(int)vertices.size(),indices.data(),(int)indices.size());
 
-    SDL_RenderGeometry(
-        __renderer,
-        tex,
-        vertices.data(),
-        (int)vertices.size(),
-        indices.data(),
-        (int)indices.size()
-    );
+    if(_borderWidth>0){
+        float innerA=a-_borderWidth;
+        float innerB=b-_borderWidth;
 
-    if(_borderWidth > 0){
-        SDL_SetRenderDrawColor(
-            __renderer,
-            _borderColor.r,
-            _borderColor.g,
-            _borderColor.b,
-            _borderColor.a
-        );
+        if(innerA<0)innerA=0;
+        if(innerB<0)innerB=0;
 
-        for(int i = 0; i <= segments; i++){
-            float t1 = (float)i/segments * 2.0f * math::PI;
-            float t2 = (float)(i + 1)/segments * 2.0f * math::PI;
+        std::vector<SDL_Vertex> bVertices;
+        std::vector<int> bIndices;
 
-            float x1 = center.x+a * cos(t1);
-            float y1 = center.y+b * sin(t1);
+        for(int i=0;i<=segments;i++){
+            float t=(float)i/segments*2.0f*M_PI;
 
-            float x2 = center.x+a * cos(t2);
-            float y2 = center.y+b * sin(t2);
+            float cosT=cos(t);
+            float sinT=sin(t);
 
-            SDL_RenderLine(__renderer, x1, y1, x2, y2);
+            SDL_Vertex o{};
+            o.position={center.x+a*cosT,center.y+b*sinT};
+            o.color={
+                _borderColor.r/255.0f,
+                _borderColor.g/255.0f,
+                _borderColor.b/255.0f,
+                _borderColor.a/255.0f
+            };
+
+            SDL_Vertex in{};
+            in.position={center.x+innerA*cosT,center.y+innerB*sinT};
+            in.color=o.color;
+
+            bVertices.push_back(o);
+            bVertices.push_back(in);
         }
+
+        for(int i=0;i<segments;i++){
+            int idx=i*2;
+
+            bIndices.push_back(idx);
+            bIndices.push_back(idx+1);
+            bIndices.push_back(idx+2);
+
+            bIndices.push_back(idx+1);
+            bIndices.push_back(idx+3);
+            bIndices.push_back(idx+2);
+        }
+
+        SDL_RenderGeometry(__renderer,nullptr,bVertices.data(),(int)bVertices.size(),bIndices.data(),(int)bIndices.size());
     }
 
-    SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_NONE);
+    SDL_SetRenderDrawBlendMode(__renderer,SDL_BLENDMODE_NONE);
 }
 
 Vector2D Ellipse::_computePivotOffset() const {

@@ -68,112 +68,232 @@ Vector2D Circle::_computePivotOffset() const {
 	return {0, 0};
 }
 
+void Circle::_draw(SDL_Renderer* __renderer){
+    if(!__renderer||_hide)return;
 
-void Circle::_draw(SDL_Renderer* __renderer) {
-	if (_hide) return;
-	SDL_SetRenderDrawBlendMode(__renderer, SDL_BLENDMODE_BLEND);
+    Vector2D pos=getPosition();
+    Vector2D pivotOffset=_computePivotOffset();
 
-	Vector2D topLeft = _pos + _computePivotOffset();
+    float cx=pos.x+_radius-pivotOffset.x;
+    float cy=pos.y+_radius-pivotOffset.y;
 
-	float cx = topLeft.x + _radius;
-	float cy = topLeft.y + _radius;
+    SDL_Texture* tex=nullptr;
 
-	float rOuter = _radius;
-	float rInner = _radius - _borderWidth;
-	if (rInner < 0) rInner = 0;
+    if(_hasAnim&&_currAnim){
+        Texture t=_currAnim->getCurrentFrame();
+        tex=Texture_Manager::getSDLTexture(t);
+    }else if(_hasTexture){
+        tex=Texture_Manager::getSDLTexture(_texture);
+    }
 
-	SDL_SetRenderDrawColor(
-		__renderer,
-		_color.r,
-		_color.g,
-		_color.b,
-		_color.a
-	);
+    const int segments=40;
 
-	_drawFilledCircle(__renderer, cx, cy, rInner, _color);
+    std::vector<SDL_Vertex> vertices;
+    std::vector<int> indices;
 
-	if (_hasTexture) {
-		Texture_Manager::load(_texture);
+    SDL_Vertex center{};
+    center.position={cx,cy};
+    center.color={1.0f,1.0f,1.0f,1.0f};
+    center.tex_coord={0.5f,0.5f};
 
-		float innerRadius = _radius - _borderWidth;
-		if (innerRadius < 0) innerRadius = 0;
+    if(!tex){
+        center.color={
+            _color.r/255.0f,
+            _color.g/255.0f,
+            _color.b/255.0f,
+            _color.a/255.0f
+        };
+        center.tex_coord={0,0};
+    }
 
-		SDL_FRect dst{
-			cx - innerRadius,
-			cy - innerRadius,
-			innerRadius * 2.0f,
-			innerRadius * 2.0f
-		};
+    vertices.push_back(center);
 
-		SDL_FPoint center{
-			dst.w / 2.0f,
-			dst.h / 2.0f
-		};
+    for(int i=0;i<=segments;i++){
+        float a=(float)i/segments*2.0f*M_PI;
 
-		SDL_RenderTextureRotated(
-			__renderer,
-			Texture_Manager::getSDLTexture(_texture),
-			nullptr,
-			&dst,
-			_rotation,
-			&center,
-			SDL_FLIP_NONE
-		);
-	}
+        float x=cx+cos(a)*_radius;
+        float y=cy+sin(a)*_radius;
 
-	SDL_SetRenderDrawColor(
-		__renderer,
-		_borderColor.r,
-		_borderColor.g,
-		_borderColor.b,
-		_borderColor.a
-	);
+        float u=cos(a)*0.5f+0.5f;
+        float v=sin(a)*0.5f+0.5f;
 
-	for (int y = -rOuter; y <= rOuter; y++) {
-		int xOuter = (int)std::floor(std::sqrt(rOuter * rOuter - y * y));
-		int xInner = (rInner > 0 && std::abs(y) <= rInner)
-			? (int)std::floor(std::sqrt(rInner * rInner - y * y))
-			: 0;
+        SDL_Vertex vtx{};
+        vtx.position={x,y};
 
-		int yPos = cy + y;
+        if(tex){
+            vtx.color={1.0f,1.0f,1.0f,1.0f};
+            vtx.tex_coord={u,v};
+        }else{
+            vtx.color={
+                _color.r/255.0f,
+                _color.g/255.0f,
+                _color.b/255.0f,
+                _color.a/255.0f
+            };
+            vtx.tex_coord={0,0};
+        }
 
-		SDL_RenderLine(__renderer,
-			cx - xOuter, yPos,
-			cx - xInner, yPos
-		);
+        vertices.push_back(vtx);
+    }
 
-		SDL_RenderLine(__renderer,
-			cx + xInner, yPos,
-			cx + xOuter, yPos
-		);
-	}
+    for(int i=1;i<=segments;i++){
+        indices.push_back(0);
+        indices.push_back(i);
+        indices.push_back(i+1);
+    }
+
+    SDL_RenderGeometry(__renderer,tex,vertices.data(),(int)vertices.size(),indices.data(),(int)indices.size());
+
+    if(_borderWidth>0){
+        float innerR=_radius-_borderWidth;
+        if(innerR<0)innerR=0;
+
+        std::vector<SDL_Vertex> bVertices;
+        std::vector<int> bIndices;
+
+        for(int i=0;i<=segments;i++){
+            float a=(float)i/segments*2.0f*M_PI;
+
+            float cosA=cos(a);
+            float sinA=sin(a);
+
+            SDL_Vertex o{};
+            o.position={cx+cosA*_radius,cy+sinA*_radius};
+            o.color={
+                _borderColor.r/255.0f,
+                _borderColor.g/255.0f,
+                _borderColor.b/255.0f,
+                _borderColor.a/255.0f
+            };
+
+            SDL_Vertex in{};
+            in.position={cx+cosA*innerR,cy+sinA*innerR};
+            in.color=o.color;
+
+            bVertices.push_back(o);
+            bVertices.push_back(in);
+        }
+
+        for(int i=0;i<segments;i++){
+            int idx=i*2;
+
+            bIndices.push_back(idx);
+            bIndices.push_back(idx+1);
+            bIndices.push_back(idx+2);
+
+            bIndices.push_back(idx+1);
+            bIndices.push_back(idx+3);
+            bIndices.push_back(idx+2);
+        }
+
+        SDL_RenderGeometry(__renderer,nullptr,bVertices.data(),(int)bVertices.size(),bIndices.data(),(int)bIndices.size());
+    }
 }
 
 void Circle::_drawFilledCircle(
-	SDL_Renderer* __renderer,
-	const float __cx,
-	const float __cy,
-	const float __radius,
-	const Color_RGBA& __color
-) {
-	if (__radius <= 0) return;
+    SDL_Renderer* __renderer,
+    const float __cx,
+    const float __cy,
+    const float __radius,
+    const Color_RGBA& __color
+){
+    if(__radius <= 0) return;
 
-	SDL_SetRenderDrawColor(
-		__renderer,
-		__color.r,
-		__color.g,
-		__color.b,
-		__color.a
-	);
+    const int segments = 40;
 
-	for (int y=-__radius; y<=__radius; y++) {
-		int xSpan = (int)std::floor(std::sqrt(__radius*__radius-y*y));
+    std::vector<SDL_Vertex> vertices;
+    std::vector<int> indices;
 
-		int x1 = __cx - xSpan;
-		int x2 = __cx + xSpan;
-		int yy = __cy + y;
+    SDL_Vertex center{};
+    center.position = {__cx, __cy};
+    center.color = {(float)__color.r, (float)__color.g, (float)__color.b, (float)__color.a};
+    center.tex_coord = {0,0}; // non usata
 
-		SDL_RenderLine(__renderer, x1, yy, x2, yy);
-	}
+    vertices.push_back(center);
+
+    for(int i=0; i<=segments; ++i){
+        float angle = (float)i / segments * 2.0f * math::PI;
+
+        float x = __cx+cos(angle) * __radius;
+        float y = __cy+sin(angle) * __radius;
+
+        SDL_Vertex v{};
+        v.position = {x, y};
+        v.color = {(float)__color.r, (float)__color.g, (float)__color.b, (float)__color.a};
+        v.tex_coord = {0,0};
+
+        vertices.push_back(v);
+    }
+
+    for(int i=1; i<=segments; ++i){
+        indices.push_back(0);
+        indices.push_back(i);
+        indices.push_back(i+1);
+    }
+
+    SDL_RenderGeometry(
+        __renderer,
+        nullptr,
+        vertices.data(),
+        vertices.size(),
+        indices.data(),
+        indices.size()
+    );
+}
+void Circle::_drawCircleBorder(
+    SDL_Renderer* __renderer,
+    const float __cx, float __cy,
+    const float __radius,
+    const float __borderWidth,
+    const Color_RGBA& __color
+){
+    if(__borderWidth <= 0) return;
+
+    const int segments = 40;
+
+    float innerR = __radius-__borderWidth;
+    if(innerR < 0) innerR = 0;
+
+    std::vector<SDL_Vertex> vertices;
+    std::vector<int> indices;
+
+    for(int i=0; i<=segments; ++i){
+        float angle = (float)i / segments * 2.0f * math::PI;
+
+        float cosA = cos(angle);
+        float sinA = sin(angle);
+
+        SDL_Vertex vOuter{};
+        vOuter.position = {__cx+cosA * __radius, __cy+sinA * __radius};
+        vOuter.color = {(float)__color.r, (float)__color.g, (float)__color.b, (float)__color.a};
+
+        SDL_Vertex vInner{};
+        vInner.position = {__cx+cosA * innerR, __cy+sinA * innerR};
+        vInner.color = {(float)__color.r, (float)__color.g, (float)__color.b, (float)__color.a};
+
+        vertices.push_back(vOuter);
+        vertices.push_back(vInner);
+    }
+
+    for(int i = 0; i <= segments; ++i){
+        int idx = i * 2;
+
+        indices.push_back(idx);
+        indices.push_back(idx+1);
+        indices.push_back(idx+2);
+
+        indices.push_back(idx+1);
+        indices.push_back(idx+3);
+        indices.push_back(idx+2);
+    }
+
+    SDL_RenderGeometry(
+        __renderer,
+        nullptr,
+        vertices.data(),
+        vertices.size(),
+        indices.data(),
+        indices.size()
+    );
 }
 }

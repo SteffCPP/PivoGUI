@@ -50,7 +50,7 @@ public:
     void stop();
     void reset();
 
-    Texture* getCurrentFrame() const;
+    Texture getCurrentFrame() const;
 
     void toggleLoop(const bool loop);
     void setSpeed(const float speed);

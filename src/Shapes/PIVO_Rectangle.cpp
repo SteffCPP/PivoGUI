@@ -123,11 +123,11 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
 		if(_hasAnim){
 			_currAnim->update(Window::getDeltaT());
 
-			Texture* frame = _currAnim->getCurrentFrame();
-			if(frame){
+			Texture frame = _currAnim->getCurrentFrame();
+			if(frame.getPath()!=""){
 				SDL_RenderTexture(
 					__renderer,
-					Texture_Manager::getSDLTexture(*frame),
+					Texture_Manager::getSDLTexture(frame),
 					NULL,
 					&innerRect
 				);
@@ -200,11 +200,11 @@ void Rectangle::_draw(SDL_Renderer* __renderer) {
     if(_hasAnim){
 		_currAnim->update(Window::getDeltaT());
 
-		Texture* frame = _currAnim->getCurrentFrame();
-		if(frame){
+		Texture frame = _currAnim->getCurrentFrame();
+		if(frame.getPath()!=""){
 			SDL_RenderTexture(
 				__renderer,
-				Texture_Manager::getSDLTexture(*frame),
+				Texture_Manager::getSDLTexture(frame),
 				NULL,
 				&innerRect
 			);

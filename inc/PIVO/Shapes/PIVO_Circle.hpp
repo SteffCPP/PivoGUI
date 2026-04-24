@@ -48,11 +48,17 @@ private:
 	virtual void _draw(SDL_Renderer* __renderer) override;
 	virtual Vector2D _computePivotOffset() const override;
 
-	inline void _drawFilledCircle(	SDL_Renderer* __renderer, 
-									const float __cx,
-									const float __cy,
-									const float __radius,
-									const Color_RGBA& __color);
+	void _drawFilledCircle(	SDL_Renderer* __renderer, 
+							const float __cx,
+							const float __cy,
+							const float __radius,
+							const Color_RGBA& __color);
+	
+	void _drawCircleBorder( SDL_Renderer* __renderer,
+    						const float __cx, float __cy,
+    						const float __radius,
+   							const float __borderWidth,
+    						const Color_RGBA& __color);
 
 	float _radius{0};
 };

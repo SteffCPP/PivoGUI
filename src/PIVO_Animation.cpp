@@ -92,9 +92,9 @@ void SpriteAnimation::reset(){
     _time = 0.0f;
 }
 
-Texture* SpriteAnimation::getCurrentFrame() const{
-    if(_frames.empty()) return nullptr;
-    return _frames[_currentFrame];
+Texture SpriteAnimation::getCurrentFrame() const{
+    if(_frames.empty()) return {};
+    return *_frames[_currentFrame];
 }
 
 void SpriteAnimation::toggleLoop(const bool loop){ _loop = loop; }

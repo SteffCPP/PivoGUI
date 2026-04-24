@@ -8,19 +8,15 @@ int main(){
 	//chopinNocturne.play();
 
 	// === Shapes ===
-
+	pivo::Texture emoji1{"test/imgs/emoji.jpeg"};
+	
 	pivo::Rectangle rect{{50, 50}, {50, 50}, pivo::colors::White};
 	win.assign(rect);
-	pivo::Texture emoji1{"test/imgs/emoji.jpeg"};
-
-	std::vector<pivo::Texture*> frames = {&emoji1};
-	rect.addAnimation("idle", frames);
-	rect.playAnimation("idle");
 
 	pivo::Ellipse ell({300, 200}, {200, 110}, pivo::colors::White);
 	win.assign(ell);
 	
-	pivo::Triangle triangle{{400, 500}, {600, 700}, {800, 800}, pivo::colors::White};
+	pivo::Triangle triangle{{400, 500}, {400, 700}, {800, 800}, pivo::colors::White};
 	win.assign(triangle);
 
 	pivo::Circle circle{40.0f, {300, 800}, pivo::colors::White};
@@ -38,7 +34,6 @@ int main(){
 	pivo::Line line{{1000, 300}, {980, 700}, pivo::colors::White};
 	win.assign(line);
 	
-
 	while(win.isOpen()){
 		pivo::Input_Manager::update();
 		//if(pivo::Keyboard::isPressed(pivo::Key::UP)) chopinNocturne.changeVolume(0.1);
