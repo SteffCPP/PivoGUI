@@ -188,13 +188,13 @@ void Window::destroy() {
     _isOpen = false;
 }
 
-void Window::assign(Widget& widget) {
-    std::size_t widLayerN = widget.getLayerNumber();
+void Window::assign(Widget* widget) {
+    std::size_t widLayerN = widget->getLayerNumber();
     std::size_t i=0;
 
     if(_widgets.empty()){
-        if (widLayerN == 0) widget.setLayerNumber(1);
-        _widgets.push_back(&widget);
+        if (widLayerN == 0) widget->setLayerNumber(1);
+        _widgets.push_back(widget);
         return;
     }
     
@@ -202,21 +202,21 @@ void Window::assign(Widget& widget) {
         for (i=0; i<_widgets.size(); ++i) {
             if (_widgets[i]->getLayerNumber() != i+1) break;
         }
-        widget.setLayerNumber(i + 1);
+        widget->setLayerNumber(i + 1);
     } else {
         for (i=0; i<_widgets.size(); ++i) {
             if (_widgets[i]->getLayerNumber() > widLayerN) break;
         }
     }
     
-    _widgets.insert(_widgets.begin() + i, &widget);
+    _widgets.insert(_widgets.begin() + i, widget);
 }
 
-void Window::remove(Widget& widget){
+void Window::remove(Widget* widget){
 	_widgets.erase(
 		std::remove_if(_widgets.begin(), _widgets.end(),
 					[&](const Widget* ptr){
-						return ptr == &widget;
+						return ptr == widget;
 					}),
 		_widgets.end()
 	);

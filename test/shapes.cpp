@@ -15,17 +15,17 @@ int main(){
 	pivo::Texture emoji1{"test/imgs/emoji.jpeg"};
 
 	pivo::Rectangle rect{{50, 50}, {50, 50}, pivo::colors::White};
-	win.assign(rect);
+	win.assign(&rect);
 	rect.assignTexture(emoji1);
 
 	pivo::Ellipse ell({300, 200}, {200, 110}, pivo::colors::White);
-	win.assign(ell);
+	win.assign(&ell);
 	
 	pivo::Triangle triangle{{400, 500}, {400, 700}, {800, 800}, pivo::colors::White};
-	win.assign(triangle);
+	win.assign(&triangle);
 
 	pivo::Circle circle{40.0f, {300, 800}, pivo::colors::White};
-	win.assign(circle);
+	win.assign(&circle);
 
 	pivo::TextLabel label;
 	label.text.loadFont("test/fonts/retro_gaming.ttf", 50);
@@ -34,10 +34,10 @@ int main(){
 	label.setPosition({700, 40});
 	label.setSize({300, 100});
 	label.setColor(pivo::colors::White);
-	win.assign(label);
+	win.assign(&label);
 
 	pivo::Line line{{1000, 300}, {980, 700}, pivo::colors::White};
-	win.assign(line);
+	win.assign(&line);
 
 	while(win.isOpen()){
 		pivo::Input_Manager::update();

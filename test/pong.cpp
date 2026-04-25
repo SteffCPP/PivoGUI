@@ -7,12 +7,12 @@ int main(){
 
 	pivo::Rectangle pad1{{10, 100}, {100, winSize->y/2}, pivo::colors::White};
 	pivo::Rectangle pad2{{10, 100}, {winSize->x-100, winSize->y/2}, pivo::colors::White};
-	win.assign(pad1);
-	win.assign(pad2);
+	win.assign(&pad1);
+	win.assign(&pad2);
 
 	pivo::Circle ball{5.0f, {winSize->x/2, winSize->y/2}, pivo::colors::White};
 	ball.setPivot(pivo::Circle::Pivot::CENTER);
-	win.assign(ball);
+	win.assign(&ball);
 
 	float ballDeltaX = 5;
 	float ballDeltaY = 5;

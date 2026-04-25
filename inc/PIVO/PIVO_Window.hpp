@@ -53,12 +53,12 @@ public:
     void destroy();
 
     /// Assigns a widget to be managed and rendered by the window.
-    /// @param widget Widget to add.
-    void assign(Widget& widget);
+    /// @param widget* Widget to add.
+    void assign(Widget* widget);
 
     /// Removes a widget from the window.
-    /// @param widget Widget to remove.
-    void remove(Widget& widget);
+    /// @param widget* Widget to remove.
+    void remove(Widget* widget);
 
     /// Sets the background color of the window.
     /// @param color New background color.
