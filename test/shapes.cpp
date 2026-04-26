@@ -1,10 +1,6 @@
 #include <iostream>
 #include "PIVO/PIVO.hpp"
 
-void printHello(){
-	std::cout << "Hello World!\n";
-}
-
 int main(){
 	pivo::Window win("Finestra", {1080, 900}, pivo::colors::Gray);
 

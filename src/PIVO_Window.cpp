@@ -30,25 +30,15 @@ copies or substantial portions of the Software.
 #include <utility>
 
 namespace pivo {
-inline bool Window::_checkWidgetsOrder() const {
-	if (_widgets.size() <= 1) return true;
-    if (_widgets.size() == 2){
-        if(_widgets.at(0)->getLayerNumber() > _widgets.at(1)->getLayerNumber())
-			return false;
-		
-		return true;
-    }
-	
-    for (std::size_t i=0; i < _widgets.size()-1; ++i) {
-        if (_widgets.at(i)->getLayerNumber() > _widgets.at(i+1)->getLayerNumber())
-            return false;
-    }
-    return true;
+void Window::setTargetFPS(const float FPS){
+    _fpsTarget = FPS;
 }
+
 inline void Window::_sortWidgets(){
     std::sort(_widgets.begin(), _widgets.end(), [](const Widget* a, const Widget* b){
         return a->getLayerNumber() > b->getLayerNumber();
     });
+    _dirtyWidgets=false;
 }
 
 void Window::create(const std::string& title, 
@@ -90,9 +80,9 @@ Vector2D Window::getSize() const { return _size; }
 
 void Window::update(){
     if(!_sdlwin || !_sdlrenderer || !_isOpen) return;
-    if(!_checkWidgetsOrder()) _sortWidgets();
+    if(_dirtyWidgets) _sortWidgets();
 
-    const double targetFrameTime = 1000.0 / 60.0;
+    const double targetFrameTime = 1000.0 / _fpsTarget;
     Uint64 freq = SDL_GetPerformanceFrequency();
     Uint64 frameStart = SDL_GetPerformanceCounter();
     _delta = (frameStart - _lastTime) * 1000.0 / freq;
@@ -210,6 +200,7 @@ void Window::assign(Widget* widget) {
     }
     
     _widgets.insert(_widgets.begin() + i, widget);
+    _dirtyWidgets=true;
 }
 
 void Window::remove(Widget* widget){

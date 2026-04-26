@@ -74,6 +74,8 @@ public:
 
     static double getDeltaT();
 
+    void setTargetFPS(const float FPS);
+
     /// Constructs a Window with parameters.
     /// @param title Window title.
     /// @param size Window size in pixels.
@@ -94,20 +96,17 @@ public:
     ~Window();
 
 private:
-    inline bool _checkWidgetsOrder() const;
-
     inline void _sortWidgets();
+
+    std::vector<Widget*> _widgets;
+    bool _dirtyWidgets{false};
 
     SDL_Window* _sdlwin{nullptr};
     SDL_Renderer* _sdlrenderer{nullptr};
-
-    std::vector<Widget*> _widgets;
-
     Color_RGBA _backgroundColor{colors::White};
-
     bool _isOpen{false};
-
     size_t _lastTime{0};
+    float _fpsTarget{60.0};
 
     static inline double _delta{0};
 
